@@ -38,4 +38,4 @@ release.properties
 pom.xml.releaseBackup
 
 /target
-
+/src/main/latex/*.pdf
