@@ -1,34 +1,18 @@
 package org.whiskeysierra.powpow
 
-import de.bht.jvr.core.ShapeNode
-import de.bht.jvr.core.Finder
-import de.bht.jvr.core.Printer
-import de.bht.jvr.core.Transform
-import java.awt.event.KeyEvent
-import de.bht.jvr.renderer.Viewer
-import de.bht.jvr.util.StopWatch
-import java.awt.Color
-import de.bht.jvr.renderer.AwtRenderWindow
-import de.bht.jvr.renderer.RenderWindow
-import de.bht.jvr.util.InputState
-import de.bht.jvr.core.pipeline.Pipeline
-import de.bht.jvr.core.CameraNode
-import de.bht.jvr.core.PointLightNode
-import de.bht.jvr.math.Vector3
-import de.bht.jvr.core.uniforms.UniformVector3
-import de.bht.jvr.core.ShaderMaterial
-import de.bht.jvr.core.ShaderProgram
-import javax.media.opengl.GL2ES2
 import com.google.common.io.{Resources}
 import de.bht.jvr.collada14.loader.ColladaLoader
-import de.bht.jvr.core.{SceneNode, GroupNode, Shader}
-
+import de.bht.jvr.core.{SceneNode, GroupNode, Shader, ShaderProgram, ShaderMaterial, PointLightNode, CameraNode, Transform, Printer, Finder, ShapeNode}
+import de.bht.jvr.core.pipeline.Pipeline
+import de.bht.jvr.renderer.{RenderWindow, AwtRenderWindow, Viewer}
+import de.bht.jvr.util.{InputState, StopWatch}
+import javax.media.opengl.GL2ES2
+import java.awt.Color
+import java.awt.event.KeyEvent
 import java.io.InputStream
 import scala.util.control.Breaks._
 
 object PowPow {
-    
-    def open(fileName:String):InputStream = Resources.getResource(fileName).openStream
 
     def main(args:Array[String]) {
         
@@ -40,7 +24,6 @@ object PowPow {
         val program:ShaderProgram = new ShaderProgram(vertexShader, fragmentShader)
         
         val material:ShaderMaterial = new ShaderMaterial
-        material.setUniform("LIGHTING", "toonColor", new UniformVector3(new Vector3(1, 1, 1)))
         material.setShaderProgram("LIGHTING", program)
 
         Finder.find(box, classOf[ShapeNode], null).setMaterial(material);
@@ -103,5 +86,7 @@ object PowPow {
         
         viewer.close
     }
+    
+    private def open(fileName:String):InputStream = Resources.getResource(fileName).openStream
     
 }
