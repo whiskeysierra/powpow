@@ -38,4 +38,11 @@ release.properties
 pom.xml.releaseBackup
 
 /target
+/src/main/latex/*-blx.bib
+/src/main/latex/*.aux
+/src/main/latex/*.bbl
+/src/main/latex/*.blg
+/src/main/latex/*.lof
 /src/main/latex/*.pdf
+/src/main/latex/*.run.xml
+/src/main/latex/*.synctex.gz
