@@ -18,7 +18,7 @@ The idea is a partial port of a 2D arcade space shooter game available for mobil
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=0.75\textwidth]{PewPew-iPhone-App-Review.jpg}
+\includegraphics[width=0.7\textwidth]{PewPew-iPhone-App-Review.jpg}
 \caption{Visual appearance}
 \end{figure}
 
@@ -27,29 +27,33 @@ PewPew ships with several different game modes, levels and enemy types. The core
 \newpage
 
 \section*{Ideas and goals}
-mandatory vs advisable vs optional vs demarcation, 3d vs 2d
+The main idea behind the game prototype is moving from flat 2D graphics to full 3D models while trying to preserve the overall look and feel of the game. To separate desired goals from optional or even undesired ones the next few paragraphs explain in detail which features are planned to be met and why.
 
 \subsection*{Mandatory criteria}
-one level, one game mode, following camera, collision detection, 1 kinds of enemies, gun fire, simple explosion, glow/bloom effect, blur effect
+All goals and ideas described as mandatory form the very basic goal of the prototype. Achieving these is the top priority. For complexity and time planning reasons the prototype will be limited to one game mode taking place in a single level. There will be one main ship, keyboard controls for movement and gun fire, at least one kind of enemies and collision detection. Hits and collisions should cause simple explosions. All objects participating in the game will have a self glowing effect. To emphasize the effect of speed fast moving particles should cause a blur effect.
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=0.75\textwidth]{4dd9c__pewpew-for-android-550x330.jpg}
+\includegraphics[width=0.7\textwidth]{4dd9c__pewpew-for-android-550x330.jpg}
 \caption{Pandemonium game mode}
 \end{figure}
 
 \subsection*{Advisable criteria}
+Everything named in this paragraph can be considered important for prototype to be considered complete but is not top priority. All these features will not be targeted even if there is only one mandatory criterion left to be implemented. Advisable criteria include a head-up-display which shows the current game score, the amount of shields and remaining lives. In addition to keyboard controls an integration with the Jinput library is planned to support a game controller with dual analog sticks, maybe even including force feedback.
 shield, lives, score, game controller, dual analog sticks, force feedback, adjustable camera perspective
 
 \subsection*{Optional criteria}
-second gun fire, special explosions, second kind of enemies, multiplayer, split screen
+There are several features which would enhance the prototype but not very likely to be implemented. This includes a second gun fire mode, more advanced explosions, additional kinds of enemies and a split-screen style multiplayer mode allowing two players with gamepads playing at the same system.
 
 \subsection*{Demarcation criteria}
-different levels, multiple game modes, ranking
+To keep the prototype limited and the work load to an acceptable level some features will not be targeted by the prototype. Traditional light sources including shadows of any kind do not fit well in a wireframe style space arcade scenario and will therefore not be implemented. Neither will multiple levels, game modes nor a ranking of any kind be part of the prototype.
+
+\newpage
 
 \nocite{pewpewgame}
 \nocite{iphoneappcafe}
 \nocite{androidear}
+\nocite{jinput}
 \printbibliography
 
 \listoffigures
