@@ -1,8 +1,6 @@
 package org.whiskeysierra.powpow
 
-import de.bht.jvr.math.Matrix4
-import de.bht.jvr.math.Vector3
-import com.google.common.io.{Resources}
+import com.google.common.io.Resources
 import de.bht.jvr.collada14.loader.ColladaLoader
 import de.bht.jvr.core.{SceneNode, GroupNode, Shader, ShaderProgram, ShaderMaterial, PointLightNode, CameraNode, Transform, Printer, Finder, ShapeNode}
 import de.bht.jvr.core.pipeline.Pipeline
@@ -10,7 +8,6 @@ import de.bht.jvr.renderer.{RenderWindow, AwtRenderWindow, Viewer}
 import de.bht.jvr.util.{InputState, StopWatch}
 import javax.media.opengl.GL2ES2
 import java.awt.Color
-import java.awt.event.KeyEvent
 import java.io.InputStream
 import scala.util.control.Breaks._
 
