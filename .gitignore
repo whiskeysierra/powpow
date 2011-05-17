@@ -43,6 +43,11 @@ pom.xml.releaseBackup
 /src/main/latex/*.bbl
 /src/main/latex/*.blg
 /src/main/latex/*.lof
+/src/main/latex/*.mp
 /src/main/latex/*.pdf
+/src/main/latex/*.tmp
+/src/main/latex/*.tui
+/src/main/latex/*.tuo
 /src/main/latex/*.run.xml
 /src/main/latex/*.synctex.gz
+
