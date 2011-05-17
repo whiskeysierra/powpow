@@ -2,13 +2,13 @@ package org.whiskeysierra.powpow
 import de.bht.jvr.core.{CameraNode, Transform}
 import de.bht.jvr.util.InputState
 
-class Camera(private val node:CameraNode) extends FrameListener {
+class Camera(private val node:CameraNode) {
     
     private var x:Float = 0
     private var y:Float = 0
     private val speed:Float = 0.01f
     
-    override def update(elapsed:Float, input:InputState):Unit = {
+    def update(elapsed:Float, input:InputState):Unit = {
     
         if (input.isDown('W')) {
             y += speed 
