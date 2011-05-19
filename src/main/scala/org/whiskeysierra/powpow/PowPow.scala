@@ -54,6 +54,9 @@ object PowPow {
         
         val cam:Camera = new Camera(camera)
         val cube:Cube = new Cube(box)
+        val controller:GameController = new GameController(cube)
+        
+        controller.start
 
         val time:StopWatch = new StopWatch
         val viewer:Viewer = new Viewer(window)
@@ -72,6 +75,7 @@ object PowPow {
             }
         }
         
+        controller ! Exit
         viewer.close
     }
     
