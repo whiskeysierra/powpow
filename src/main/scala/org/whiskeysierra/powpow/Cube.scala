@@ -2,24 +2,23 @@ package org.whiskeysierra.powpow
 
 import de.bht.jvr.core.{Transform, SceneNode}
 import javax.vecmath.Vector2f
-import org.whiskeysierra.powpow.input.{MoveY, MoveX}
 import scala.actors.Actor
 
 class Cube(private val node:SceneNode) extends Actor {
     
-    var x:Float = 1
-    var y:Float = 1
+    private var x:Float = 1
+    private var y:Float = 1
     
     private var last:Vector2f = new Vector2f
-    
-    private val speed = 0.01f
     
     override def act():Unit = {
         loop {
             react {
-                case MoveX(value) => x += value * speed
-                case MoveY(value) => y += value * speed
-                case _:Update => update
+                case MoveX(value) => x += value
+                case MoveY(value) => y += value
+                case _:Update => 
+                    sender ! Position(x, y)
+                    update
                 case PoisonPill => exit
             }
         }
@@ -27,12 +26,8 @@ class Cube(private val node:SceneNode) extends Actor {
     
     def update():Unit = {
         val current = new Vector2f(x, y)
-        
-        if (last.epsilonEquals(current, 0.01f)) {
-            return
-        }
-        
         val direction = new Vector2f(x, y)
+        
         direction.sub(last)
         
         var angle = 0f
@@ -51,6 +46,7 @@ class Cube(private val node:SceneNode) extends Actor {
                                     Transform.rotateZ(angle)
                             )))
         }
+        
         
     }
     

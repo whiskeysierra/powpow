@@ -1,13 +1,12 @@
-package org.whiskeysierra.powpow.input
+package org.whiskeysierra.powpow
 
 import de.bht.jvr.util.InputState
 import java.awt.event.KeyEvent
-import org.whiskeysierra.powpow.{Cube, Update, PoisonPill}
 import scala.actors.Actor
 
 class Keyboard(private val input:InputState) extends Actor {
     
-    private val speed:Float = 90
+    private val speed:Float = 5
     
     def act():Unit = {
         loop {

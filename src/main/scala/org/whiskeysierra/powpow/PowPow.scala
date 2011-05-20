@@ -1,8 +1,5 @@
 package org.whiskeysierra.powpow
 
-import org.whiskeysierra.powpow.input.{GameController, Keyboard}
-import java.io.File
-import scala.actors.Actor
 import com.google.common.io.Resources
 import de.bht.jvr.collada14.loader.ColladaLoader
 import de.bht.jvr.core.{SceneNode, GroupNode, Shader, ShaderProgram, ShaderMaterial, PointLightNode, CameraNode, Transform, Printer, Finder, ShapeNode}
@@ -12,8 +9,8 @@ import de.bht.jvr.util.{InputState, StopWatch}
 import javax.media.opengl.GL2ES2
 import java.awt.Color
 import java.io.InputStream
+import scala.actors.Actor
 import scala.util.control.Breaks._
-import scala.collection.JavaConversions._
 
 object PowPow {
 
@@ -64,7 +61,7 @@ object PowPow {
         window.addKeyListener(input)
         
         val cube:Cube = new Cube(boxGroup)
-        val camera:Camera = new Camera(cameraNode, cube)
+        val camera:Camera = new Camera(cameraNode)
         var keyboard:Keyboard = new Keyboard(input)
         val controller:GameController = GameController.getOrFake
         

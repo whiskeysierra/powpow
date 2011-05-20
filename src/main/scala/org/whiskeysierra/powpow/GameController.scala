@@ -1,7 +1,6 @@
-package org.whiskeysierra.powpow.input
+package org.whiskeysierra.powpow
 
 import net.java.games.input.{Controller, ControllerEnvironment, Component, EventQueue, Event}
-import org.whiskeysierra.powpow.{Exit, Update, PoisonPill}
 import scala.actors.Actor
 
 trait GameController extends Actor {
@@ -12,7 +11,7 @@ object GameController {
     private val controllers:Array[Controller] = ControllerEnvironment.getDefaultEnvironment().getControllers
     
     def isPresent():Boolean = {
-        return controllers.length > 0
+        return ! controllers.isEmpty
     }
     
     def getOrFake:GameController = {
@@ -38,8 +37,10 @@ private class JInputGameController extends GameController {
     private var queue:EventQueue = controller.getEventQueue
     private val event:Event = new Event
     
-    private var x:Float = 0
-    private var y:Float = 0
+    private var x = 0f
+    private var y = 0f
+    
+    private val speed = 0.01f
     
     private def poll():Unit = {
         controller.poll         
