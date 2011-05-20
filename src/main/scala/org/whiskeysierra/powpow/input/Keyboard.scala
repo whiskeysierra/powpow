@@ -2,7 +2,7 @@ package org.whiskeysierra.powpow.input
 
 import de.bht.jvr.util.InputState
 import java.awt.event.KeyEvent
-import org.whiskeysierra.powpow.{Cube, Update}
+import org.whiskeysierra.powpow.{Cube, Exit, Update}
 import scala.actors.Actor
 
 class Keyboard(private val cube:Cube, private val input:InputState) extends Actor {
@@ -14,21 +14,22 @@ class Keyboard(private val cube:Cube, private val input:InputState) extends Acto
             react {
                 case Update(elapsed) => {
                     if (input.isDown(KeyEvent.VK_LEFT)) {
-                        cube ! MoveY(-elapsed * speed)
+                        cube ! MoveX(-elapsed * speed)
                     }
                     
                     if (input.isDown(KeyEvent.VK_RIGHT)) {
-                        cube ! MoveY(elapsed * speed)
-                    }
-                    
-                    if (input.isDown(KeyEvent.VK_UP)) {
                         cube ! MoveX(elapsed * speed)
                     }
                     
+                    if (input.isDown(KeyEvent.VK_UP)) {
+                        cube ! MoveY(elapsed * speed)
+                    }
+                    
                     if (input.isDown(KeyEvent.VK_DOWN)) {
-                        cube ! MoveX(-elapsed * speed)
+                        cube ! MoveY(-elapsed * speed)
                     }
                 }
+                case Exit => exit
             }
         }
     }

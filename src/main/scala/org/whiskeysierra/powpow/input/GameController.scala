@@ -1,8 +1,13 @@
-package org.whiskeysierra.powpow
+package org.whiskeysierra.powpow.input
 
 import net.java.games.input.{Controller, ControllerEnvironment, Component, EventQueue, Event}
-import org.whiskeysierra.powpow.input.{MoveY, MoveX}
+import org.whiskeysierra.powpow.{Cube, Exit, Update}
 import scala.actors.Actor
+
+trait GameController {
+    def start:Actor
+    def !(msg:Any):Unit
+}
 
 object GameController {
     
@@ -12,13 +17,24 @@ object GameController {
         return controllers.length > 0
     }
     
+    def getOrFake(cube:Cube):GameController = {
+        if (isPresent) {
+            return new JInputGameController(cube)
+        } else {
+            return new GameController {
+                def start:Actor = null
+                def !(msg:Any):Unit = Unit
+            }
+        }
+    }
+    
     def getController():Controller = {
         return controllers(0)
     }
     
 }
 
-class GameController(private val cube:Cube) extends Actor {
+private class JInputGameController(private val cube:Cube) extends Actor with GameController {
 
     private val controller:Controller = GameController.getController
     
@@ -29,12 +45,12 @@ class GameController(private val cube:Cube) extends Actor {
     private var y:Float = 0
     
     private def poll():Unit = {
-        controller.poll
+        controller.poll         
         while (queue.getNextEvent(event)) {
             val value:Float = event.getValue
             event.getComponent.getName match {
-                case "x" => x = value
-                case "y" => y = value
+                case "x" => y = value
+                case "y" => x = -value
                 case _ => 
             }
         }

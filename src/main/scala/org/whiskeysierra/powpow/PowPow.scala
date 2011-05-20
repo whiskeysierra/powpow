@@ -1,5 +1,8 @@
 package org.whiskeysierra.powpow
 
+import org.whiskeysierra.powpow.input.GameController
+import org.whiskeysierra.powpow.input.GameController
+import java.io.File
 import scala.actors.Actor
 import org.whiskeysierra.powpow.input.Keyboard
 import com.google.common.io.Resources
@@ -12,6 +15,7 @@ import javax.media.opengl.GL2ES2
 import java.awt.Color
 import java.io.InputStream
 import scala.util.control.Breaks._
+import scala.collection.JavaConversions._
 
 object PowPow {
 
@@ -26,27 +30,34 @@ object PowPow {
         val material:ShaderMaterial = new ShaderMaterial
         material.setShaderProgram("LIGHTING", program)
 
-        val box:SceneNode = ColladaLoader.load(open("box.dae"))
+        val box:SceneNode = ColladaLoader.load(open("models/box.dae"))
+        
+        val a:SceneNode = load("axis")
+        a.setTransform(Transform.scale(0.01f))
+        
+        val boxGroup:GroupNode = new GroupNode("Box+Axis")
+        boxGroup.addChildNodes(box, a)
+        
         Finder.find(box, classOf[ShapeNode], null).setMaterial(material);
         
-        val bottom:SceneNode = ColladaLoader.load(open("box.dae"))
-        bottom.setTransform(Transform.translate(0, -1, 0).mul(Transform.scale(10, 0.01f, 5)))
-
+        val axis:SceneNode = load("axis")
+        axis.setTransform(Transform.scale(0.01f))
+        
         val light:PointLightNode = new PointLightNode("sun")
         light.setTransform(Transform.translate(3, 0, 3))
 
         val width:Int = 1000
         val height:Int = 625
         
-        val camera:CameraNode = new CameraNode("camera", width.toFloat / height.toFloat, 60)
-        camera.setTransform(Transform.rotateDeg(1, 0, 0, -90).mul(Transform.translate(0, 0, 3)))
+        val cameraNode:CameraNode = new CameraNode("camera", width.toFloat / height.toFloat, 60)
+        cameraNode.setTransform(Transform.rotateDeg(1, 0, 0, -90).mul(Transform.translate(0, 0, 3)))
 
-        root.addChildNodes(box, bottom, light, camera)
+        root.addChildNodes(axis, boxGroup, light, cameraNode)
         Printer.print(root)
 
         val pipeline:Pipeline = new Pipeline(root)
         pipeline.clearBuffers(true, true, new Color(0, 0, 0))
-        pipeline.switchCamera(camera)
+        pipeline.switchCamera(cameraNode)
         pipeline.drawGeometry("AMBIENT", null)
         pipeline.doLightLoop(true, true).drawGeometry("LIGHTING", null)
 
@@ -54,19 +65,15 @@ object PowPow {
         val window:RenderWindow = new AwtRenderWindow(pipeline, width, height)
         window.addKeyListener(input)
         
-        val cam:Camera = new Camera(camera)
-        val cube:Cube = new Cube(box)
-        
-        var inputActor:Actor = null
-        
-        if (GameController.isPresent) {
-            inputActor = new GameController(cube)
-        } else {
-            inputActor = new Keyboard(cube, input)
-        }
+        val cube:Cube = new Cube(boxGroup)
+        val camera:Camera = new Camera(cameraNode, cube)
+        var keyboard:Keyboard = new Keyboard(cube, input)
+        val controller:GameController = GameController.getOrFake(cube)
         
         cube.start
-        inputActor.start
+        camera.start
+        keyboard.start
+        controller.start
         
         val time:StopWatch = new StopWatch
         val viewer:Viewer = new Viewer(window)
@@ -74,11 +81,12 @@ object PowPow {
         breakable {
             while (viewer.isRunning) {
                 val elapsed:Float = time.elapsed
-                cam.update(elapsed, input)
                 
                 val update:Update = Update(elapsed)
                 
-                inputActor ! update
+                keyboard ! update
+                controller ! update
+                camera ! update
                 cube ! update
     
                 if (input.isDown('Q')) {
@@ -89,11 +97,15 @@ object PowPow {
             }
         }
         
+        camera ! Exit
         cube ! Exit
-        inputActor ! Exit
+        keyboard ! Exit
+        controller ! Exit
         
         viewer.close
     }
+    
+    private def load(model:String):SceneNode = ColladaLoader.load(open("models/" + model + ".dae"))
     
     private def open(fileName:String):InputStream = Resources.getResource(fileName).openStream
     

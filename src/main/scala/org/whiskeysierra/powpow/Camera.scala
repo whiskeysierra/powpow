@@ -1,33 +1,20 @@
 package org.whiskeysierra.powpow
+
+import scala.actors.Actor
 import de.bht.jvr.core.{CameraNode, Transform}
 import de.bht.jvr.util.InputState
 
-class Camera(private val node:CameraNode) {
+class Camera(private val node:CameraNode, private val cube:Cube) extends Actor {
     
-    private var x:Float = 0
-    private var y:Float = 0
-    private val speed:Float = 0.01f
-    
-    def update(elapsed:Float, input:InputState):Unit = {
-    
-        if (input.isDown('W')) {
-            y += speed 
+    override def act() = {
+        loop {
+            react {
+                case _:Update => {
+                    node.setTransform(Transform.translate(cube.x, cube.y, 3))
+                }
+                case Exit => exit
+            }
         }
-        
-        if (input.isDown('A')) {
-            x -= speed
-        }
-        
-        if (input.isDown('S')) {
-            y -= speed
-        }
-        
-        if (input.isDown('D')) {
-            x += speed
-        }
-        
-        node.setTransform(Transform.translate(x, y, 3))
-        
     }
     
 }
