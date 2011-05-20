@@ -1,12 +1,10 @@
 package org.whiskeysierra.powpow.input
 
 import net.java.games.input.{Controller, ControllerEnvironment, Component, EventQueue, Event}
-import org.whiskeysierra.powpow.{Cube, Exit, Update}
+import org.whiskeysierra.powpow.{Exit, Update, PoisonPill}
 import scala.actors.Actor
 
-trait GameController {
-    def start:Actor
-    def !(msg:Any):Unit
+trait GameController extends Actor {
 }
 
 object GameController {
@@ -17,13 +15,12 @@ object GameController {
         return controllers.length > 0
     }
     
-    def getOrFake(cube:Cube):GameController = {
+    def getOrFake:GameController = {
         if (isPresent) {
-            return new JInputGameController(cube)
+            return new JInputGameController
         } else {
             return new GameController {
-                def start:Actor = null
-                def !(msg:Any):Unit = Unit
+                override def act = Unit
             }
         }
     }
@@ -34,7 +31,7 @@ object GameController {
     
 }
 
-private class JInputGameController(private val cube:Cube) extends Actor with GameController {
+private class JInputGameController extends GameController {
 
     private val controller:Controller = GameController.getController
     
@@ -61,10 +58,9 @@ private class JInputGameController(private val cube:Cube) extends Actor with Gam
             react {
                 case _:Update =>
                     poll
-                    cube ! MoveY(x)
-                    cube ! MoveX(y)
-                case Exit =>
-                    exit
+                    sender ! MoveY(x)
+                    sender ! MoveX(y)
+                case PoisonPill => exit
             }
         }
     }

@@ -1,10 +1,8 @@
 package org.whiskeysierra.powpow
 
-import org.whiskeysierra.powpow.input.GameController
-import org.whiskeysierra.powpow.input.GameController
+import org.whiskeysierra.powpow.input.{GameController, Keyboard}
 import java.io.File
 import scala.actors.Actor
-import org.whiskeysierra.powpow.input.Keyboard
 import com.google.common.io.Resources
 import de.bht.jvr.collada14.loader.ColladaLoader
 import de.bht.jvr.core.{SceneNode, GroupNode, Shader, ShaderProgram, ShaderMaterial, PointLightNode, CameraNode, Transform, Printer, Finder, ShapeNode}
@@ -67,13 +65,13 @@ object PowPow {
         
         val cube:Cube = new Cube(boxGroup)
         val camera:Camera = new Camera(cameraNode, cube)
-        var keyboard:Keyboard = new Keyboard(cube, input)
-        val controller:GameController = GameController.getOrFake(cube)
+        var keyboard:Keyboard = new Keyboard(input)
+        val controller:GameController = GameController.getOrFake
         
-        cube.start
-        camera.start
-        keyboard.start
-        controller.start
+        val actors:List[Actor] = List(cube, camera, keyboard, controller)
+        actors foreach {_.start}
+        val hub:MessageHub = new MessageHub(actors)
+        hub.start
         
         val time:StopWatch = new StopWatch
         val viewer:Viewer = new Viewer(window)
@@ -82,13 +80,8 @@ object PowPow {
             while (viewer.isRunning) {
                 val elapsed:Float = time.elapsed
                 
-                val update:Update = Update(elapsed)
+                hub ! Update(elapsed)
                 
-                keyboard ! update
-                controller ! update
-                camera ! update
-                cube ! update
-    
                 if (input.isDown('Q')) {
                     break
                 }
@@ -96,11 +89,8 @@ object PowPow {
                 viewer.display
             }
         }
-        
-        camera ! Exit
-        cube ! Exit
-        keyboard ! Exit
-        controller ! Exit
+
+        hub ! Exit
         
         viewer.close
     }

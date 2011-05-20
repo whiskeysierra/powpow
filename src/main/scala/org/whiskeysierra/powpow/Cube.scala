@@ -20,7 +20,7 @@ class Cube(private val node:SceneNode) extends Actor {
                 case MoveX(value) => x += value * speed
                 case MoveY(value) => y += value * speed
                 case _:Update => update
-                case Exit => exit()
+                case PoisonPill => exit
             }
         }
     }
