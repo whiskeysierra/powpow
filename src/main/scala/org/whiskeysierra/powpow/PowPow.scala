@@ -1,5 +1,7 @@
 package org.whiskeysierra.powpow
 
+import scala.actors.Actor
+import org.whiskeysierra.powpow.input.Keyboard
 import com.google.common.io.Resources
 import de.bht.jvr.collada14.loader.ColladaLoader
 import de.bht.jvr.core.{SceneNode, GroupNode, Shader, ShaderProgram, ShaderMaterial, PointLightNode, CameraNode, Transform, Printer, Finder, ShapeNode}
@@ -54,10 +56,18 @@ object PowPow {
         
         val cam:Camera = new Camera(camera)
         val cube:Cube = new Cube(box)
-        val controller:GameController = new GameController(cube)
         
-        controller.start
-
+        var inputActor:Actor = null
+        
+        if (GameController.isPresent) {
+            inputActor = new GameController(cube)
+        } else {
+            inputActor = new Keyboard(cube, input)
+        }
+        
+        cube.start
+        inputActor.start
+        
         val time:StopWatch = new StopWatch
         val viewer:Viewer = new Viewer(window)
 
@@ -65,7 +75,11 @@ object PowPow {
             while (viewer.isRunning) {
                 val elapsed:Float = time.elapsed
                 cam.update(elapsed, input)
-                cube.update(elapsed, input)
+                
+                val update:Update = Update(elapsed)
+                
+                inputActor ! update
+                cube ! update
     
                 if (input.isDown('Q')) {
                     break
@@ -75,7 +89,9 @@ object PowPow {
             }
         }
         
-        controller ! Exit
+        cube ! Exit
+        inputActor ! Exit
+        
         viewer.close
     }
     

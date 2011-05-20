@@ -1,48 +1,27 @@
 package org.whiskeysierra.powpow
 
-import scala.actors.Actor
 import de.bht.jvr.core.{Transform, SceneNode}
-import de.bht.jvr.util.InputState
-import java.awt.event.KeyEvent
 
-class Cube(private val node:SceneNode) {
+import org.whiskeysierra.powpow.input.{MoveY, MoveX}
+import scala.actors.Actor
+
+class Cube(private val node:SceneNode) extends Actor {
     
-    private var moveX:Float = 0
-    private var angleY:Float = 0
-    private var moveY:Float = 0
     private var angleX:Float = 0
-    private val speed:Float = 1
+    private var angleY:Float = 0
     
-    def moveX(value:Float):Unit = {
-        moveX = value
+    override def act():Unit = {
+        loop {
+            react {
+                case MoveX(value) => angleX += value
+                case MoveY(value) => angleY += value
+                case _:Update => update
+                case Exit => exit()
+            }
+        }
     }
     
-    def moveY(value:Float):Unit = {
-        moveY = value
-    }
-    
-    def update(elapsed:Float, input:InputState):Unit = {
-        
-//        if (input.isDown(KeyEvent.VK_UP)) {
-//            angleX += elapsed * speed
-//        }
-//        
-//        if (input.isDown(KeyEvent.VK_LEFT)) {
-//            angleY -= elapsed * speed
-//        }
-//        
-//        if (input.isDown(KeyEvent.VK_DOWN)) {
-//            angleX -= elapsed * speed
-//        }
-//        
-//        if (input.isDown(KeyEvent.VK_RIGHT)) {
-//            angleY += elapsed * speed
-//        }
-
-        
-        angleX += moveX * speed
-        angleY += moveY * speed
-        
+    def update():Unit = {
         node.setTransform(Transform.rotateYDeg(angleY).mul(Transform.rotateXDeg(angleX)))
     }
     
