@@ -57,7 +57,7 @@ private class JInputGameController extends GameController {
     override def act():Unit = {
         loop {
             react {
-                case _:Update =>
+                case Update =>
                     poll
                     sender ! MoveY(x)
                     sender ! MoveX(y)

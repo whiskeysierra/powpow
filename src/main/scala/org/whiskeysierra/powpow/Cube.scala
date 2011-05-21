@@ -16,7 +16,7 @@ class Cube(private val node:SceneNode) extends Actor {
             react {
                 case MoveX(value) => x += value
                 case MoveY(value) => y += value
-                case _:Update => 
+                case Update => 
                     sender ! Position(x, y)
                     update
                 case PoisonPill => exit

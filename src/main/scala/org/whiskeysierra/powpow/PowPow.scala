@@ -10,7 +10,6 @@ import javax.media.opengl.GL2ES2
 import java.awt.Color
 import java.io.InputStream
 import scala.actors.Actor
-import scala.util.control.Breaks._
 
 object PowPow {
 
@@ -60,36 +59,18 @@ object PowPow {
         val window:RenderWindow = new AwtRenderWindow(pipeline, width, height)
         window.addKeyListener(input)
         
-        val cube:Cube = new Cube(boxGroup)
-        val camera:Camera = new Camera(cameraNode)
-        var keyboard:Keyboard = new Keyboard(input)
-        val controller:GameController = GameController.getOrFake
-        
-        val actors:List[Actor] = List(cube, camera, keyboard, controller)
-        actors foreach {_.start}
+        val actors:Map[String, Actor] = Map(
+            "updater" -> new Updater(window),
+            "cube" -> new Cube(boxGroup),
+            "camera" -> new Camera(cameraNode),
+            "keyboard" -> new Keyboard(input),
+            "controller" -> GameController.getOrFake
+        )
+        actors.values foreach {_.start}
         val hub:MessageHub = new MessageHub(actors)
         hub.start
         
-        val time:StopWatch = new StopWatch
-        val viewer:Viewer = new Viewer(window)
-
-        breakable {
-            while (viewer.isRunning) {
-                val elapsed:Float = time.elapsed
-                
-                hub ! Update(elapsed)
-                
-                if (input.isDown('Q')) {
-                    break
-                }
-    
-                viewer.display
-            }
-        }
-
-        hub ! Exit
-        
-        viewer.close
+        hub ! Start
     }
     
     private def load(model:String):SceneNode = ColladaLoader.load(open("models/" + model + ".dae"))

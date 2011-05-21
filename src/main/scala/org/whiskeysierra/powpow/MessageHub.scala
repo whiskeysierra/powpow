@@ -2,12 +2,13 @@ package org.whiskeysierra.powpow
 
 import scala.actors.Actor
 
-final class MessageHub(private val actors:List[Actor]) extends Actor {
+final class MessageHub(private val actors:Map[String, Actor]) extends Actor {
 
     override def act = {
         loop {
             react {
-                case Exit => 
+                case position:Position => sendTo("camera", position)
+                case Quit => 
                     broadcast(PoisonPill)
                     exit()
                 case other => broadcast(other)
@@ -15,9 +16,16 @@ final class MessageHub(private val actors:List[Actor]) extends Actor {
         }
     }
     
+    private def sendTo(name:String, message:Any) ={
+        actors.get(name) match {
+            case Some(actor) => actor ! message
+            case None =>
+        }
+    }
+    
     private def broadcast(message:Any) = {
         actors foreach {
-            _ ! message
+            case (name, actor) => actor ! message
         }
     }
     
