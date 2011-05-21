@@ -46,8 +46,11 @@ object PowPow {
         val height:Int = 625
         
         val cameraNode:CameraNode = new CameraNode("camera", width.toFloat / height.toFloat, 60)
+        
+        val bullets:GroupNode = new GroupNode("Bullets")
 
-        root.addChildNodes(axis, box, sphere, light, cameraNode)
+        root.addChildNodes(axis, box, sphere, bullets, light, cameraNode)
+        
         Printer.print(root)
 
         val pipeline:Pipeline = new Pipeline(root)
@@ -65,17 +68,17 @@ object PowPow {
             "player" -> new Player(box),
             "camera" -> new Camera(cameraNode),
             "gun" -> new Gun,
+            "bullets" -> new Bullets(bullets),
             "keyboard" -> new Keyboard(input),
             "controller1" -> GameController(0),
             "controller2" -> GameController(1)
         )
         
-        actors.values foreach {_.start}
-        
         val hub:MessageHub = new MessageHub(actors)
         
         hub.start
-        hub ! Update
+        
+        hub ! Start
     }
     
     private def load(model:String):SceneNode = ColladaLoader.load(open("models/" + model + ".dae"))

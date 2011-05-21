@@ -9,8 +9,8 @@ class Camera(private val node:CameraNode) extends Actor {
     override def act() = {
         loop {
             react {
-                case Position(x, y) => {
-                    node.setTransform(Transform.translate(x, y, 7.5f))
+                case Position(position) => {
+                    node.setTransform(Transform.translate(position.x, position.y, 7.5f))
                 }
                 case PoisonPill => exit
             }

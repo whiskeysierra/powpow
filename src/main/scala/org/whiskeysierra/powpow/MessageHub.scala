@@ -3,14 +3,22 @@ package org.whiskeysierra.powpow
 import scala.actors.Actor
 
 final class MessageHub(private val actors:Map[String, Actor]) extends Actor {
+    
+    private def each(f: (Actor) => Unit):Unit = actors.values foreach {f(_)}
+    
+    private def broadcast(message:Any) = each {_ ! message}
 
+    override def start = {
+        each {_.start}
+        super.start
+    }
+    
     override def act = {
         loop {
             react {
-                case position:Position => deliver("camera", position)
                 case Quit => 
                     broadcast(PoisonPill)
-                    exit()
+                    exit
                 case other => broadcast(other)
             }
         }
@@ -20,12 +28,6 @@ final class MessageHub(private val actors:Map[String, Actor]) extends Actor {
         actors.get(name) match {
             case Some(actor) => actor ! message
             case None => throw new IllegalStateException("Unknown actor name: " + name)
-        }
-    }
-    
-    private def broadcast(message:Any) = {
-        actors.values foreach {
-            actor => actor ! message
         }
     }
     

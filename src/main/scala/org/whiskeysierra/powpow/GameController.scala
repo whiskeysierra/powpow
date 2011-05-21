@@ -34,11 +34,8 @@ private class JInputGameController(private val controller:Controller) extends Ga
     private var queue:EventQueue = controller.getEventQueue
     private val event:Event = new Event
     
-    private var x = 0f
-    private var y = 0f
-    
-    private var shootX = 0f
-    private var shootY = 0f
+    private val movement = Vector()
+    private val aim = Vector()
     
     private val speed = 0.01f
     
@@ -47,10 +44,10 @@ private class JInputGameController(private val controller:Controller) extends Ga
         while (queue.getNextEvent(event)) {
             val value:Float = event.getValue
             event.getComponent.getName match {
-                case "x" => y = value
-                case "y" => x = -value
-                case "rz" => shootY = value
-                case "slider" => shootX = -value
+                case "x" => movement.x = value
+                case "y" => movement.y = -value
+                case "rz" => aim.y = value
+                case "slider" => aim.x = -value
                 case _ => 
             }
         }
@@ -61,10 +58,9 @@ private class JInputGameController(private val controller:Controller) extends Ga
             react {
                 case Update =>
                     poll
-                    sender ! MoveY(x)
-                    sender ! MoveX(y)
-                    sender ! ShootY(shootX)
-                    sender ! ShootX(shootY)
+                    // TODO find the min and max values of x/y returned from jinput and scale movement accordingly
+                    sender ! Move(movement)
+                    sender ! Aim(aim.normalize)
                 case PoisonPill => exit
             }
         }

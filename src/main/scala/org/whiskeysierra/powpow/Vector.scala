@@ -17,11 +17,13 @@ final class Vector(var x:Float, var y:Float) {
     
     def length = math.sqrt(math.pow(x, 2) + math.pow(y, 2)).toFloat
     
-    def normalize = this / length
+    def normalize = if (isZero) Vector() else this / length
     
     def dot(v:Vector) = x * v.x + y * v.y
     
     def copy = Vector(x, y)
+    
+    def isZero = x == 0 && y == 0
 
     private def eq(a:Float, b:Float) = a - b < 0.1f
     
@@ -31,5 +33,7 @@ final class Vector(var x:Float, var y:Float) {
     }
     
     override def hashCode = x.hashCode ^ y.hashCode
+    
+    override def toString = "[%.2f, %.2f]".format(x, y)
     
 }

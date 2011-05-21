@@ -2,16 +2,17 @@ package org.whiskeysierra.powpow
 
 sealed abstract class Message
 
+case object Start extends Message
+
 case object Update extends Message
 
-case class MoveX(val value:Float) extends Message
-case class MoveY(val value:Float) extends Message
+// length of movement defines speed, 1.0 is maximum
+case class Move(val movement:Vector) extends Message
+case class Position(val position:Vector) extends Message
+case class Direction(val direction:Vector) extends Message
 
-case class Position(val x:Float, val y:Float) extends Message
-case class Direction(val angle:Float) extends Message
-
-case class ShootX(val value:Float) extends Message
-case class ShootY(val value:Float) extends Message
+case class Aim(val direction:Vector) extends Message
+case class Fire(val position:Vector) extends Message
 
 case object PoisonPill extends Message
 case object Quit extends Message
