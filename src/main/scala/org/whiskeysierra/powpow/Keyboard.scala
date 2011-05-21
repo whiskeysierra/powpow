@@ -46,10 +46,12 @@ class Keyboard(private val input:InputState) extends Actor {
                     }
                     
                     if (input.isDown(KeyEvent.VK_RIGHT)) {
-                        aim.y += 1
+                        aim.x += 1
                     }
                     
-                    sender ! Aim(aim)
+                    if (aim.isNotZero) {
+                        sender ! Aim(aim)
+                    }
                     
                     if (input.isDown('Q')) {
                         sender ! Quit

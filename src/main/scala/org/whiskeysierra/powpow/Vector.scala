@@ -1,5 +1,7 @@
 package org.whiskeysierra.powpow
 
+import de.bht.jvr.math.Vector3
+
 object Vector {
     def apply(x:Float=0, y:Float=0) = new Vector(x, y)
     def unapply(v:Vector):Option[(Float, Float)] = Some((v.x, v.y))
@@ -24,7 +26,11 @@ final class Vector(var x:Float, var y:Float) {
     def copy = Vector(x, y)
     
     def isZero = x == 0 && y == 0
+    
+    def isNotZero = !isZero
 
+    def toVector3 = new Vector3(x, y, 0)
+    
     private def eq(a:Float, b:Float) = a - b < 0.1f
     
     override def equals(that:Any):Boolean = that match {
