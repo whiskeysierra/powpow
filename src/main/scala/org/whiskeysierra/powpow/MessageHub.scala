@@ -7,7 +7,7 @@ final class MessageHub(private val actors:Map[String, Actor]) extends Actor {
     override def act = {
         loop {
             react {
-                case position:Position => sendTo("camera", position)
+                case position:Position => deliver("camera", position)
                 case Quit => 
                     broadcast(PoisonPill)
                     exit()
@@ -16,10 +16,10 @@ final class MessageHub(private val actors:Map[String, Actor]) extends Actor {
         }
     }
     
-    private def sendTo(name:String, message:Any) ={
+    private def deliver(name:String, message:Any) ={
         actors.get(name) match {
             case Some(actor) => actor ! message
-            case None =>
+            case None => throw new IllegalStateException("Unknown actor name: " + name)
         }
     }
     

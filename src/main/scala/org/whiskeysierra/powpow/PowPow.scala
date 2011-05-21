@@ -66,11 +66,13 @@ object PowPow {
             "keyboard" -> new Keyboard(input),
             "controller" -> GameController.getOrFake
         )
-        actors.values foreach {_.start}
-        val hub:MessageHub = new MessageHub(actors)
-        hub.start
         
-        hub ! Start
+        actors.values foreach {_.start}
+        
+        val hub:MessageHub = new MessageHub(actors)
+        
+        hub.start
+        hub ! Update
     }
     
     private def load(model:String):SceneNode = ColladaLoader.load(open("models/" + model + ".dae"))

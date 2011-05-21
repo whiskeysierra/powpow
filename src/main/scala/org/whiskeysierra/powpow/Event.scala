@@ -1,7 +1,5 @@
 package org.whiskeysierra.powpow
 
-case object Start
-
 case object Update
 
 case class MoveX(val delta:Float)

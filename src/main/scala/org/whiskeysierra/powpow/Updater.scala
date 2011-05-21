@@ -10,8 +10,6 @@ class Updater(private val window:RenderWindow) extends Actor {
     override def act = {
         loop {
             react {
-                case Start =>
-                    sender ! Update
                 case Update =>
                     if (viewer.isRunning) {
                         sender ! Update
