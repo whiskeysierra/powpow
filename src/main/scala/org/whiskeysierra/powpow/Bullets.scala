@@ -6,13 +6,13 @@ import scala.actors.Actor
 
 class Bullets(private val node:GroupNode, private val sphere:SceneNode) extends Actor {
     
-    private var direction = Vector()
+    private var position = Vector()
     
     override def act = {
         loop {
             react {
-                case Aim(direction) => this.direction = direction
-                case Fire(position) =>
+                case Position(position) => this.position = position
+                case Aim(direction) =>
                     val bullet = new GroupNode("Bullet")
                     bullet.addChildNodes(sphere)
                     bullet.setTransform(translate(direction + position toVector3) mul scale(.5f))

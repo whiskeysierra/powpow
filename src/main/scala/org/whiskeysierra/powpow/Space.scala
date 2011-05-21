@@ -22,7 +22,7 @@ class Space extends Actor {
         loop {
             react {
                 case Start =>
-                    world.setGravity(new Vector3f(0, -10, 0))
+                    world.setGravity(new Vector3f)
                     world.getDispatchInfo().allowedCcdPenetration = 0
                 case PoisonPill => exit
             }

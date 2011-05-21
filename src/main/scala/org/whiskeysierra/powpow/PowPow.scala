@@ -67,7 +67,6 @@ object PowPow {
             "displayer" -> new Displayer(window),
             "player" -> new Player(box),
             "camera" -> new Camera(cameraNode),
-            "gun" -> new Gun,
             "bullets" -> new Bullets(bullets, sphere),
             "keyboard" -> new Keyboard(input),
             "controller1" -> GameController(0),
