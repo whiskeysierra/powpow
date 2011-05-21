@@ -12,8 +12,8 @@ class Updater(private val window:RenderWindow) extends Actor {
             react {
                 case Update =>
                     if (viewer.isRunning) {
-                        sender ! Update
                         viewer.display
+                        sender ! Update
                     }
                 case PoisonPill =>
                     viewer.close

@@ -24,7 +24,7 @@ object PowPow {
         val material:ShaderMaterial = new ShaderMaterial
         material.setShaderProgram("LIGHTING", program)
 
-        val boxNode:SceneNode = ColladaLoader.load(open("models/box.dae"))
+        val boxNode:SceneNode = load("box")
         
         val boxAxis:SceneNode = load("axis")
         boxAxis.setTransform(Transform.scale(0.01f))

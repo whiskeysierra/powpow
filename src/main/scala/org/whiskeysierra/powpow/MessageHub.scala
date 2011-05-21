@@ -16,7 +16,7 @@ final class MessageHub(private val actors:Map[String, Actor]) extends Actor {
         }
     }
     
-    private def deliver(name:String, message:Any) ={
+    private def deliver(name:String, message:Any) = {
         actors.get(name) match {
             case Some(actor) => actor ! message
             case None => throw new IllegalStateException("Unknown actor name: " + name)
@@ -24,8 +24,8 @@ final class MessageHub(private val actors:Map[String, Actor]) extends Actor {
     }
     
     private def broadcast(message:Any) = {
-        actors foreach {
-            case (name, actor) => actor ! message
+        actors.values foreach {
+            actor => actor ! message
         }
     }
     
