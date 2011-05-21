@@ -24,15 +24,15 @@ object PowPow {
         val material:ShaderMaterial = new ShaderMaterial
         material.setShaderProgram("LIGHTING", program)
 
-        val box:SceneNode = ColladaLoader.load(open("models/box.dae"))
+        val boxNode:SceneNode = ColladaLoader.load(open("models/box.dae"))
         
-        val a:SceneNode = load("axis")
-        a.setTransform(Transform.scale(0.01f))
+        val boxAxis:SceneNode = load("axis")
+        boxAxis.setTransform(Transform.scale(0.01f))
         
-        val boxGroup:GroupNode = new GroupNode("Box+Axis")
-        boxGroup.addChildNodes(box, a)
+        val box:GroupNode = new GroupNode("Box+Axis")
+        box.addChildNodes(boxNode, boxAxis)
         
-        Finder.find(box, classOf[ShapeNode], null).setMaterial(material);
+        Finder.find(boxNode, classOf[ShapeNode], null).setMaterial(material);
         
         val axis:SceneNode = load("axis")
         axis.setTransform(Transform.scale(0.01f))
@@ -46,7 +46,7 @@ object PowPow {
         val cameraNode:CameraNode = new CameraNode("camera", width.toFloat / height.toFloat, 60)
         cameraNode.setTransform(Transform.rotateDeg(1, 0, 0, -90).mul(Transform.translate(0, 0, 3)))
 
-        root.addChildNodes(axis, boxGroup, light, cameraNode)
+        root.addChildNodes(axis, box, light, cameraNode)
         Printer.print(root)
 
         val pipeline:Pipeline = new Pipeline(root)
@@ -61,10 +61,11 @@ object PowPow {
         
         val actors:Map[String, Actor] = Map(
             "updater" -> new Updater(window),
-            "cube" -> new Cube(boxGroup),
+            "cube" -> new Cube(box),
             "camera" -> new Camera(cameraNode),
             "keyboard" -> new Keyboard(input),
-            "controller" -> GameController.getOrFake
+            "controller1" -> GameController(0),
+            "controller2" -> GameController(1)
         )
         
         actors.values foreach {_.start}

@@ -1,39 +1,37 @@
 package org.whiskeysierra.powpow
 
-import net.java.games.input.{Controller, ControllerEnvironment, Component, EventQueue, Event}
+import net.java.games.input.{AbstractController, Controller, ControllerEnvironment, Component, EventQueue, Event}
 import scala.actors.Actor
 
-trait GameController extends Actor {
-}
 
 object GameController {
     
-    private val controllers:Array[Controller] = ControllerEnvironment.getDefaultEnvironment().getControllers
-    
-    def isPresent():Boolean = {
-        return ! controllers.isEmpty
+    private val controllers:Array[Controller] = ControllerEnvironment.getDefaultEnvironment().getControllers filter {
+        _.getType == Controller.Type.GAMEPAD
     }
     
-    def getOrFake:GameController = {
-        if (isPresent) {
-            return new JInputGameController
+    private def find(index:Int):Controller = {
+        if (index < controllers.length) {
+            val controller:Controller = controllers(index)
+            println("Found: " + controller)
+            return controller
         } else {
-            return new GameController {
-                override def act = Unit
+            return new AbstractController("Fake Controller #" + index, Array(), Array(), Array()) {
+                override def getNextDeviceEvent(event:Event):Boolean = false
             }
         }
     }
     
-    def getController():Controller = {
-        return controllers(0)
+    def apply(index:Int):GameController = {
+        val controller:Controller = find(index)
+        println("Using " + controller)
+        return new GameController(controller)
     }
     
 }
 
-private class JInputGameController extends GameController {
+class GameController(private val controller:Controller) extends Actor {
 
-    private val controller:Controller = GameController.getController
-    
     private var queue:EventQueue = controller.getEventQueue
     private val event:Event = new Event
     
