@@ -37,6 +37,8 @@ object PowPow {
         val axis:SceneNode = load("axis")
         axis.setTransform(Transform.scale(0.01f))
         
+        val sphere:SceneNode = load("sphere")
+        
         val light:PointLightNode = new PointLightNode("sun")
         light.setTransform(Transform.translate(3, 0, 3))
 
@@ -44,9 +46,8 @@ object PowPow {
         val height:Int = 625
         
         val cameraNode:CameraNode = new CameraNode("camera", width.toFloat / height.toFloat, 60)
-        cameraNode.setTransform(Transform.rotateDeg(1, 0, 0, -90).mul(Transform.translate(0, 0, 3)))
 
-        root.addChildNodes(axis, box, light, cameraNode)
+        root.addChildNodes(axis, box, sphere, light, cameraNode)
         Printer.print(root)
 
         val pipeline:Pipeline = new Pipeline(root)
@@ -61,8 +62,9 @@ object PowPow {
         
         val actors:Map[String, Actor] = Map(
             "updater" -> new Updater(window),
-            "cube" -> new Cube(box),
+            "player" -> new Player(box),
             "camera" -> new Camera(cameraNode),
+            "gun" -> new Gun,
             "keyboard" -> new Keyboard(input),
             "controller1" -> GameController(0),
             "controller2" -> GameController(1)

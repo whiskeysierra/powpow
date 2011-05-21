@@ -10,33 +10,35 @@ object GameController {
         _.getType == Controller.Type.GAMEPAD
     }
     
-    private def find(index:Int):Controller = {
+    def apply(index:Int):GameController = {
         if (index < controllers.length) {
             val controller:Controller = controllers(index)
             println("Found: " + controller)
-            return controller
+            return new JInputGameController(controller)
         } else {
-            return new AbstractController("Fake Controller #" + index, Array(), Array(), Array()) {
-                override def getNextDeviceEvent(event:Event):Boolean = false
-            }
+            println("Using Fake Controller #" + index)
+            return FakeGameController
         }
-    }
-    
-    def apply(index:Int):GameController = {
-        val controller:Controller = find(index)
-        println("Using " + controller)
-        return new GameController(controller)
     }
     
 }
 
-class GameController(private val controller:Controller) extends Actor {
+trait GameController extends Actor
+
+private object FakeGameController extends GameController {
+    override def act = Unit
+}
+
+private class JInputGameController(private val controller:Controller) extends GameController {
 
     private var queue:EventQueue = controller.getEventQueue
     private val event:Event = new Event
     
     private var x = 0f
     private var y = 0f
+    
+    private var shootX = 0f
+    private var shootY = 0f
     
     private val speed = 0.01f
     
@@ -47,6 +49,8 @@ class GameController(private val controller:Controller) extends Actor {
             event.getComponent.getName match {
                 case "x" => y = value
                 case "y" => x = -value
+                case "rz" => shootY = value
+                case "slider" => shootX = -value
                 case _ => 
             }
         }
@@ -59,6 +63,8 @@ class GameController(private val controller:Controller) extends Actor {
                     poll
                     sender ! MoveY(x)
                     sender ! MoveX(y)
+                    sender ! ShootY(shootX)
+                    sender ! ShootX(shootY)
                 case PoisonPill => exit
             }
         }

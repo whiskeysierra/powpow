@@ -4,10 +4,11 @@ sealed abstract class Message
 
 case object Update extends Message
 
-case class MoveX(val delta:Float) extends Message
-case class MoveY(val delta:Float) extends Message
+case class MoveX(val value:Float) extends Message
+case class MoveY(val value:Float) extends Message
 
 case class Position(val x:Float, val y:Float) extends Message
+case class Direction(val angle:Float) extends Message
 
 case class ShootX(val value:Float) extends Message
 case class ShootY(val value:Float) extends Message

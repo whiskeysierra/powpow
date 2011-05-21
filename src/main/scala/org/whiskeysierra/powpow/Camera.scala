@@ -10,7 +10,7 @@ class Camera(private val node:CameraNode) extends Actor {
         loop {
             react {
                 case Position(x, y) => {
-                    node.setTransform(Transform.translate(x, y, 3))
+                    node.setTransform(Transform.translate(x, y, 7.5f))
                 }
                 case PoisonPill => exit
             }

@@ -7,6 +7,7 @@ import scala.actors.Actor
 class Keyboard(private val input:InputState) extends Actor {
     
     private val time:StopWatch = new StopWatch
+    
     private val speed:Float = 5
     
     def act():Unit = {
@@ -32,19 +33,19 @@ class Keyboard(private val input:InputState) extends Actor {
                     }
                     
                     if (input.isDown(KeyEvent.VK_LEFT)) {
-                        sender ! MoveX(-elapsed * speed)
+                        sender ! ShootX(-elapsed * speed)
                     }
                     
                     if (input.isDown(KeyEvent.VK_UP)) {
-                        sender ! MoveY(elapsed * speed)
+                        sender ! ShootY(elapsed * speed)
                     }
                     
                     if (input.isDown(KeyEvent.VK_DOWN)) {
-                        sender ! MoveY(-elapsed * speed)
+                        sender ! ShootY(-elapsed * speed)
                     }
                     
                     if (input.isDown(KeyEvent.VK_RIGHT)) {
-                        sender ! MoveX(elapsed * speed)
+                        sender ! ShootX(elapsed * speed)
                     }
                     
                     if (input.isDown('Q')) {
