@@ -64,7 +64,7 @@ object PowPow {
         window.addKeyListener(input)
         
         val actors:Map[String, Actor] = Map(
-            "updater" -> new Updater(window),
+            "displayer" -> new Displayer(window),
             "player" -> new Player(box),
             "camera" -> new Camera(cameraNode),
             "gun" -> new Gun,

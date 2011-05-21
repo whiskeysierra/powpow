@@ -13,11 +13,10 @@ class Bullets(private val node:GroupNode, private val sphere:SceneNode) extends 
             react {
                 case Aim(direction) => this.direction = direction
                 case Fire(position) =>
-//                    val bullet = new GroupNode("Bullet")
-//                    bullet.addChildNodes(sphere)
-//                    bullet.setTransform(scale(.5f) mul translate(direction.normalize * .2f toVector3))
-//                    node.addChildNodes(bullet)
-                    println("Shooting at " + direction)
+                    val bullet = new GroupNode("Bullet")
+                    bullet.addChildNodes(sphere)
+                    bullet.setTransform(translate(direction + position toVector3) mul scale(.5f))
+                    sender ! Add(node, bullet)
                 case PoisonPill => exit
             }
         }
