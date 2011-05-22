@@ -11,8 +11,7 @@ class Displayer(private val window:RenderWindow) extends Actor {
         loop {
             react {
                 case Start => displayAndUpdate
-                case Update =>
-                    if (viewer.isRunning) displayAndUpdate
+                case Update => displayAndUpdate
                 case Add(parent, child) => parent.addChildNodes(child)
                 case Remove(parent, orphan) => parent.removeChildNode(orphan)
                 case PoisonPill =>
@@ -23,8 +22,10 @@ class Displayer(private val window:RenderWindow) extends Actor {
     }
     
     private def displayAndUpdate = {
-        viewer.display
-        sender ! Update
+        if (viewer.isRunning) {
+            viewer.display
+            sender ! Update
+        }
     }
     
 }
