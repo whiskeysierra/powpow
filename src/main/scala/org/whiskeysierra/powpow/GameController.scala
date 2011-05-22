@@ -58,7 +58,11 @@ private class JInputGameController(private val controller:Controller) extends Ga
             react {
                 case Update =>
                     poll
-                    sender ! Move(movement)
+                    if (movement.length > 0.1) {
+                        sender ! Move(movement)
+                    } else {
+                        sender ! Stop
+                    }
                     if (aim.length > 0.1) {
                         sender ! Aim(aim.normalize)
                     }

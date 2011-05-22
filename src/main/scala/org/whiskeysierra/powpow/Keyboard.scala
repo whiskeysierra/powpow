@@ -28,8 +28,10 @@ class Keyboard(private val input:InputState) extends Actor {
                         direction.x += 1
                     }
                     
-                    // keyboard moves with full speed, hence the normalize
-                    if (direction.isNotZero) {
+                    if (direction.isZero) {
+                        sender ! Stop
+                    } else {
+                        // keyboard moves with full speed, hence the normalize
                         sender ! Move(direction.normalize)
                     }
                     

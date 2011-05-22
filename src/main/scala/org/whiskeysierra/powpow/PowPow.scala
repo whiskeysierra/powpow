@@ -66,7 +66,7 @@ object PowPow {
         val hub:Actor = new MessageHub(Map(
             "displayer" -> new Displayer(window),
             "space" -> new Space,
-            "player" -> new Player(box),
+            "ship" -> new Ship(box),
             "camera" -> new Camera(cameraNode),
             "gun" -> new Gun(bullets, sphere),
             "keyboard" -> new Keyboard(input),
