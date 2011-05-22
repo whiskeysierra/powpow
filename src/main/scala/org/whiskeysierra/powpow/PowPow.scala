@@ -63,20 +63,16 @@ object PowPow {
         val window:RenderWindow = new AwtRenderWindow(pipeline, width, height)
         window.addKeyListener(input)
         
-        val actors:Map[String, Actor] = Map(
+        val hub:Actor = new MessageHub(Map(
             "displayer" -> new Displayer(window),
             "space" -> new Space,
             "player" -> new Player(box),
             "camera" -> new Camera(cameraNode),
-            "bullets" -> new Bullets(bullets, sphere),
+            "gun" -> new Gun(bullets, sphere),
             "keyboard" -> new Keyboard(input),
             "controller1" -> GameController(0),
             "controller2" -> GameController(1)
-        )
-        
-        val hub:MessageHub = new MessageHub(actors)
-        
-        hub.start
+        )).start
         
         hub ! Start
     }
