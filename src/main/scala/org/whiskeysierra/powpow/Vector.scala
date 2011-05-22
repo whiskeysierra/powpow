@@ -1,9 +1,11 @@
 package org.whiskeysierra.powpow
 
 import de.bht.jvr.math.Vector3
+import javax.vecmath.Vector3f
 
 object Vector {
     def apply(x:Float=0, y:Float=0) = new Vector(x, y)
+    def apply(v:Vector3f) = new Vector(v.x, v.y)
     def unapply(v:Vector):Option[(Float, Float)] = Some((v.x, v.y))
 }
 
@@ -30,6 +32,8 @@ final class Vector(var x:Float, var y:Float) {
     def isNotZero = !isZero
 
     def toVector3 = new Vector3(x, y, 0)
+    
+    def toVector3f = new Vector3f(x, y, 0)
     
     private def eq(a:Float, b:Float) = a - b < 0.1f
     

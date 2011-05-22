@@ -65,6 +65,7 @@ object PowPow {
         
         val actors:Map[String, Actor] = Map(
             "displayer" -> new Displayer(window),
+            "space" -> new Space,
             "player" -> new Player(box),
             "camera" -> new Camera(cameraNode),
             "bullets" -> new Bullets(bullets, sphere),

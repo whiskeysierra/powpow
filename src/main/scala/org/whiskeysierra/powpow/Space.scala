@@ -6,6 +6,7 @@ import com.bulletphysics.collision.dispatch._
 import com.bulletphysics.dynamics._
 import com.bulletphysics.dynamics.constraintsolver._
 import javax.vecmath._
+import de.bht.jvr.util.StopWatch
 
 class Space extends Actor {
 
@@ -17,6 +18,8 @@ class Space extends Actor {
         new SequentialImpulseConstraintSolver,
         config
     )
+    
+    private val time = new StopWatch
 
     override def act = {
         loop {
@@ -24,6 +27,8 @@ class Space extends Actor {
                 case Start =>
                     world.setGravity(new Vector3f)
                     world.getDispatchInfo().allowedCcdPenetration = 0
+                case AddBody(body) => world.addRigidBody(body)
+                case Update => world.stepSimulation(time.elapsed, 10);
                 case PoisonPill => exit
             }
         }
