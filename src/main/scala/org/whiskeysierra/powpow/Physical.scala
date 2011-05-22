@@ -20,7 +20,6 @@ trait Physical {
         val inertia = new Vector3f
         shape.calculateLocalInertia(mass, inertia)
         
-        var self = this
         val state = new MotionState {
             
             override def getWorldTransform(transform:Transform) = {
