@@ -11,10 +11,11 @@ import de.bht.jvr.util.StopWatch
 class Space extends Actor {
 
     private val config:CollisionConfiguration = new DefaultCollisionConfiguration
+    private val limit = 100f
     
     private val world = new DiscreteDynamicsWorld(
         new CollisionDispatcher(config),
-        new AxisSweep3(new Vector3f(-10000, -10000, -10000), new Vector3f(10000, 10000, 10000)),
+        new AxisSweep3(new Vector3f(-limit, -limit, -limit), new Vector3f(limit, limit, limit)),
         new SequentialImpulseConstraintSolver,
         config
     )
