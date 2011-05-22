@@ -46,9 +46,9 @@ private class JInputGameController(private val controller:Controller) extends Ga
             event.getComponent.getName match {
                 case "x" => movement.x = value
                 case "y" => movement.y = -value
-                case "rz" => aim.y = value
-                case "slider" => aim.x = -value
-                case _ => 
+                case "z" => aim.x = value
+                case "rz" => aim.y = -value
+                case _ =>
             }
         }
     }
@@ -58,9 +58,10 @@ private class JInputGameController(private val controller:Controller) extends Ga
             react {
                 case Update =>
                     poll
-                    // TODO find the min and max values of x/y returned from jinput and scale movement accordingly
                     sender ! Move(movement)
-                    sender ! Aim(aim.normalize)
+                    if (aim.length > 0.1) {
+                        sender ! Aim(aim.normalize)
+                    }
                 case PoisonPill => exit
             }
         }
