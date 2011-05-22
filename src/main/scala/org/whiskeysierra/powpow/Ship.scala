@@ -2,8 +2,8 @@ package org.whiskeysierra.powpow
 
 import com.bulletphysics.collision.shapes.SphereShape
 import de.bht.jvr.core.{Transform, SceneNode}
-import scala.actors.Actor
 import javax.vecmath.Vector3f
+import scala.actors.Actor
 
 class Ship(private val node:SceneNode, var position:Vector) extends Actor with Physical {
     
