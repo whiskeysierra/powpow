@@ -23,7 +23,7 @@ object Bullet {
         val matrix = new Matrix4f
         matrix.set(position toVector3f)
         body.proceedToTransform(new Transform(matrix))
-        body.setLinearVelocity(direction toVector3f);
+        body.setLinearVelocity(direction * 25 toVector3f);
         body.setActivationState(CollisionObject.DISABLE_DEACTIVATION)
         
         bullet.body = body

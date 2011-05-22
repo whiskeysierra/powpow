@@ -19,17 +19,21 @@ class Bullets(private val parent:GroupNode, private val sphere:SceneNode) extend
                     val bullet = Bullet(position, direction)
                     val node = new GroupNode("Bullet")
                     node.addChildNodes(sphere)
+                    transform(bullet, node)
                     bullets += (bullet -> node)
-                    sender ! AddBody(bullet.body)
+                    sender ! AddBody(bullet.body, Collisions.BULLET, Collisions.NOTHING)
                     sender ! Add(parent, node)
                 case Update =>
                     bullets foreach {
-                        case (bullet, node) =>
-                            node.setTransform(translate(bullet.position toVector3) mul scale(.5f))
+                        case (bullet, node) => transform(bullet, node)
                     }
                 case PoisonPill => exit
             }
         }
+    }
+    
+    private def transform(bullet:Bullet, node:SceneNode) = {
+        node.setTransform(translate(bullet.position toVector3) mul scale(.5f))
     }
     
 }
