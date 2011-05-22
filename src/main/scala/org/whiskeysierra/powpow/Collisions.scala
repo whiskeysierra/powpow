@@ -6,6 +6,6 @@ object Collisions {
     val BULLET:Short = bit(0)
     val SHIP:Short = bit(1)
     
-    private def bit(s:Short):Short = 1 << s toShort
+    private def bit(s:Short) = 1 << s toShort
     
 }
