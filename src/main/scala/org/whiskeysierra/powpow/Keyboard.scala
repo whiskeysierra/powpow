@@ -6,7 +6,7 @@ import scala.actors.Actor
 
 class Keyboard(private val input:InputState) extends Actor {
     
-    def act():Unit = {
+    override def act = {
         loop {
             react {
                 case Update => {
@@ -29,7 +29,9 @@ class Keyboard(private val input:InputState) extends Actor {
                     }
                     
                     // keyboard moves with full speed, hence the normalize
-                    sender ! Move(direction.normalize)
+                    if (direction.isNotZero) {
+                        sender ! Move(direction.normalize)
+                    }
                     
                     val aim = Vector()
                     

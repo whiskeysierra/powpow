@@ -5,43 +5,30 @@ import scala.actors.Actor
 
 class Player(private val node:SceneNode) extends Actor {
     
-    private val TwoPi = Math.Pi.toFloat * 2
-        
     private val axis = Vector(1)
     private val speed = 0.2f
     
-    private var current = Vector()
-    private var last = Vector()
+    private var direction = Vector()
+    private var position = Vector()
 
-    private var angle:Float = 0
-    
     override def act():Unit = {
         loop {
             react {
-                case Move(movement) => current += movement * speed
+                case Move(movement) => 
+                    direction = movement.normalize
+                    position += movement * speed
                 case Update => 
-                    sender ! Position(current)
-                    
-                    if (current equals last) {
-                        // standing still, no need to change the angle
-                    } else {
-                        val direction = current - last
-                        angle = math.acos(axis dot (direction.normalize)).toFloat
-                        if (angle.isNaN) angle = 0
-                        sender ! Direction(direction)
-                    }
-                    
-                    last = current.copy
                     update
-                    
+                    sender ! Position(position)
                 case PoisonPill => exit
             }
         }
     }
     
-    def update():Unit = {
+    private def update = {
+        val angle = math.acos(axis dot direction).toFloat
         node.setTransform(
-            Transform.translate(current.x, current.y, 0) mul
+            Transform.translate(position.x, position.y, 0) mul
             Transform.rotateZ(angle)
         )
     }
