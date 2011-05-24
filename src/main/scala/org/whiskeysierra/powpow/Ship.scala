@@ -7,7 +7,7 @@ import scala.actors.Actor
 
 class Ship(private val node:SceneNode, var position:Vector) extends Actor with Physical {
     
-    private val axis = Vector(1)
+    private val pi:Float = Math.Pi.toFloat
     private val stopped = new Vector3f
     private val speed = 15
     
@@ -35,8 +35,15 @@ class Ship(private val node:SceneNode, var position:Vector) extends Actor with P
         }
     }
     
+    private def angle:Float = {
+        if (direction.x == -1) {
+            Math.Pi.toFloat
+        } else {
+            2 * math.atan(direction.y / (1 + direction.x)).toFloat
+        }
+    }
+    
     private def update = {
-        val angle = math.acos(axis dot direction).toFloat
         node.setTransform(
             Transform.translate(position.x, position.y, 0) mul
             Transform.rotateZ(angle)
