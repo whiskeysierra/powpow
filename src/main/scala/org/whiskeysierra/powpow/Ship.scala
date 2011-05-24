@@ -7,7 +7,7 @@ import scala.actors.Actor
 
 class Ship(private val node:SceneNode, var position:Vector) extends Actor with Physical {
     
-    private val pi:Float = Math.Pi.toFloat
+    private val pi:Float = math.Pi.toFloat
     private val stopped = new Vector3f
     private val speed = 15
     
@@ -37,7 +37,7 @@ class Ship(private val node:SceneNode, var position:Vector) extends Actor with P
     
     private def angle:Float = {
         if (direction.x == -1) {
-            Math.Pi.toFloat
+            math.Pi.toFloat
         } else {
             2 * math.atan(direction.y / (1 + direction.x)).toFloat
         }
