@@ -1,7 +1,8 @@
 package org.whiskeysierra.powpow
 
+import de.bht.jvr.core.{AttributeCloud, GroupNode, SceneNode, Transform}
 import de.bht.jvr.core.Transform._
-import de.bht.jvr.core.{Transform, GroupNode, SceneNode}
+import javax.media.opengl.GL
 import scala.actors.Actor
 import scala.collection.mutable.Map
 import scala.util.Random
@@ -10,10 +11,13 @@ class Gun(private val parent:GroupNode, private val sphere:SceneNode) extends Ac
     
     private var position = Vector()
     
+    private val cloud = new AttributeCloud(1000, GL.GL_LINE_STRIP)
+    
     private val bullets = Map[Bullet, SceneNode]()
     
     private val angles = for (a <- -20 until 20) yield a.toRadians
     private val random = new Random
+    private val collisions = Collisions.WALL | Collisions.SEEKER | Collisions.BOMBER toShort
     
     private def cos(a:Float) = math.cos(a).toFloat
     private def sin(a:Float) = math.sin(a).toFloat
@@ -36,7 +40,7 @@ class Gun(private val parent:GroupNode, private val sphere:SceneNode) extends Ac
                     node.addChildNodes(sphere)
                     transform(bullet, node)
                     bullets += (bullet -> node)
-                    sender ! AddBody(bullet.body, Collisions.BULLET, Collisions.NOTHING)
+                    sender ! AddBody(bullet.body, Collisions.BULLET, collisions)
                     sender ! Add(parent, node)
                 case Update =>
                     bullets foreach {
