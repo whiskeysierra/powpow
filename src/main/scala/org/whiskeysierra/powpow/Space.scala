@@ -29,6 +29,7 @@ class Space extends Actor {
                     world.setGravity(new Vector3f)
                     world.getDispatchInfo().allowedCcdPenetration = 0
                 case AddBody(body, bit, mask) => world.addRigidBody(body, bit, mask)
+                case RemoveBody(body) => world.removeRigidBody(body)
                 case Update => world.stepSimulation(time.elapsed, 10);
                 case PoisonPill => exit
             }

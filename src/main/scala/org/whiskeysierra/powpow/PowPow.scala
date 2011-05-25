@@ -11,7 +11,7 @@ import javax.media.opengl.GL2ES2
 import java.io.InputStream
 import scala.actors.Actor
 
-object PowPow {
+object PowPow extends ResourceLoader {
 
     def main(args:Array[String]) {
         
@@ -24,9 +24,9 @@ object PowPow {
         val material:ShaderMaterial = new ShaderMaterial
         material.setShaderProgram("LIGHTING", program)
 
-        val boxNode:SceneNode = load("box")
+        val boxNode:SceneNode = loadModel("box")
         
-        val boxAxis:SceneNode = load("axis")
+        val boxAxis:SceneNode = loadModel("axis")
         boxAxis.setTransform(Transform.scale(0.01f))
         
         val box:GroupNode = new GroupNode("Box+Axis")
@@ -34,10 +34,10 @@ object PowPow {
         
         Finder.find(boxNode, classOf[ShapeNode], null).setMaterial(material);
         
-        val axis:SceneNode = load("axis")
+        val axis:SceneNode = loadModel("axis")
         axis.setTransform(Transform.scale(0.01f))
         
-        val sphere:SceneNode = load("sphere")
+        val sphere:SceneNode = loadModel("sphere")
         
         val light:PointLightNode = new PointLightNode("sun")
         light.setTransform(Transform.translate(3, 0, 3))
@@ -77,8 +77,6 @@ object PowPow {
         hub ! Start
     }
     
-    private def load(model:String):SceneNode = ColladaLoader.load(open("models/" + model + ".dae"))
-    
-    private def open(fileName:String):InputStream = Resources.getResource(fileName).openStream
+    private def loadModel(model:String):SceneNode = ColladaLoader.load(open("models/" + model + ".dae"))
     
 }

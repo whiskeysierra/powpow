@@ -19,6 +19,9 @@ case class Position(val position:Vector) extends Message
 case class Aim(val direction:Vector) extends Message
 
 case class AddBody(body:RigidBody, bit:Short, mask:Short) extends Message
+case class RemoveBody(body:RigidBody) extends Message
+
+case class Collision(left:Collidable, right:Collidable) extends Message
 
 case object PoisonPill extends Message
 case object Quit extends Message
