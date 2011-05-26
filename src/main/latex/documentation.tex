@@ -1,10 +1,38 @@
-\documentclass{article}
+\documentclass[a4paper]{article}
 \usepackage[utf8]{inputenc}
-\title{Dokumentation}
+\usepackage{fullpage}
+\usepackage{biblatex}
+\bibliography{documentation.bib}
+\usepackage{graphicx}
+\usepackage{scala}
+\usepackage{minted}
+\usemintedstyle{default}
+\title{PowPow Documentation}
 \author{Willi Schönborn}
 \date{\today}
 \begin{document}
+
 \maketitle
+\newpage
+
+\tableofcontents
+\newpage
+
+\section{Introduction}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.7\textwidth]{PewPew-iPhone-App-Review.jpg}
+\caption{Visual appearance}
+\end{figure}
+
+\inputminted[firstline=20, lastline=36]{scala}{../scala/org/whiskeysierra/powpow/Ship.scala}
+
+\newpage
+\nocite{pewpewgame}
+\nocite{jinput}
+\printbibliography
+\listoffigures
 
 \end{document}
 
