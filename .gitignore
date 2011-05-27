@@ -42,6 +42,7 @@ pom.xml.releaseBackup
 /src/main/latex/*.aux
 /src/main/latex/*.bbl
 /src/main/latex/*.blg
+/src/main/latex/*.fdb_latexmk
 /src/main/latex/*.lof
 /src/main/latex/*.mp
 /src/main/latex/*.pdf
