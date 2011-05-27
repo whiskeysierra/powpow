@@ -4,11 +4,13 @@ import com.bulletphysics.collision.dispatch.CollisionObject
 import com.bulletphysics.collision.shapes.CollisionShape
 import com.bulletphysics.dynamics.{RigidBodyConstructionInfo, RigidBody}
 import com.bulletphysics.linearmath.{Transform, MotionState}
+import de.bht.jvr.math.Vector3
 import javax.vecmath.{Vector3f, Matrix4f}
+import Vector.toVector3f
 
 trait Physical {
 
-    var position:Vector
+    var position:Vector3
     
     private val rigidBody = createBody
     
@@ -24,7 +26,7 @@ trait Physical {
             
             override def getWorldTransform(transform:Transform) = {
                 val matrix = new Matrix4f
-                matrix.set(position toVector3f)
+                matrix.set(position)
                 transform.set(matrix)
                 transform
             }
@@ -45,7 +47,7 @@ trait Physical {
         info.angularDamping = 0
         val body = new RigidBody(info)
         val matrix = new Matrix4f
-        matrix.set(position toVector3f)
+        matrix.set(position)
         body.proceedToTransform(new Transform(matrix))
         body.setActivationState(CollisionObject.DISABLE_DEACTIVATION)
         body

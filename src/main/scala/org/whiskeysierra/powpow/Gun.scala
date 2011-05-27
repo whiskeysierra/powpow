@@ -11,10 +11,11 @@ import scala.actors.Actor
 import scala.collection.JavaConversions._
 import scala.util.Random
 import javax.vecmath.{Vector3f, Matrix4f}
+import Vector.toVector3f
 
 class Gun(private val parent:GroupNode, private val sphere:SceneNode) extends Actor with ResourceLoader {
     
-    private var position = Vector()
+    private var position = new Vector3
     
     private val cloud = new AttributeCloud(1000, GL.GL_POINTS)
     
@@ -31,7 +32,7 @@ class Gun(private val parent:GroupNode, private val sphere:SceneNode) extends Ac
     private def cos(a:Float) = math.cos(a).toFloat
     private def sin(a:Float) = math.sin(a).toFloat
     
-    private def randomize(direction:Vector) = {
+    private def randomize(direction:Vector3) = {
         val angle = angles(random.nextInt(angles.length))
         Vector(
             cos(angle) * direction.x - sin(angle) * direction.y,
@@ -61,7 +62,7 @@ class Gun(private val parent:GroupNode, private val sphere:SceneNode) extends Ac
                     shape.setMaterial(material)
 
                     for (i <- 0 until cloud.getNumPoints) {
-                        val bullet = Bullet()
+                        val bullet = Bullet.apply()
                         bullets add bullet
                         sender ! AddBody(bullet.body, Collisions.BULLET, collisions)
                     }
@@ -79,9 +80,9 @@ class Gun(private val parent:GroupNode, private val sphere:SceneNode) extends Ac
                             bullet.direction = randomize(direction)
                             
                             val matrix = new Matrix4f
-                            matrix.set(position toVector3f)
+                            matrix.set(position)
                             bullet.body.proceedToTransform(new com.bulletphysics.linearmath.Transform(matrix))
-                            bullet.body.setLinearVelocity(bullet.direction * 25 toVector3f)
+                            bullet.body.setLinearVelocity(bullet.direction mul 25)
                             bullet.energy = 1
                         }
                     }

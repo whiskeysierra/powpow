@@ -4,46 +4,19 @@ import de.bht.jvr.math.Vector3
 import javax.vecmath.Vector3f
 
 object Vector {
-    def apply(x:Float=0, y:Float=0) = new Vector(x, y)
-    def apply(v:Vector3f) = new Vector(v.x, v.y)
-    def unapply(v:Vector):Option[(Float, Float)] = Some((v.x, v.y))
-}
-
-final class Vector(var x:Float, var y:Float) {
-
-    def +(v:Vector) = Vector(x + v.x, y + v.y)
     
-    def -(v:Vector) = Vector(x - v.x, y - v.y)
+    def apply():Vector3 = apply(0, 0)
     
-    def *(s:Float) = Vector(x * s, y * s)
+    def apply(x:Float, y:Float) = new Vector3(x, y, 0)
     
-    def /(s:Float) = this * (1 / s)
+    def apply(v:Vector3f) = new Vector3(v.x, v.y, v.z)
     
-    def length = math.sqrt(math.pow(x, 2) + math.pow(y, 2)).toFloat
+    def isZero(v:Vector3) = v.x == 0 && v.y == 0
     
-    def normalize = if (isZero) Vector() else this / length
+    def isNotZero(v:Vector3) = !isZero(v)
     
-    def dot(v:Vector) = x * v.x + y * v.y
+    def copy(v:Vector3) = new Vector3(v.x, v.y, v.z)
     
-    def copy = Vector(x, y)
-    
-    def isZero = x == 0 && y == 0
-    
-    def isNotZero = !isZero
-
-    def toVector3 = new Vector3(x, y, 0)
-    
-    def toVector3f = new Vector3f(x, y, 0)
-    
-    private def eq(a:Float, b:Float) = a - b < 0.1f
-    
-    override def equals(that:Any):Boolean = that match {
-        case Vector(x, y) => eq(this.x, x) && eq(this.y, y)
-        case other => false
-    }
-    
-    override def hashCode = x.hashCode ^ y.hashCode
-    
-    override def toString = "[%.2f, %.2f]".format(x, y)
+    implicit def toVector3f(v:Vector3) = new Vector3f(v.x, v.y, v.z)
     
 }
