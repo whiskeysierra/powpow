@@ -7,17 +7,13 @@ import javax.vecmath.Vector3f
 import scala.actors.Actor
 import Vector._
 
-class Ship(private val node:SceneNode, var position:Vector3) extends Actor with Physical {
+class Ship(private val node:SceneNode) extends Actor with Physical {
     
     private val pi:Float = math.Pi.toFloat
-    private val stopped = new Vector3f
-    private val speed = 15
+    private val stopped = new Vector3
     
-    private var direction = new Vector3()
-    
-    def this(node:SceneNode) = this(node, new Vector3())
-    
-    override def shape = new SphereShape(1f)
+    val shape = new SphereShape(1f)
+    override val boost = 15f
 
     override def act():Unit = {
         loop {
@@ -26,9 +22,8 @@ class Ship(private val node:SceneNode, var position:Vector3) extends Actor with 
                     sender ! AddBody(body, Collisions.SHIP, Collisions.NOTHING)
                 case Move(movement) => 
                     direction = movement.normalize
-                    body.setLinearVelocity(movement mul speed)
                 case Stop =>
-                    body.setLinearVelocity(stopped)
+                    direction = stopped
                 case Update => 
                     update
                     sender ! Position(position)

@@ -9,21 +9,40 @@ import javax.vecmath.{Vector3f, Matrix4f}
 import Vector.toVector3f
 
 trait Physical {
-
-    var position:Vector3
     
-    private val rigidBody = createBody
+    val shape:CollisionShape
     
-    def body:RigidBody = rigidBody
-    def shape:CollisionShape
+    val mass = 1f
+    val boost = 1f
     
-    private def createBody:RigidBody = {
-        val mass = 1
+    private var p = new Vector3
+    
+    final def position = p
+    final def position_=(p:Vector3):Unit = {
+        this.p = p
+        val matrix = new Matrix4f
+        matrix.set(position)
+        body.proceedToTransform(new Transform(matrix))
+    }
+    
+    private var d = new Vector3
+    
+    final def direction = d  
+    final def direction_=(d:Vector3) = {
+        this.d = d
+        body.setLinearVelocity(direction mul boost)
+    }
+    
+    private var b:RigidBody = null
+    
+    def body:RigidBody = if (b == null) createAndSetBody else b
+    
+    private def createAndSetBody():RigidBody = {
         val inertia = new Vector3f
         shape.calculateLocalInertia(mass, inertia)
         
         val state = new MotionState {
-            
+                
             override def getWorldTransform(transform:Transform) = {
                 val matrix = new Matrix4f
                 matrix.set(position)
@@ -40,17 +59,15 @@ trait Physical {
             }
             
         }
-    
+        
         val info = new RigidBodyConstructionInfo(mass, state, shape, inertia)
         info.restitution = 0
         info.linearDamping = 0
         info.angularDamping = 0
-        val body = new RigidBody(info)
-        val matrix = new Matrix4f
-        matrix.set(position)
-        body.proceedToTransform(new Transform(matrix))
-        body.setActivationState(CollisionObject.DISABLE_DEACTIVATION)
-        body
+        
+        b = new RigidBody(info)
+        b.setActivationState(CollisionObject.DISABLE_DEACTIVATION)
+        return b
     }
     
 }

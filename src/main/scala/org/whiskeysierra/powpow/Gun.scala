@@ -70,7 +70,7 @@ class Gun(private val parent:GroupNode, private val sphere:SceneNode) extends Ac
                     shape.setMaterial(material)
 
                     for (i <- 0 until max) {
-                        val bullet = Bullet.apply()
+                        val bullet = Bullet()
                         bullets add bullet
                         sender ! AddBody(bullet.body, Collisions.BULLET, collisions)
                     }
@@ -87,10 +87,10 @@ class Gun(private val parent:GroupNode, private val sphere:SceneNode) extends Ac
                             bullet.position = position
                             bullet.direction = randomize(direction)
                             
-                            val matrix = new Matrix4f
-                            matrix.set(position)
-                            bullet.body.proceedToTransform(new com.bulletphysics.linearmath.Transform(matrix))
-                            bullet.body.setLinearVelocity(bullet.direction mul 25)
+//                            val matrix = new Matrix4f
+//                            matrix.set(position)
+//                            bullet.body.proceedToTransform(new com.bulletphysics.linearmath.Transform(matrix))
+//                            bullet.body.setLinearVelocity(bullet.direction mul 25)
                             bullet.energy = 1
                         }
                     }

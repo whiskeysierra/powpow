@@ -6,21 +6,16 @@ import Vector.toVector3f
 
 object Bullet {
     
-    def apply():Bullet = apply(Vector(), Vector())
-    
-    def apply(position:Vector3, direction:Vector3):Bullet = {
-        val radius = .5f
-        val shape = new SphereShape(radius)
-        val bullet = new Bullet(position, direction, shape)
-        bullet.body.setLinearVelocity(direction mul 25)
-        bullet
-    }
+    def apply():Bullet = new Bullet
     
 }
 
-class Bullet(var position:Vector3, var direction:Vector3, val shape:CollisionShape) extends Physical {
+class Bullet extends Physical {
     
-    var energy:Float = 0
+    val shape = new SphereShape(.5f)
+    override val mass = 1f
+    override val boost = 25f
+    var energy = 1f
  
     override def toString = "Bullet(%s, %s, %f)" format (position, direction, energy)
     
