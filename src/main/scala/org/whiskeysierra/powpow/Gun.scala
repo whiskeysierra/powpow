@@ -1,6 +1,7 @@
 package org.whiskeysierra.powpow
 
 import com.google.common.collect.{Iterables, Lists}
+import com.google.common.base.{Function, Predicate}
 import de.bht.jvr.core.{AttributeCloud, GroupNode, SceneNode, Shader, ShaderMaterial, ShaderProgram, ShapeNode}
 import de.bht.jvr.core.attributes.{AttributeFloat, AttributeVector3}
 import de.bht.jvr.math.Vector3
@@ -17,13 +18,20 @@ class Gun(private val parent:GroupNode, private val sphere:SceneNode) extends Ac
     
     private var position = new Vector3
     
-    private val cloud = new AttributeCloud(1000, GL.GL_POINTS)
+    private val max = 1000
+    private val cloud = new AttributeCloud(max, GL.GL_POINTS)
     
-    private val bullets:List[Bullet] = Lists.newArrayListWithCapacity(cloud.getNumPoints)
+    private val bullets:List[Bullet] = Lists.newArrayListWithCapacity(max)
     
-    private val positions:List[Vector3] = Lists.transform(bullets, Bullet.Position)
-    private val energies:List[java.lang.Float] = Lists.transform(bullets, Bullet.Energy)
-    private val inactives:Iterable[Bullet] = Iterables.filter(bullets, Bullet.Inactive)
+    private val positions:List[Vector3] = Lists.transform(bullets, new Function[Bullet, Vector3] {
+        override def apply(b) = b.position  
+    });
+    
+    private val energies:Array[Float] = Array.fill(max) {0}
+    
+    private val inactives:Iterable[Bullet] = Iterables.filter(bullets, new Predicate[Bullet] {
+        override def apply(b:Bullet) = b.energy <= 0f
+    })
     
     private val angles = for (a <- -20 until 20) yield a.toRadians
     private val random = new Random
@@ -61,7 +69,7 @@ class Gun(private val parent:GroupNode, private val sphere:SceneNode) extends Ac
                     shape.setGeometry(cloud)
                     shape.setMaterial(material)
 
-                    for (i <- 0 until cloud.getNumPoints) {
+                    for (i <- 0 until max) {
                         val bullet = Bullet.apply()
                         bullets add bullet
                         sender ! AddBody(bullet.body, Collisions.BULLET, collisions)
@@ -86,18 +94,24 @@ class Gun(private val parent:GroupNode, private val sphere:SceneNode) extends Ac
                             bullet.energy = 1
                         }
                     }
-                case Update => 
-                    update
-                    bullets foreach {bullet =>
-                        bullet.energy -= 0.01f
-                    }
+                case Update => update
                 case PoisonPill => exit
             }
         }
     }
     
     private def update = {
+        
+        for (i <- 0 until max) {
+            energies.update(i, bullets(i).energy)
+        }
+        
         cloud.setAttribute("position", new AttributeVector3(positions))
+        cloud.setAttribute("energy", new AttributeFloat(energies))
+        
+        bullets foreach {bullet =>
+            bullet.energy -= 0.01f
+        }
     }
     
 }
