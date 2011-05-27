@@ -7,19 +7,54 @@ import scala.actors.Actor
 object GameController {
     
     private val controllers:Array[Controller] = ControllerEnvironment.getDefaultEnvironment().getControllers filter {
-        _.getType == Controller.Type.GAMEPAD
+        c => c.getType == Controller.Type.GAMEPAD || c.getType == Controller.Type.STICK
     }
     
     def apply(index:Int):GameController = {
         if (index < controllers.length) {
             val controller:Controller = controllers(index)
             println("Found: " + controller)
-            return new JInputGameController(controller)
+            
+            controller.getName match {
+                case WingManRumblePad.name => new JInputGameController(controller, WingManRumblePad)
+                case CordlessRumblePad2.name => new JInputGameController(controller, CordlessRumblePad2)
+            }
         } else {
             println("Using Fake Controller #" + index)
             return FakeGameController
         }
     }
+    
+}
+    
+private trait Template {
+    
+    val name:String
+    
+    val leftX = "x"
+    val leftY = "y" 
+    val rightX:String
+    val rightY:String
+    
+    override def toString = name
+    
+}
+
+private object WingManRumblePad extends Template {
+    
+    val name = "Logitech Inc. WingMan RumblePad"
+        
+    val rightX = "rz"
+    val rightY = "slider"
+    
+}
+
+private object CordlessRumblePad2 extends Template {
+    
+    val name = "Logitech Logitech Cordless RumblePad 2"
+        
+    val rightX = "z"
+    val rightY = "rz"
     
 }
 
@@ -29,7 +64,7 @@ private object FakeGameController extends GameController {
     override def act = Unit
 }
 
-private class JInputGameController(private val controller:Controller) extends GameController {
+private class JInputGameController(val controller:Controller, val template:Template) extends GameController {
 
     private var queue:EventQueue = controller.getEventQueue
     private val event:Event = new Event
@@ -46,10 +81,10 @@ private class JInputGameController(private val controller:Controller) extends Ga
         while (queue.getNextEvent(event)) {
             val value:Float = event.getValue
             event.getComponent.getName match {
-                case "x" => movementX = value
-                case "y" => movementY = -value
-                case "z" => aimX = value
-                case "rz" => aimY = -value
+                case template.leftX => movementX = value
+                case template.leftY => movementY = -value
+                case template.rightX => aimX = value
+                case template.rightY => aimY = -value
                 case _ =>
             }
         }
