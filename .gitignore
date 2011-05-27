@@ -47,6 +47,7 @@ pom.xml.releaseBackup
 /src/main/latex/*.pdf
 /src/main/latex/*.tmp
 /src/main/latex/*.toc
+/src/main/latex/*.top
 /src/main/latex/*.tui
 /src/main/latex/*.tuo
 /src/main/latex/*.run.xml
