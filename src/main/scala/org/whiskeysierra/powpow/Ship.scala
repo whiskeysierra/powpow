@@ -23,7 +23,8 @@ class Ship(private val node:SceneNode) extends Actor with Physical {
                 case Move(movement) => 
                     direction = movement.normalize
                 case Stop =>
-                    direction = stopped
+                    // TODO distinguish direction and velocity (direction:Vector3 mul velocity:Float?)
+                    body.setLinearVelocity(stopped)
                 case Update => 
                     update
                     sender ! Position(position)
