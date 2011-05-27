@@ -27,6 +27,10 @@ class Gun(private val parent:GroupNode, private val sphere:SceneNode) extends Ac
         override def apply(b) = b.position  
     });
     
+    private val directions:List[Vector3] = Lists.transform(bullets, new Function[Bullet, Vector3] {
+        override def apply(b) = b.direction  
+    });
+    
     private val energies:Array[Float] = Array.fill(max) {0}
     
     private val inactives:Iterable[Bullet] = Iterables.filter(bullets, new Predicate[Bullet] {
@@ -61,8 +65,8 @@ class Gun(private val parent:GroupNode, private val sphere:SceneNode) extends Ac
                     val program = new ShaderProgram(vs, fs, gs)            
             
                     program.setParameter(GL2GL3.GL_GEOMETRY_INPUT_TYPE_ARB, GL.GL_POINTS)
-                    program.setParameter(GL2GL3.GL_GEOMETRY_OUTPUT_TYPE_ARB, GL2.GL_QUADS)
-                    program.setParameter(GL2GL3.GL_GEOMETRY_VERTICES_OUT_ARB, 4)
+                    program.setParameter(GL2GL3.GL_GEOMETRY_OUTPUT_TYPE_ARB, GL.GL_LINE_STRIP)
+                    program.setParameter(GL2GL3.GL_GEOMETRY_VERTICES_OUT_ARB, 3)
             
                     val material = new ShaderMaterial("AMBIENT", program)
             
@@ -86,11 +90,6 @@ class Gun(private val parent:GroupNode, private val sphere:SceneNode) extends Ac
                             val bullet = inactive.next
                             bullet.position = position
                             bullet.direction = randomize(direction)
-                            
-//                            val matrix = new Matrix4f
-//                            matrix.set(position)
-//                            bullet.body.proceedToTransform(new com.bulletphysics.linearmath.Transform(matrix))
-//                            bullet.body.setLinearVelocity(bullet.direction mul 25)
                             bullet.energy = 1
                         }
                     }
@@ -101,16 +100,16 @@ class Gun(private val parent:GroupNode, private val sphere:SceneNode) extends Ac
     }
     
     private def update = {
-        
-        for (i <- 0 until max) {
-            energies.update(i, bullets(i).energy)
-        }
+//        for (i <- 0 until max) {
+//            energies.update(i, bullets(i).energy)
+//        }
         
         cloud.setAttribute("position", new AttributeVector3(positions))
-        cloud.setAttribute("energy", new AttributeFloat(energies))
+        cloud.setAttribute("direction", new AttributeVector3(directions))
+//        cloud.setAttribute("energy", new AttributeFloat(energies))
         
-        bullets foreach {bullet =>
-            bullet.energy -= 0.01f
+        bullets foreach {
+            bullet => bullet.energy -= 0.01f
         }
     }
     
