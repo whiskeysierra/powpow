@@ -72,7 +72,7 @@ class Gun(private val parent:GroupNode, private val sphere:SceneNode) extends Ac
                 case Position(position) => this.position = position
                 case Aim(direction) =>
                     var inactive = inactives.iterator
-                    for (i <- 0 until 10) {
+                    for (i <- 0 until 5) {
                         if (inactive.hasNext) {
                             val bullet = inactive.next
                             bullet.position = position
@@ -81,14 +81,14 @@ class Gun(private val parent:GroupNode, private val sphere:SceneNode) extends Ac
                             val matrix = new Matrix4f
                             matrix.set(position toVector3f)
                             bullet.body.proceedToTransform(new com.bulletphysics.linearmath.Transform(matrix))
-                            bullet.body.setLinearVelocity(direction * 25 toVector3f)
+                            bullet.body.setLinearVelocity(bullet.direction * 25 toVector3f)
                             bullet.energy = 1
                         }
                     }
                 case Update => 
                     update
                     bullets foreach {bullet =>
-                        bullet.energy -= 0.1f
+                        bullet.energy -= 0.01f
                     }
                 case PoisonPill => exit
             }
