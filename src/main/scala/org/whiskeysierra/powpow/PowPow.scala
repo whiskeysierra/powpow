@@ -2,11 +2,10 @@ package org.whiskeysierra.powpow
 
 import com.google.common.io.Resources
 import de.bht.jvr.collada14.loader.ColladaLoader
-import de.bht.jvr.core.{SceneNode, GroupNode, Shader, ShaderProgram, ShaderMaterial, PointLightNode, CameraNode, Transform, Printer, Finder, ShapeNode}
+import de.bht.jvr.core.{SceneNode, GroupNode, PointLightNode, CameraNode, Transform, Printer}
 import de.bht.jvr.core.pipeline.Pipeline
-import de.bht.jvr.util.{StopWatch, Color}
+import de.bht.jvr.util.Color
 import de.bht.jvr.util.awt.InputState
-import javax.media.opengl.GL2ES2
 import java.io.InputStream
 import scala.actors.Actor
 
@@ -16,13 +15,6 @@ object PowPow extends ResourceLoader {
         
         val root:GroupNode = new GroupNode("scene root")
 
-        val vertexShader:Shader = new Shader(open("lighting.vs"), GL2ES2.GL_VERTEX_SHADER)
-        val fragmentShader:Shader = new Shader(open("lighting.fs"), GL2ES2.GL_FRAGMENT_SHADER)
-        val program:ShaderProgram = new ShaderProgram(vertexShader, fragmentShader)
-        
-        val material:ShaderMaterial = new ShaderMaterial
-        material.setShaderProgram("LIGHTING", program)
-
         val boxNode:SceneNode = loadModel("box")
         
         val boxAxis:SceneNode = loadModel("axis")
@@ -31,12 +23,13 @@ object PowPow extends ResourceLoader {
         val box:GroupNode = new GroupNode("Box+Axis")
         box.addChildNodes(boxNode, boxAxis)
         
-        Finder.find(boxNode, classOf[ShapeNode], null).setMaterial(material);
-        
         val axis:SceneNode = loadModel("axis")
         axis.setTransform(Transform.scale(0.01f))
         
         val sphere:SceneNode = loadModel("sphere")
+        
+//        val grid:SceneNode = loadModel("grid")
+//        grid.setTransform(Transform.translate(0, 0, -50) mul Transform.rotateYDeg(90))
         
         val light:PointLightNode = new PointLightNode("sun")
         light.setTransform(Transform.translate(3, 0, 3))
@@ -65,7 +58,7 @@ object PowPow extends ResourceLoader {
             "space" -> new Space,
             "ship" -> new Ship(box),
             "camera" -> new Camera(cameraNode),
-            "gun" -> new Gun(bullets, sphere),
+            "gun" -> new Gun(bullets),
             "keyboard" -> new Keyboard(input),
             "controller1" -> GameController(0),
             "controller2" -> GameController(1)

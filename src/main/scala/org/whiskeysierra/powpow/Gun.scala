@@ -4,7 +4,7 @@ import Vector.toVector3f
 import com.google.common.base.{Function, Predicate}
 
 import com.google.common.collect.{Iterables, Lists}
-import de.bht.jvr.core.{AttributeCloud, GroupNode, SceneNode, Shader, ShaderMaterial, ShaderProgram, ShapeNode}
+import de.bht.jvr.core.{AttributeCloud, GroupNode, Shader, ShaderMaterial, ShaderProgram, ShapeNode}
 import de.bht.jvr.core.attributes.{AttributeFloat, AttributeVector3}
 import de.bht.jvr.math.Vector3
 import javax.media.opengl.{GL, GL2, GL3, GL2ES2, GL2GL3}
@@ -15,7 +15,7 @@ import scala.actors.Actor
 import scala.collection.JavaConversions._
 import scala.util.Random
 
-class Gun(private val parent:GroupNode, private val sphere:SceneNode) extends Actor with ResourceLoader {
+class Gun(private val parent:GroupNode) extends Actor with ResourceLoader {
     
     private var position = new Vector3
     
@@ -56,9 +56,9 @@ class Gun(private val parent:GroupNode, private val sphere:SceneNode) extends Ac
                 case Start =>
                     val shape:ShapeNode = new ShapeNode("Gun")
                     
-                    val vs = new Shader(open("bullets.vs"), GL2ES2.GL_VERTEX_SHADER)
-                    val gs = new Shader(open("bullets.gs"), GL3.GL_GEOMETRY_SHADER)
-                    val fs = new Shader(open("bullets.fs"), GL2ES2.GL_FRAGMENT_SHADER)
+                    val vs = new Shader(load("bullets.vs"), GL2ES2.GL_VERTEX_SHADER)
+                    val gs = new Shader(load("bullets.gs"), GL3.GL_GEOMETRY_SHADER)
+                    val fs = new Shader(load("bullets.fs"), GL2ES2.GL_FRAGMENT_SHADER)
         
                     val program = new ShaderProgram(vs, fs, gs)            
             
