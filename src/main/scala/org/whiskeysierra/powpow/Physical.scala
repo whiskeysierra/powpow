@@ -8,6 +8,12 @@ import com.bulletphysics.linearmath.{Transform, MotionState}
 import de.bht.jvr.math.Vector3
 import javax.vecmath.{Vector3f, Matrix4f}
 
+private object Physical {
+	
+	val ZERO = new Vector3f
+	
+}
+
 trait Physical {
     
     val shape:CollisionShape
@@ -30,7 +36,15 @@ trait Physical {
     final def direction = d  
     final def direction_=(d:Vector3) = {
         this.d = d
-        body.setLinearVelocity(direction mul boost)
+        body.setLinearVelocity(direction mul velocity * boost)
+    }
+    
+    private var v = 1f
+    
+    final def velocity = v
+    final def velocity_=(v:Float) = {
+    	this.v = v
+        body.setLinearVelocity(Physical.ZERO)
     }
     
     private var b:RigidBody = null

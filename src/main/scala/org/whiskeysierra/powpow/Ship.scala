@@ -18,11 +18,11 @@ class Ship(private val node:SceneNode) extends Actor with Physical {
             react {
                 case Start =>
                     sender ! AddBody(body, Collisions.SHIP, Collisions.NOTHING)
-                case Move(movement) => 
+                case Move(movement) =>
+                    velocity = 1 
                     direction = movement.normalize
                 case Stop =>
-                    // TODO distinguish direction and velocity (direction:Vector3 mul velocity:Float?)
-                    body.setLinearVelocity(stopped)
+                    velocity = 0
                 case Update => 
                     update
                     sender ! Position(position)
