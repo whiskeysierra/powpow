@@ -1,17 +1,18 @@
 package org.whiskeysierra.powpow
-import com.bulletphysics.collision.broadphase._
-import com.bulletphysics.collision.dispatch._
-import com.bulletphysics.dynamics._
-import com.bulletphysics.dynamics.constraintsolver._
+
+import com.bulletphysics.collision.broadphase.AxisSweep3
+import com.bulletphysics.collision.dispatch.{CollisionConfiguration, CollisionDispatcher, DefaultCollisionConfiguration}
+import com.bulletphysics.dynamics.DiscreteDynamicsWorld
+import com.bulletphysics.dynamics.constraintsolver.SequentialImpulseConstraintSolver
 import de.bht.jvr.util.StopWatch
-import javax.vecmath._
+import javax.vecmath.Vector3f
 
 import scala.actors.Actor
 
 class Space extends Actor {
 
     private val config:CollisionConfiguration = new DefaultCollisionConfiguration
-    private val limit = 100f
+    private val limit = 50f
     
     private val world = new DiscreteDynamicsWorld(
         new CollisionDispatcher(config),

@@ -65,6 +65,7 @@ trait Physical {
             override def getWorldTransform(transform:Transform) = {
                 val matrix = new Matrix4f
                 matrix.set(position)
+                // TODO add direction as rotation
                 transform.set(matrix)
                 transform
             }
@@ -73,6 +74,7 @@ trait Physical {
                 val matrix = new Matrix4f
                 transform.getMatrix(matrix)
                 val translation = new Vector3f
+                // TODO extract rotation into direction
                 matrix.get(translation)
                 position = translation
             }

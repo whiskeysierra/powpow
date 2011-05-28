@@ -1,24 +1,45 @@
 package org.whiskeysierra.powpow
 
+import com.bulletphysics.collision.shapes.StaticPlaneShape
+import com.bulletphysics.dynamics.RigidBody
+import com.bulletphysics.linearmath.Transform
 import de.bht.jvr.core.{AttributeCloud, GroupNode, Shader, ShaderMaterial, ShaderProgram, ShapeNode}
 import de.bht.jvr.core.attributes.AttributeVector3
 import de.bht.jvr.core.uniforms.{UniformFloat, UniformVector4}
 import de.bht.jvr.math.{Vector3, Vector4}
 import javax.media.opengl.{GL, GL2, GL3, GL2ES2, GL2GL3}
+import javax.vecmath.{Matrix4f, Vector3f}
 import scala.actors.Actor
 import scala.collection.JavaConversions._
 
 class Grid(private val parent:GroupNode) extends Actor with ResourceLoader {
 
+	val size = 50
+	
 	override def act = {
 		loop {
 			react {
 				case Start =>
-                    walls
-                    background
+					walls
+					grid(75, size)
+					grid(100, size, -50, 0.2f)
 				case PoisonPill => exit
 			}
 		}
+	}
+	
+	private def normals = Array(
+		new Vector3f( 0,  1, 0),
+		new Vector3f( 0, -1, 0),
+		new Vector3f( 1,  0, 0),
+		new Vector3f(-1,  0, 0)
+	)
+	
+	private def walls = for (normal <- normals) {
+		val body = new RigidBody(0, null, new StaticPlaneShape(normal, 0))
+		normal.scale(-15)
+		body.translate(normal)
+		sender ! AddBody(body, Collisions.WALL, Collisions.BULLET)
 	}
 	
 	private def grid(max:Float, size:Float, z:Float=0, alpha:Float=1) = {
@@ -45,8 +66,5 @@ class Grid(private val parent:GroupNode) extends Actor with ResourceLoader {
 
         sender ! Add(parent, shape)
 	}
-	
-	private def walls = grid(75, 50)
-	private def background = grid(100, 50, -50, 0.2f)
 	
 }
