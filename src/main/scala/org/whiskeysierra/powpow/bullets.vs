@@ -1,7 +1,7 @@
+uniform mat4 jvr_ModelViewProjectionMatrix;
+
 attribute vec3 position;
 attribute vec3 direction;
-
-uniform mat4 jvr_ModelViewProjectionMatrix;
 
 varying vec3 bulletDirection;
 

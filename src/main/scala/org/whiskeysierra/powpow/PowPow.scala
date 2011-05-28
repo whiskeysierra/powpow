@@ -40,8 +40,9 @@ object PowPow extends ResourceLoader {
         val cameraNode:CameraNode = new CameraNode("camera", width.toFloat / height.toFloat, 60)
         
         val bullets:GroupNode = new GroupNode("Bullets")
+        val grid:GroupNode = new GroupNode("Grid")
 
-        root.addChildNodes(axis, box, sphere, bullets, light, cameraNode)
+        root.addChildNodes(axis, box, sphere, bullets, grid, light, cameraNode)
         
         Printer.print(root)
 
@@ -56,6 +57,7 @@ object PowPow extends ResourceLoader {
         val hub:Actor = new MessageHub(Map(
             "displayer" -> new Displayer(pipeline, input),
             "space" -> new Space,
+            "grid" -> new Grid(grid),
             "ship" -> new Ship(box),
             "camera" -> new Camera(cameraNode),
             "gun" -> new Gun(bullets),
