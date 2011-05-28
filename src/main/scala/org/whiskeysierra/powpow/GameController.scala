@@ -1,8 +1,8 @@
 package org.whiskeysierra.powpow
 
+import de.bht.jvr.math.Vector3
 import net.java.games.input.{AbstractController, Controller, ControllerEnvironment, Component, EventQueue, Event}
 import scala.actors.Actor
-
 
 object GameController {
     
@@ -96,14 +96,14 @@ private class JInputGameController(val controller:Controller, val template:Templ
                 case Update =>
                     poll
                     
-                    val movement = Vector(movementX, movementY)
+                    val movement = new Vector3(movementX, movementY, 0)
                     if (movement.length > 0.1) {
                         sender ! Move(movement)
                     } else {
                         sender ! Stop
                     }
                     
-                    val aim = Vector(aimX, aimY)
+                    val aim = new Vector3(aimX, aimY, 0)
                     if (aim.length > 0.1) {
                         sender ! Aim(aim.normalize)
                     }

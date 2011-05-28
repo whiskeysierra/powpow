@@ -1,5 +1,6 @@
 package org.whiskeysierra.powpow
 
+import de.bht.jvr.math.Vector3
 import de.bht.jvr.util.InputState
 import java.awt.event.KeyEvent
 import scala.actors.Actor
@@ -10,8 +11,8 @@ class Keyboard(private val input:InputState) extends Actor {
         loop {
             react {
                 case Update => {
-                    var directionX = 0
-                    var directionY = 0
+                    var directionX = 0f
+                    var directionY = 0f
                     
                     if (input.isDown('A')) {
                         directionX -= 1
@@ -29,8 +30,8 @@ class Keyboard(private val input:InputState) extends Actor {
                         directionX += 1
                     }
                     
-                    val direction = Vector(directionX, directionY)
-                    if (Vector.isZero(direction)) {
+                    val direction = new Vector3(directionX, directionY, 0)
+                    if (direction.length == 0) {
                         sender ! Stop
                     } else {
                         // keyboard moves with full speed, hence the normalize
@@ -56,8 +57,8 @@ class Keyboard(private val input:InputState) extends Actor {
                         aimX += 1
                     }
                     
-                    val aim = Vector(aimX, aimY)
-                    if (Vector.isNotZero(aim)) {
+                    val aim = new Vector3(aimX, aimY, 0)
+                    if (aim.length > 0) {
                         sender ! Aim(aim)
                     }
                     

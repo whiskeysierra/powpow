@@ -24,11 +24,11 @@ class Gun(private val parent:GroupNode, private val sphere:SceneNode) extends Ac
     private val bullets:List[Bullet] = Lists.newArrayListWithCapacity(max)
     
     private val positions:List[Vector3] = Lists.transform(bullets, new Function[Bullet, Vector3] {
-        override def apply(b) = b.position  
+        override def apply(b:Bullet) = b.position  
     });
     
     private val directions:List[Vector3] = Lists.transform(bullets, new Function[Bullet, Vector3] {
-        override def apply(b) = b.direction  
+        override def apply(b:Bullet) = b.direction  
     });
     
     private val energies:Array[Float] = Array.fill(max) {0}
@@ -46,9 +46,10 @@ class Gun(private val parent:GroupNode, private val sphere:SceneNode) extends Ac
     
     private def randomize(direction:Vector3) = {
         val angle = angles(random.nextInt(angles.length))
-        Vector(
+        new Vector3(
             cos(angle) * direction.x - sin(angle) * direction.y,
-            sin(angle) * direction.x + cos(angle) * direction.y
+            sin(angle) * direction.x + cos(angle) * direction.y,
+            0
         )
     }
     

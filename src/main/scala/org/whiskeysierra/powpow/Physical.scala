@@ -6,7 +6,7 @@ import com.bulletphysics.dynamics.{RigidBodyConstructionInfo, RigidBody}
 import com.bulletphysics.linearmath.{Transform, MotionState}
 import de.bht.jvr.math.Vector3
 import javax.vecmath.{Vector3f, Matrix4f}
-import Vector.toVector3f
+import Vector.{toVector3, toVector3f}
 
 trait Physical {
     
@@ -55,7 +55,7 @@ trait Physical {
                 transform.getMatrix(matrix)
                 val translation = new Vector3f
                 matrix.get(translation)
-                position = Vector(translation)
+                position = translation
             }
             
         }
