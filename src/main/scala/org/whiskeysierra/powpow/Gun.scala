@@ -1,18 +1,18 @@
 package org.whiskeysierra.powpow
+import Vector.toVector3f
+import com.google.common.base.{Function, Predicate}
 
 import com.google.common.collect.{Iterables, Lists}
-import com.google.common.base.{Function, Predicate}
 import de.bht.jvr.core.{AttributeCloud, GroupNode, SceneNode, Shader, ShaderMaterial, ShaderProgram, ShapeNode}
 import de.bht.jvr.core.attributes.{AttributeFloat, AttributeVector3}
 import de.bht.jvr.math.Vector3
-import java.lang.Iterable
-import java.util.List 
 import javax.media.opengl.{GL, GL2, GL3, GL2ES2, GL2GL3}
+import javax.vecmath.{Vector3f, Matrix4f}
+import java.lang.Iterable
+import java.util.List
 import scala.actors.Actor
 import scala.collection.JavaConversions._
 import scala.util.Random
-import javax.vecmath.{Vector3f, Matrix4f}
-import Vector.toVector3f
 
 class Gun(private val parent:GroupNode, private val sphere:SceneNode) extends Actor with ResourceLoader {
     

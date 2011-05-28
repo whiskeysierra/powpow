@@ -1,8 +1,8 @@
 package org.whiskeysierra.powpow
+import Vector.toVector3f
 
 import com.bulletphysics.collision.shapes.{CollisionShape, SphereShape}
 import de.bht.jvr.math.Vector3
-import Vector.toVector3f
 
 object Bullet {
     

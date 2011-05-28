@@ -1,7 +1,7 @@
 package org.whiskeysierra.powpow
 
 import de.bht.jvr.math.Vector3
-import de.bht.jvr.util.InputState
+import de.bht.jvr.util.awt.InputState
 import java.awt.event.KeyEvent
 import scala.actors.Actor
 

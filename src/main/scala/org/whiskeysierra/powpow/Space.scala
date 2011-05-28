@@ -1,12 +1,12 @@
 package org.whiskeysierra.powpow
-
-import scala.actors.Actor
 import com.bulletphysics.collision.broadphase._
 import com.bulletphysics.collision.dispatch._
 import com.bulletphysics.dynamics._
 import com.bulletphysics.dynamics.constraintsolver._
-import javax.vecmath._
 import de.bht.jvr.util.StopWatch
+import javax.vecmath._
+
+import scala.actors.Actor
 
 class Space extends Actor {
 

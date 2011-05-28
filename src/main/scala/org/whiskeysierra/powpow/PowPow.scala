@@ -4,9 +4,8 @@ import com.google.common.io.Resources
 import de.bht.jvr.collada14.loader.ColladaLoader
 import de.bht.jvr.core.{SceneNode, GroupNode, Shader, ShaderProgram, ShaderMaterial, PointLightNode, CameraNode, Transform, Printer, Finder, ShapeNode}
 import de.bht.jvr.core.pipeline.Pipeline
-import de.bht.jvr.util.Color
-import de.bht.jvr.renderer.{RenderWindow, AwtRenderWindow, Viewer}
-import de.bht.jvr.util.{InputState, StopWatch}
+import de.bht.jvr.util.{StopWatch, Color}
+import de.bht.jvr.util.awt.InputState
 import javax.media.opengl.GL2ES2
 import java.io.InputStream
 import scala.actors.Actor
@@ -60,11 +59,9 @@ object PowPow extends ResourceLoader {
         pipeline.doLightLoop(true, true).drawGeometry("LIGHTING", null)
 
         val input:InputState = new InputState
-        val window:RenderWindow = new AwtRenderWindow(pipeline, width, height)
-        window.addKeyListener(input)
         
         val hub:Actor = new MessageHub(Map(
-            "displayer" -> new Displayer(window),
+            "displayer" -> new Displayer(pipeline, input),
             "space" -> new Space,
             "ship" -> new Ship(box),
             "camera" -> new Camera(cameraNode),

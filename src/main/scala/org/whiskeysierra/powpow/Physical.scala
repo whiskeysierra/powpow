@@ -1,12 +1,12 @@
 package org.whiskeysierra.powpow
+import Vector.{toVector3, toVector3f}
 
 import com.bulletphysics.collision.dispatch.CollisionObject
 import com.bulletphysics.collision.shapes.CollisionShape
-import com.bulletphysics.dynamics.{RigidBodyConstructionInfo, RigidBody}
+import com.bulletphysics.dynamics.RigidBody
 import com.bulletphysics.linearmath.{Transform, MotionState}
 import de.bht.jvr.math.Vector3
 import javax.vecmath.{Vector3f, Matrix4f}
-import Vector.{toVector3, toVector3f}
 
 trait Physical {
     
@@ -37,7 +37,12 @@ trait Physical {
     
     def body:RigidBody = if (b == null) createAndSetBody else b
     
-    private def createAndSetBody():RigidBody = {
+    private def createAndSetBody:RigidBody = {
+    	b = createBody
+    	return b
+    }
+    
+    private def createBody():RigidBody = {
         val inertia = new Vector3f
         shape.calculateLocalInertia(mass, inertia)
         
@@ -60,14 +65,9 @@ trait Physical {
             
         }
         
-        val info = new RigidBodyConstructionInfo(mass, state, shape, inertia)
-        info.restitution = 0
-        info.linearDamping = 0
-        info.angularDamping = 0
-        
-        b = new RigidBody(info)
-        b.setActivationState(CollisionObject.DISABLE_DEACTIVATION)
-        return b
+        val body = new RigidBody(mass, state, shape, inertia)
+        body.setActivationState(CollisionObject.DISABLE_DEACTIVATION)
+        return body
     }
     
 }

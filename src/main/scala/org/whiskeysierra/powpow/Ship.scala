@@ -5,12 +5,10 @@ import de.bht.jvr.core.{Transform, SceneNode}
 import de.bht.jvr.math.Vector3
 import javax.vecmath.Vector3f
 import scala.actors.Actor
-import Vector._
 
 class Ship(private val node:SceneNode) extends Actor with Physical {
     
-    private val pi:Float = math.Pi.toFloat
-    private val stopped = new Vector3
+    private val stopped = new Vector3f
     
     val shape = new SphereShape(1f)
     override val boost = 15f
