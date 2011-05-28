@@ -9,6 +9,7 @@ sealed abstract class Message
 case object Start extends Message
 
 case object Update extends Message
+case class Resize(val width:Int, val height:Int) extends Message
 
 case class Add(val parent:GroupNode, val child:SceneNode) extends Message
 case class Remove(val parent:GroupNode, val orphan:SceneNode) extends Message

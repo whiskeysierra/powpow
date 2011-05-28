@@ -36,8 +36,9 @@ class Displayer(val pipeline:Pipeline, private val input:InputState) extends Act
 		sender ! Update
 	}
 
-    // TODO change camera
-    override def reshape(drawable:GLAutoDrawable, x:Int, y:Int, width:Int, height:Int) = Unit
+    override def reshape(drawable:GLAutoDrawable, x:Int, y:Int, width:Int, height:Int) = {
+    	sender ! Resize(width, height)
+    }
 
     override def dispose(drawable:GLAutoDrawable) = Unit
     
