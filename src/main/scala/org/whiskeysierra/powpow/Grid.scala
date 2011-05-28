@@ -20,7 +20,7 @@ class Grid(private val parent:GroupNode) extends Actor with ResourceLoader {
 		loop {
 			react {
 				case Start =>
-					walls
+					generateWalls
 					grid(75, size)
 					grid(100, size, -50, 0.2f)
 				case PoisonPill => exit
@@ -35,11 +35,9 @@ class Grid(private val parent:GroupNode) extends Actor with ResourceLoader {
 		new Vector3f(-1,  0, 0)
 	)
 	
-	private def walls = for (normal <- normals) {
-		val body = new RigidBody(0, null, new StaticPlaneShape(normal, 0))
-		normal.scale(-15)
-		body.translate(normal)
-		sender ! AddBody(body, Collisions.WALL, Collisions.BULLET)
+	private def generateWalls = for (normal <- normals) {
+		val wall = Wall(normal)
+		sender ! AddBody(wall.body, Collisions.WALL, Collisions.BULLET)
 	}
 	
 	private def grid(max:Float, size:Float, z:Float=0, alpha:Float=1) = {

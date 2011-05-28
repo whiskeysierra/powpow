@@ -83,7 +83,14 @@ trait Physical {
         
         val body = new RigidBody(mass, state, shape, inertia)
         body.setActivationState(CollisionObject.DISABLE_DEACTIVATION)
+        body.setUserPointer(this)
         return body
+    }
+    
+    private val name = getClass.getSimpleName
+    
+    override def toString = {
+		"%s [%s, %s, %f]" format (name, position, direction, velocity)
     }
     
 }

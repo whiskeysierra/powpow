@@ -47,9 +47,6 @@ class Gun(private val parent:GroupNode) extends Actor with ResourceLoader {
         override def apply(b:Bullet) = b.energy <= 0f
     })
     
-    private val random = new Random
-    private val collisions = Collisions.WALL | Collisions.SEEKER | Collisions.BOMBER toShort
-    
     override def act = {
         loop {
             react {
@@ -74,7 +71,7 @@ class Gun(private val parent:GroupNode) extends Actor with ResourceLoader {
                     for (i <- 0 until max) {
                         val bullet = Bullet()
                         bullets add bullet
-                        sender ! AddBody(bullet.body, Collisions.BULLET, collisions)
+                        sender ! AddBody(bullet.body, Collisions.BULLET, Collisions.WALL)
                     }
                     
                     update

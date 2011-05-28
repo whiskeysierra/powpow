@@ -13,10 +13,7 @@ object Bullet {
 class Bullet extends Physical with Collidable {
     
     val shape = new SphereShape(.5f)
-    override val mass = 1f
     override val boost = 25f
     var energy = 1f
  
-    override def toString = "Bullet(%s, %s, %f)" format (position, direction, energy)
-    
 }
