@@ -6,7 +6,7 @@ import de.bht.jvr.math.Vector3
 import javax.vecmath.Vector3f
 import scala.actors.Actor
 
-class Ship(private val node:SceneNode) extends Actor with Physical {
+class Ship(private val node:SceneNode) extends Actor with Physical with Collidable {
     
     private val stopped = new Vector3f
     

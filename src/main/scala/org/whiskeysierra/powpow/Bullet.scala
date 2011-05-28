@@ -10,7 +10,7 @@ object Bullet {
     
 }
 
-class Bullet extends Physical {
+class Bullet extends Physical with Collidable {
     
     val shape = new SphereShape(.5f)
     override val mass = 1f
