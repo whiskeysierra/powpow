@@ -28,14 +28,12 @@ object PowPow extends ResourceLoader {
         
         val sphere:SceneNode = loadModel("sphere")
         
-//        val grid:SceneNode = loadModel("grid")
-//        grid.setTransform(Transform.translate(0, 0, -50) mul Transform.rotateYDeg(90))
-        
         val light:PointLightNode = new PointLightNode("sun")
         light.setTransform(Transform.translate(3, 0, 3))
 
-        val width:Int = 1000
-        val height:Int = 625
+        // TODO this should be somewhere else
+        val width:Int = 600
+        val height:Int = 600
         
         val cameraNode:CameraNode = new CameraNode("camera", width.toFloat / height.toFloat, 60)
         

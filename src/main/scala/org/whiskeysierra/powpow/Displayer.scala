@@ -51,7 +51,7 @@ class Displayer(val pipeline:Pipeline, private val input:InputState) extends Act
 			        frame.getContentPane().add(canvas)
 			        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE)
 			        // TODO make configurable
-			        frame.setMinimumSize(new Dimension(1000, 625))
+			        frame.setMinimumSize(new Dimension(600, 600))
 			        frame.setVisible(true)
 			        canvas.requestFocusInWindow
 		        	animator.start
