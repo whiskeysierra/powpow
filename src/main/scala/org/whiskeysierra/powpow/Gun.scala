@@ -1,4 +1,5 @@
 package org.whiskeysierra.powpow
+
 import Vector.toVector3f
 import com.google.common.base.{Function, Predicate}
 
@@ -17,6 +18,16 @@ import scala.util.Random
 class Gun(private val parent:GroupNode, private val sphere:SceneNode) extends Actor with ResourceLoader {
     
     private var position = new Vector3
+    
+    private val rateOfFire = 5
+    private val spreading = 30 // in degrees
+    
+    private val angles = {
+    	val size = spreading / (rateOfFire - 1)
+    	for (i <- 0 until rateOfFire) 
+    		yield (size * i - spreading / 2).toRadians
+    }
+    
     
     private val max = 1000
     private val cloud = new AttributeCloud(max, GL.GL_POINTS)
@@ -37,16 +48,15 @@ class Gun(private val parent:GroupNode, private val sphere:SceneNode) extends Ac
         override def apply(b:Bullet) = b.energy <= 0f
     })
     
-    private val angles = for (a <- -20 until 20) yield a.toRadians
     private val random = new Random
     private val collisions = Collisions.WALL | Collisions.SEEKER | Collisions.BOMBER toShort
     
     private def cos(a:Float) = math.cos(a).toFloat
     private def sin(a:Float) = math.sin(a).toFloat
     
-    private def randomize(direction:Vector3) = {
-        val angle = angles(random.nextInt(angles.length))
-        new Vector3(
+    private def toDirection(direction:Vector3, i:Int):Vector3 = {
+		val angle = angles(i)
+		return new Vector3(
             cos(angle) * direction.x - sin(angle) * direction.y,
             sin(angle) * direction.x + cos(angle) * direction.y,
             0
@@ -86,11 +96,11 @@ class Gun(private val parent:GroupNode, private val sphere:SceneNode) extends Ac
                 case Position(position) => this.position = position
                 case Aim(direction) =>
                     var inactive = inactives.iterator
-                    for (i <- 0 until 5) {
+                    for (i <- 0 until rateOfFire) {
                         if (inactive.hasNext) {
                             val bullet = inactive.next
                             bullet.position = position
-                            bullet.direction = randomize(direction)
+                            bullet.direction = toDirection(direction, i)
                             bullet.energy = 1
                         }
                     }
