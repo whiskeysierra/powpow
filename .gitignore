@@ -46,6 +46,7 @@ pom.xml.releaseBackup
 /src/main/latex/*.lof
 /src/main/latex/*.mp
 /src/main/latex/*.pdf
+/src/main/latex/*.pyg
 /src/main/latex/*.tmp
 /src/main/latex/*.toc
 /src/main/latex/*.top
