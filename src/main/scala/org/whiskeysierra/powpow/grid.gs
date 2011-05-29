@@ -3,7 +3,7 @@ uniform float max;
 uniform float size;
 
 void emit(float x, float y) {
-    gl_Position = gl_PositionIn[0] + vec4(vec2(x, y), 0, 0);
+    gl_Position = gl_PositionIn[0] + vec4(x, y, 0, 0);
     EmitVertex();
 }
 
