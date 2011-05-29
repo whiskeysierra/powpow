@@ -10,14 +10,14 @@ class Ship(private val node:SceneNode) extends Actor with Physical with Collidab
     
     private val stopped = new Vector3f
     
-    val shape = new SphereShape(1f)
+    val shape = new SphereShape(.5f)
     override val boost = 15f
 
     override def act():Unit = {
         loop {
             react {
                 case Start =>
-                    sender ! AddBody(body, Collisions.SHIP, Collisions.NOTHING)
+                    sender ! AddBody(body, Collisions.SHIP, Collisions.WALL)
                 case Move(movement) =>
                     velocity = 1 
                     direction = movement.normalize
