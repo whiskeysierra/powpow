@@ -37,7 +37,7 @@ class Grid(private val parent:GroupNode) extends Actor with ResourceLoader {
 	
 	private def generateWalls = for (normal <- normals) {
 		val wall = Wall(normal)
-		sender ! AddBody(wall.body, Collisions.WALL, Collisions.SHIP | Collisions.BULLET toShort)
+		sender ! AddBody(wall.body, Collisions.WALL, Collisions.WITH_WALL)
 	}
 	
 	private def grid(max:Float, size:Float, z:Float=0, alpha:Float=1) = {

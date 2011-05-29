@@ -23,7 +23,9 @@ case class Aim(val direction:Vector3) extends Message
 case class AddBody(body:RigidBody, bit:Short, mask:Short) extends Message
 case class RemoveBody(body:RigidBody) extends Message
 
-case class Collision(left:Collidable, right:Collidable) extends Message
+case class Miss(bullet:Bullet) extends Message
+case class SeekerHit(seeker:Seeker, bullet:Bullet) extends Message
+case class BomberHit(bomber:Bomber, bullet:Bullet) extends Message
 
 case object PoisonPill extends Message
 case object Quit extends Message

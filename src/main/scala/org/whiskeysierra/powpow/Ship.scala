@@ -17,7 +17,7 @@ class Ship(private val node:SceneNode) extends Actor with Physical with Collidab
         loop {
             react {
                 case Start =>
-                    sender ! AddBody(body, Collisions.SHIP, Collisions.WALL)
+                    sender ! AddBody(body, Collisions.SHIP, Collisions.WITH_SHIP)
                 case Move(movement) =>
                     velocity = 1 
                     direction = movement.normalize

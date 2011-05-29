@@ -71,7 +71,7 @@ class Gun(private val parent:GroupNode) extends Actor with ResourceLoader {
                     for (i <- 0 until max) {
                         val bullet = Bullet()
                         bullets add bullet
-                        sender ! AddBody(bullet.body, Collisions.BULLET, Collisions.WALL)
+                        sender ! AddBody(bullet.body, Collisions.BULLET, Collisions.WITH_BULLET)
                     }
                     
                     update
