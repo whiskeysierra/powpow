@@ -23,9 +23,9 @@ class Gun(private val parent:GroupNode) extends Actor with ResourceLoader {
     private val spreading = 30 // in degrees
     
     private val angles = {
-    	val size = spreading / (rateOfFire - 1)
-    	for (i <- 0 until rateOfFire) 
-    		yield (size * i - spreading / 2).toRadians
+        val size = spreading / (rateOfFire - 1)
+        for (i <- 0 until rateOfFire) 
+            yield (size * i - spreading / 2).toRadians
     }
     
     private val max = 1000
@@ -98,8 +98,8 @@ class Gun(private val parent:GroupNode) extends Actor with ResourceLoader {
     private def sin(a:Float) = math.sin(a).toFloat
     
     private def spread(direction:Vector3, i:Int):Vector3 = {
-		val angle = angles(i)
-		return new Vector3(
+        val angle = angles(i)
+        return new Vector3(
             cos(angle) * direction.x - sin(angle) * direction.y,
             sin(angle) * direction.x + cos(angle) * direction.y,
             0

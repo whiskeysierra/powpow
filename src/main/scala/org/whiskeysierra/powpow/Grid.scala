@@ -14,33 +14,33 @@ import scala.collection.JavaConversions._
 
 class Grid(private val parent:GroupNode) extends Actor with ResourceLoader {
 
-	val size = 50
-	
-	override def act = {
-		loop {
-			react {
-				case Start =>
-					generateWalls
-					grid(75, size)
-					grid(100, size, -50, 0.2f)
-				case PoisonPill => exit
-			}
-		}
-	}
-	
-	private def normals = Array(
-		new Vector3f( 0,  1, 0),
-		new Vector3f( 0, -1, 0),
-		new Vector3f( 1,  0, 0),
-		new Vector3f(-1,  0, 0)
-	)
-	
-	private def generateWalls = for (normal <- normals) {
-		val wall = Wall(normal)
-		sender ! AddBody(wall.body, Collisions.WALL, Collisions.WITH_WALL)
-	}
-	
-	private def grid(max:Float, size:Float, z:Float=0, alpha:Float=1) = {
+    val size = 50
+    
+    override def act = {
+        loop {
+            react {
+                case Start =>
+                    generateWalls
+                    grid(75, size)
+                    grid(100, size, -50, 0.2f)
+                case PoisonPill => exit
+            }
+        }
+    }
+    
+    private def normals = Array(
+        new Vector3f( 0,  1, 0),
+        new Vector3f( 0, -1, 0),
+        new Vector3f( 1,  0, 0),
+        new Vector3f(-1,  0, 0)
+    )
+    
+    private def generateWalls = for (normal <- normals) {
+        val wall = Wall(normal)
+        sender ! AddBody(wall.body, Collisions.WALL, Collisions.WITH_WALL)
+    }
+    
+    private def grid(max:Float, size:Float, z:Float=0, alpha:Float=1) = {
         val shape:ShapeNode = new ShapeNode
         
         val vs = new Shader(load("grid.vs"), GL2ES2.GL_VERTEX_SHADER)
@@ -63,6 +63,6 @@ class Grid(private val parent:GroupNode) extends Actor with ResourceLoader {
         shape.setMaterial(material)
 
         sender ! Add(parent, shape)
-	}
-	
+    }
+    
 }

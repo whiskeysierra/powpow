@@ -21,7 +21,7 @@ class Space extends Actor {
         config
     )
     
-	private val dispatcher = world.getDispatcher
+    private val dispatcher = world.getDispatcher
     
     private val time = new StopWatch
 
@@ -32,7 +32,7 @@ class Space extends Actor {
                     world.setGravity(new Vector3f)
                     world.getDispatchInfo.allowedCcdPenetration = 0
                     world.setInternalTickCallback(new InternalTickCallback {
-					    override def internalTick(world:DynamicsWorld, elapsed:Float) = handleCollisions
+                        override def internalTick(world:DynamicsWorld, elapsed:Float) = handleCollisions
                     }, null)
                 case AddBody(body, bit, mask) => world.addRigidBody(body, bit, mask)
                 case RemoveBody(body) => world.removeRigidBody(body)
@@ -48,30 +48,30 @@ class Space extends Actor {
         val n:Int = dispatcher.getNumManifolds
         
         for (i <- 0 until n) {
-        	val manifold = dispatcher.getManifoldByIndexInternal(i)
-        	val leftBody = manifold.getBody0.asInstanceOf[RigidBody]
-        	val rightBody = manifold.getBody0.asInstanceOf[RigidBody]
-        	val left = leftBody.getUserPointer
-        	val right = rightBody.getUserPointer
-        	
-        	left match {
-        		case b:Bullet =>
-        			right match {
-        				case w:Wall =>
-	        				println("Bullet %s collided with %s" format (b, w))
-        				case _ =>
-        			}
-        		case w:Wall =>
-        			right match {
-        				case b:Bullet =>
-	        				println("Bullet %s collided with %s" format (b, w))
-        				case _ =>
-        			}
-        		case _ =>
-        	}
-        	
-//        	println("Collision between %s and %s" format (left, right))
-//        	sender ! Collision(left, right)
+            val manifold = dispatcher.getManifoldByIndexInternal(i)
+            val leftBody = manifold.getBody0.asInstanceOf[RigidBody]
+            val rightBody = manifold.getBody0.asInstanceOf[RigidBody]
+            val left = leftBody.getUserPointer
+            val right = rightBody.getUserPointer
+            
+            left match {
+                case b:Bullet =>
+                    right match {
+                        case w:Wall =>
+                            println("Bullet %s collided with %s" format (b, w))
+                        case _ =>
+                    }
+                case w:Wall =>
+                    right match {
+                        case b:Bullet =>
+                            println("Bullet %s collided with %s" format (b, w))
+                        case _ =>
+                    }
+                case _ =>
+            }
+            
+//            println("Collision between %s and %s" format (left, right))
+//            sender ! Collision(left, right)
         }
     }
     

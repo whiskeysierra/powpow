@@ -9,9 +9,9 @@ import de.bht.jvr.math.Vector3
 import javax.vecmath.{Vector3f, Matrix4f}
 
 private object Physical {
-	
-	val ZERO = new Vector3f
-	
+    
+    val ZERO = new Vector3f
+    
 }
 
 trait Physical {
@@ -43,7 +43,7 @@ trait Physical {
     
     final def velocity = v
     final def velocity_=(v:Float) = {
-    	this.v = v
+        this.v = v
         body.setLinearVelocity(Physical.ZERO)
     }
     
@@ -52,8 +52,8 @@ trait Physical {
     def body:RigidBody = if (b == null) createAndSetBody else b
     
     private def createAndSetBody:RigidBody = {
-    	b = createBody
-    	return b
+        b = createBody
+        return b
     }
     
     private def createBody():RigidBody = {
@@ -90,7 +90,7 @@ trait Physical {
     private val name = getClass.getSimpleName
     
     override def toString = {
-		"%s [%s, %s, %f]" format (name, position, direction, velocity)
+        "%s [%s, %s, %f]" format (name, position, direction, velocity)
     }
     
 }
