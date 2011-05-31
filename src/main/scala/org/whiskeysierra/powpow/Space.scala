@@ -21,8 +21,6 @@ class Space extends Actor {
         config
     )
     
-    private val dispatcher = world.getDispatcher
-    
     private val time = new StopWatch
 
     override def act = {
@@ -42,9 +40,13 @@ class Space extends Actor {
         }
     }
     
-    private def update = world.stepSimulation(time.elapsed, 10)
+    private def update = {
+        world.stepSimulation(time.elapsed, 10)
+        handleCollisions
+    }
 
     private def handleCollisions = {
+        val dispatcher = world.getDispatcher
         val n:Int = dispatcher.getNumManifolds
         
         for (i <- 0 until n) {
@@ -55,23 +57,12 @@ class Space extends Actor {
             val right = rightBody.getUserPointer
             
             left match {
-                case b:Bullet =>
-                    right match {
-                        case w:Wall =>
-                            println("Bullet %s collided with %s" format (b, w))
-                        case _ =>
-                    }
-                case w:Wall =>
-                    right match {
-                        case b:Bullet =>
-                            println("Bullet %s collided with %s" format (b, w))
-                        case _ =>
-                    }
+                case b:Bullet => right match {
+                    case _:Wall => b.energy -= 0.01f
+                    case _ =>
+                }
                 case _ =>
             }
-            
-//            println("Collision between %s and %s" format (left, right))
-//            sender ! Collision(left, right)
         }
     }
     
