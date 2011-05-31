@@ -23,7 +23,7 @@ class Gun(private val parent:GroupNode) extends Actor with ResourceLoader {
             yield (size * i - spreading / 2).toRadians
     }
     
-    private val max = 1000
+    private val max = 100
     private val cloud = new AttributeCloud(max, GL.GL_POINTS)
     
     private val bullets:List[Bullet] = Lists.newArrayListWithCapacity(max)
