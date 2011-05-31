@@ -52,10 +52,10 @@ class Space extends Actor {
         for (i <- 0 until n) {
             val manifold = dispatcher.getManifoldByIndexInternal(i)
             val leftBody = manifold.getBody0.asInstanceOf[RigidBody]
-            val rightBody = manifold.getBody0.asInstanceOf[RigidBody]
+            val rightBody = manifold.getBody1.asInstanceOf[RigidBody]
             val left = leftBody.getUserPointer
             val right = rightBody.getUserPointer
-            
+
             left match {
                 case b:Bullet => right match {
                     case _:Wall => b.energy -= 0.01f
