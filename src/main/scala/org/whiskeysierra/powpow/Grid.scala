@@ -51,7 +51,7 @@ class Grid(private val parent:GroupNode) extends Actor with ResourceLoader {
 
         val material = new ShaderMaterial("AMBIENT", program)
         material.setUniform("AMBIENT", "z", new UniformFloat(z))
-        material.setUniform("AMBIENT", "max", new UniformFloat(max))
+        material.setUniform("AMBIENT", "maximum", new UniformFloat(max))
         material.setUniform("AMBIENT", "size", new UniformFloat(size))
         material.setUniform("AMBIENT", "color", new UniformVector4(new Vector4(1, 1, 1, alpha)))
 

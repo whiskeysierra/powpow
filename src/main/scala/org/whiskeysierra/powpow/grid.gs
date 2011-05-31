@@ -1,5 +1,5 @@
 
-uniform float max;
+uniform float maximum;
 uniform float size;
 
 void emit(float x, float y) {
@@ -8,20 +8,20 @@ void emit(float x, float y) {
 }
 
 void main(void) {
-    float x = -max + mod(max, size) + size / 2;
+    float x = -maximum + mod(maximum, size) + size / 2.0;
     
-    while (x < max) {
-        emit(x, max);
-        emit(x, -max);
+    while (x < maximum) {
+        emit(x, maximum);
+        emit(x, -maximum);
         EndPrimitive();
         x += size;
     }
     
-    float y = -max + mod(max, size) + size / 2;
+    float y = -maximum + mod(maximum, size) + size / 2.0;
     
-    while (y < max) {
-        emit(max, y);
-        emit(-max, y);
+    while (y < maximum) {
+        emit(maximum, y);
+        emit(-maximum, y);
         EndPrimitive();
         y += size;
     }
