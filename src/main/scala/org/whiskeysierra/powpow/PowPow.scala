@@ -1,6 +1,5 @@
 package org.whiskeysierra.powpow
 
-import com.google.common.io.Resources
 import de.bht.jvr.collada14.loader.ColladaLoader
 import de.bht.jvr.core.{SceneNode, GroupNode, PointLightNode, CameraNode, Transform, Printer}
 import de.bht.jvr.core.pipeline.Pipeline

@@ -3,7 +3,6 @@ package org.whiskeysierra.powpow
 import com.jogamp.opengl.util.FPSAnimator
 import de.bht.jvr.core.Context
 import de.bht.jvr.core.pipeline.Pipeline
-import de.bht.jvr.renderer.{RenderWindow, Viewer}
 import de.bht.jvr.util.awt.InputState
 import javax.media.opengl.{GL, GL2GL3, GLAutoDrawable, GLEventListener}
 import javax.media.opengl.awt.GLCanvas

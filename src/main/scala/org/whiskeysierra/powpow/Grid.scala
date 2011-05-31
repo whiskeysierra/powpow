@@ -1,16 +1,12 @@
 package org.whiskeysierra.powpow
 
-import com.bulletphysics.collision.shapes.StaticPlaneShape
 import com.bulletphysics.dynamics.RigidBody
-import com.bulletphysics.linearmath.Transform
 import de.bht.jvr.core.{AttributeCloud, GroupNode, Shader, ShaderMaterial, ShaderProgram, ShapeNode}
-import de.bht.jvr.core.attributes.AttributeVector3
 import de.bht.jvr.core.uniforms.{UniformFloat, UniformVector4}
 import de.bht.jvr.math.{Vector3, Vector4}
 import javax.media.opengl.{GL, GL2, GL3, GL2ES2, GL2GL3}
 import javax.vecmath.{Matrix4f, Vector3f}
 import scala.actors.Actor
-import scala.collection.JavaConversions._
 
 class Grid(private val parent:GroupNode) extends Actor with ResourceLoader {
 
