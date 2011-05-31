@@ -65,6 +65,7 @@ class Gun(private val parent:GroupNode) extends Actor with ResourceLoader {
 
                     for (i <- 0 until max) {
                         val bullet = Bullet()
+                        bullet.energy = 0
                         bullets add bullet
                         sender ! AddBody(bullet.body, Collisions.BULLET, Collisions.WITH_BULLET)
                     }
@@ -102,17 +103,17 @@ class Gun(private val parent:GroupNode) extends Actor with ResourceLoader {
     }
     
     private def update = {
-//        for (i <- 0 until max) {
-//            energies.update(i, bullets(i).energy)
-//        }
+        for (i <- 0 until max) {
+            energies.update(i, bullets.get(i).energy)
+        }
         
         cloud.setAttribute("position", new AttributeVector3(positions))
         cloud.setAttribute("direction", new AttributeVector3(directions))
-//        cloud.setAttribute("energy", new AttributeFloat(energies))
+        cloud.setAttribute("energy", new AttributeFloat(energies))
         
-        bullets foreach {
-            bullet => bullet.energy -= 0.01f
-        }
+//        bullets foreach {
+//            bullet => bullet.energy -= 0.01f
+//        }
     }
     
 }
