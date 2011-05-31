@@ -1,5 +1,4 @@
 package org.whiskeysierra.powpow
-import Vector.{toVector3, toVector3f}
 
 import com.bulletphysics.collision.dispatch.CollisionObject
 import com.bulletphysics.collision.shapes.CollisionShape
@@ -7,6 +6,7 @@ import com.bulletphysics.dynamics.RigidBody
 import com.bulletphysics.linearmath.{Transform, MotionState}
 import de.bht.jvr.math.Vector3
 import javax.vecmath.{Vector3f, Matrix4f}
+import Vector.{toVector3, toVector3f}
 
 private object Physical {
     
