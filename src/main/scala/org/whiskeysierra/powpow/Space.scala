@@ -23,29 +23,31 @@ class Space extends Actor {
     
     private val time = new StopWatch
 
-    override def act = {
+    override def act() {
         loop {
             react {
                 case Start =>
                     world.setGravity(new Vector3f)
                     world.getDispatchInfo.allowedCcdPenetration = 0
                     world.setInternalTickCallback(new InternalTickCallback {
-                        override def internalTick(world:DynamicsWorld, elapsed:Float) = handleCollisions
+                        override def internalTick(world:DynamicsWorld, elapsed:Float) {
+                          handleCollisions
+                        }
                     }, null)
                 case AddBody(body, bit, mask) => world.addRigidBody(body, bit, mask)
                 case RemoveBody(body) => world.removeRigidBody(body)
                 case Update => update
-                case PoisonPill => exit
+                case PoisonPill => exit()
             }
         }
     }
     
-    private def update = {
+    private def update() {
         world.stepSimulation(time.elapsed, 10)
         handleCollisions
     }
 
-    private def handleCollisions = {
+    private def handleCollisions() {
         val dispatcher = world.getDispatcher
         val n:Int = dispatcher.getNumManifolds
         

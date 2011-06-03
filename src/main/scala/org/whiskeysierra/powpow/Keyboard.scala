@@ -7,7 +7,7 @@ import scala.actors.Actor
 
 class Keyboard(private val input:InputState) extends Actor {
     
-    override def act = {
+    override def act() {
         loop {
             react {
                 case Update => {
@@ -66,7 +66,7 @@ class Keyboard(private val input:InputState) extends Actor {
                         sender ! Quit
                     }
                 }
-                case PoisonPill => exit
+                case PoisonPill => exit()
             }
         }
     }

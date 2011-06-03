@@ -42,7 +42,7 @@ class Gun(private val parent:GroupNode) extends Actor with ResourceLoader {
         override def apply(b:Bullet) = b.energy <= 0f
     })
     
-    override def act = {
+    override def act() {
         loop {
             react {
                 case Start =>
@@ -85,7 +85,7 @@ class Gun(private val parent:GroupNode) extends Actor with ResourceLoader {
                         }
                     }
                 case Update => update
-                case PoisonPill => exit
+                case PoisonPill => exit()
             }
         }
     }
@@ -95,14 +95,14 @@ class Gun(private val parent:GroupNode) extends Actor with ResourceLoader {
     
     private def spread(direction:Vector3, i:Int):Vector3 = {
         val angle = angles(i)
-        return new Vector3(
+        new Vector3(
             cos(angle) * direction.x - sin(angle) * direction.y,
             sin(angle) * direction.x + cos(angle) * direction.y,
             0
         )
     }
     
-    private def update = {
+    private def update() {
         for (i <- 0 until max) {
             energies.update(i, bullets.get(i).energy)
         }

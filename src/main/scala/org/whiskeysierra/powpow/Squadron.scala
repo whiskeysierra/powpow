@@ -13,7 +13,7 @@ class Squadron(private val parent:GroupNode, private val sphere:SceneNode) exten
     private val time = new StopWatch
     private var elapsed = 0f
 
-    override def act = {
+    override def act() {
         loop {
             react {
                 case Start => 
@@ -43,7 +43,7 @@ class Squadron(private val parent:GroupNode, private val sphere:SceneNode) exten
                     for (bomber <- bombers.filter({_.isAlive})) {
                         bomber.node.setTransform(Transform.translate(bomber.position))
                     }
-                case PoisonPill => exit
+                case PoisonPill => exit()
             }
         }
     }

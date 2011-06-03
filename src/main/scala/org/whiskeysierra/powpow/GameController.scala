@@ -6,7 +6,7 @@ import scala.actors.Actor
 
 object GameController {
     
-    private val controllers:Array[Controller] = ControllerEnvironment.getDefaultEnvironment().getControllers filter {
+    private val controllers:Array[Controller] = ControllerEnvironment.getDefaultEnvironment.getControllers filter {
         c => c.getType == Controller.Type.GAMEPAD || c.getType == Controller.Type.STICK
     }
     
@@ -21,7 +21,7 @@ object GameController {
             }
         } else {
             println("Using Fake Controller #" + index)
-            return FakeGameController
+            FakeGameController
         }
     }
     
@@ -61,7 +61,9 @@ private object CordlessRumblePad2 extends Template {
 trait GameController extends Actor
 
 private object FakeGameController extends GameController {
-    override def act = Unit
+    override def act() {
+      Unit
+    }
 }
 
 private class JInputGameController(val controller:Controller, val template:Template) extends GameController {
@@ -76,7 +78,7 @@ private class JInputGameController(val controller:Controller, val template:Templ
     
     private val speed = 0.01f
     
-    private def poll():Unit = {
+    private def poll() {
         controller.poll         
         while (queue.getNextEvent(event)) {
             val value:Float = event.getValue
@@ -90,11 +92,11 @@ private class JInputGameController(val controller:Controller, val template:Templ
         }
     }
 
-    override def act():Unit = {
+    override def act() {
         loop {
             react {
                 case Update =>
-                    poll
+                    poll()
                     
                     val movement = new Vector3(movementX, movementY, 0)
                     if (movement.length > 0.1) {
@@ -107,7 +109,7 @@ private class JInputGameController(val controller:Controller, val template:Templ
                     if (aim.length > 0.1) {
                         sender ! Aim(aim.normalize)
                     }
-                case PoisonPill => exit
+                case PoisonPill => exit()
             }
         }
     }

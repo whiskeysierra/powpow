@@ -13,7 +13,7 @@ class Ship(private val node:SceneNode) extends Actor with Physical with Collidab
     val shape = new SphereShape(.5f)
     override val boost = 15f
 
-    override def act():Unit = {
+    override def act() {
         loop {
             react {
                 case Start =>
@@ -26,7 +26,7 @@ class Ship(private val node:SceneNode) extends Actor with Physical with Collidab
                 case Update => 
                     update
                     sender ! Position(position)
-                case PoisonPill => exit
+                case PoisonPill => exit()
             }
         }
     }

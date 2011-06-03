@@ -5,7 +5,7 @@ import scala.actors.Actor
 
 class Camera(private val node:CameraNode) extends Actor {
     
-    override def act() = {
+    override def act() {
         loop {
             react {
                 case Position(position) => {
@@ -13,7 +13,7 @@ class Camera(private val node:CameraNode) extends Actor {
                     node.setTransform(Transform.translate(position.x, position.y, 15))
                 }
                 case Resize(width, height) => node.setAspectRatio(width.toFloat / height.toFloat)
-                case PoisonPill => exit
+                case PoisonPill => exit()
             }
         }
     }

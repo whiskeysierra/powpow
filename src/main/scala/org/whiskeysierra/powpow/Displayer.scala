@@ -19,8 +19,8 @@ class Displayer(val pipeline:Pipeline, private val input:InputState) extends Act
     private var gl:GL2GL3 = null
     private var context:Context = null
     
-    override def init(drawable:GLAutoDrawable) = {
-        gl = drawable.getGL().getGL2GL3
+    override def init(drawable:GLAutoDrawable) {
+        gl = drawable.getGL.getGL2GL3
         gl.setSwapInterval(1);
         context = new Context(gl)
         
@@ -29,25 +29,29 @@ class Displayer(val pipeline:Pipeline, private val input:InputState) extends Act
         gl.glHint(GL.GL_LINE_SMOOTH_HINT, GL.GL_NICEST);
     }
     
-    override def display(drawable:GLAutoDrawable) = if (animator.isAnimating) {
-        pipeline.update
+    override def display(drawable:GLAutoDrawable) {
+      if (animator.isAnimating) {
+        pipeline.update()
         pipeline.render(context)
         sender ! Update
+      }
     }
 
-    override def reshape(drawable:GLAutoDrawable, x:Int, y:Int, width:Int, height:Int) = {
+    override def reshape(drawable:GLAutoDrawable, x:Int, y:Int, width:Int, height:Int) {
         sender ! Resize(width, height)
     }
 
-    override def dispose(drawable:GLAutoDrawable) = Unit
+    override def dispose(drawable:GLAutoDrawable) {
+      Unit
+    }
     
-    override def act = {
+    override def act() {
         loop {
             react {
                 case Start => 
                     canvas.addGLEventListener(this)
                     canvas.addKeyListener(input)
-                    frame.getContentPane().add(canvas)
+                    frame.getContentPane.add(canvas)
                     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE)
                     // TODO make configurable
                     frame.setMinimumSize(new Dimension(600, 600))
@@ -59,8 +63,8 @@ class Displayer(val pipeline:Pipeline, private val input:InputState) extends Act
                 case PoisonPill =>
                     animator.stop
                     frame.setVisible(false)
-                    frame.dispose
-                    exit
+                    frame.dispose()
+                    exit()
             }
         }
     }

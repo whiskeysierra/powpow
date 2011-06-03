@@ -5,7 +5,6 @@ import de.bht.jvr.core.{SceneNode, GroupNode, PointLightNode, CameraNode, Transf
 import de.bht.jvr.core.pipeline.Pipeline
 import de.bht.jvr.util.Color
 import de.bht.jvr.util.awt.InputState
-import java.io.InputStream
 import scala.actors.Actor
 
 object PowPow extends ResourceLoader {

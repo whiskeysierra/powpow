@@ -7,6 +7,8 @@ trait Enemy {
 
     def isAlive = health > 0
     def isDead = !isAlive
-    def revive = health = max
+    def revive() {
+      health = max
+    }
     
 }

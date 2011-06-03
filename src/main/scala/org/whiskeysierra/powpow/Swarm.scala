@@ -7,10 +7,10 @@ class Swarm(private val parent:GroupNode) extends Actor {
 
     private val seekers = new Array[Seeker](100)
     
-    override def act = {
+    override def act() {
         loop {
             react {
-                case PoisonPill => exit
+                case PoisonPill => exit()
             }
         }
     }
