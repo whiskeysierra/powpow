@@ -3,8 +3,8 @@ package org.whiskeysierra.powpow
 import de.bht.jvr.core.{CameraNode, Transform}
 import scala.actors.Actor
 
-class Camera(private val node:CameraNode) extends Actor {
-    
+class Camera(private val node: CameraNode) extends Actor {
+
     override def act() {
         loop {
             react {
@@ -17,5 +17,5 @@ class Camera(private val node:CameraNode) extends Actor {
             }
         }
     }
-    
+
 }

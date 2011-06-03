@@ -1,17 +1,16 @@
 package org.whiskeysierra.powpow
 
-import com.bulletphysics.dynamics.RigidBody
 import de.bht.jvr.core.{AttributeCloud, GroupNode, Shader, ShaderMaterial, ShaderProgram, ShapeNode}
 import de.bht.jvr.core.uniforms.{UniformFloat, UniformVector4}
-import de.bht.jvr.math.{Vector3, Vector4}
-import javax.media.opengl.{GL, GL2, GL3, GL2ES2, GL2GL3}
-import javax.vecmath.{Matrix4f, Vector3f}
+import de.bht.jvr.math.Vector4
+import javax.media.opengl.{GL, GL3, GL2ES2, GL2GL3}
+import javax.vecmath.Vector3f
 import scala.actors.Actor
 
-class Grid(private val parent:GroupNode) extends Actor with ResourceLoader {
+class Grid(private val parent: GroupNode) extends Actor with ResourceLoader {
 
     val size = 50
-    
+
     override def act() {
         loop {
             react {
@@ -23,29 +22,29 @@ class Grid(private val parent:GroupNode) extends Actor with ResourceLoader {
             }
         }
     }
-    
+
     private def normals = Array(
-        new Vector3f( 0,  1, 0),
-        new Vector3f( 0, -1, 0),
-        new Vector3f( 1,  0, 0),
-        new Vector3f(-1,  0, 0)
+        new Vector3f(0, 1, 0),
+        new Vector3f(0, -1, 0),
+        new Vector3f(1, 0, 0),
+        new Vector3f(-1, 0, 0)
     )
-    
+
     private def generateWalls() {
-      for (normal <- normals) {
-        val wall = Wall(normal)
-        sender ! AddBody(wall.body, Collisions.WALL, Collisions.WITH_WALL)
-      }
+        for (normal <- normals) {
+            val wall = Wall(normal)
+            sender ! AddBody(wall.body, Collisions.WALL, Collisions.WITH_WALL)
+        }
     }
-    
-    private def grid(max:Float, size:Float, z:Float=0, alpha:Float=1) {
-        val shape:ShapeNode = new ShapeNode
-        
+
+    private def grid(max: Float, size: Float, z: Float = 0, alpha: Float = 1) {
+        val shape: ShapeNode = new ShapeNode
+
         val vs = new Shader(load("grid.vs"), GL2ES2.GL_VERTEX_SHADER)
         val gs = new Shader(load("grid.gs"), GL3.GL_GEOMETRY_SHADER)
         val fs = new Shader(load("color.fs"), GL2ES2.GL_FRAGMENT_SHADER)
 
-        val program = new ShaderProgram(vs, fs, gs)            
+        val program = new ShaderProgram(vs, fs, gs)
 
         program.setParameter(GL2GL3.GL_GEOMETRY_INPUT_TYPE_ARB, GL.GL_POINTS)
         program.setParameter(GL2GL3.GL_GEOMETRY_OUTPUT_TYPE_ARB, GL.GL_LINE_STRIP)
@@ -62,5 +61,5 @@ class Grid(private val parent:GroupNode) extends Actor with ResourceLoader {
 
         sender ! Add(parent, shape)
     }
-    
+
 }

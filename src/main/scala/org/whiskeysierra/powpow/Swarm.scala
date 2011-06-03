@@ -1,12 +1,12 @@
 package org.whiskeysierra.powpow
 
-import de.bht.jvr.core.{SceneNode, GroupNode}
+import de.bht.jvr.core.GroupNode
 import scala.actors.Actor
 
-class Swarm(private val parent:GroupNode) extends Actor {
+class Swarm(private val parent: GroupNode) extends Actor {
 
     private val seekers = new Array[Seeker](100)
-    
+
     override def act() {
         loop {
             react {
@@ -14,5 +14,5 @@ class Swarm(private val parent:GroupNode) extends Actor {
             }
         }
     }
-    
+
 }

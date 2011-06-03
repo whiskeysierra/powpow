@@ -11,16 +11,16 @@ import scala.actors.Actor
 
 class Space extends Actor {
 
-    private val config:CollisionConfiguration = new DefaultCollisionConfiguration
+    private val config: CollisionConfiguration = new DefaultCollisionConfiguration
     private val limit = 50f
-    
+
     private val world = new DiscreteDynamicsWorld(
         new CollisionDispatcher(config),
         new AxisSweep3(new Vector3f(-limit, -limit, -limit), new Vector3f(limit, limit, limit)),
         new SequentialImpulseConstraintSolver,
         config
     )
-    
+
     private val time = new StopWatch
 
     override def act() {
@@ -30,8 +30,8 @@ class Space extends Actor {
                     world.setGravity(new Vector3f)
                     world.getDispatchInfo.allowedCcdPenetration = 0
                     world.setInternalTickCallback(new InternalTickCallback {
-                        override def internalTick(world:DynamicsWorld, elapsed:Float) {
-                          handleCollisions
+                        override def internalTick(world: DynamicsWorld, elapsed: Float) {
+                            handleCollisions
                         }
                     }, null)
                 case AddBody(body, bit, mask) => world.addRigidBody(body, bit, mask)
@@ -41,7 +41,7 @@ class Space extends Actor {
             }
         }
     }
-    
+
     private def update() {
         world.stepSimulation(time.elapsed, 10)
         handleCollisions
@@ -49,8 +49,8 @@ class Space extends Actor {
 
     private def handleCollisions() {
         val dispatcher = world.getDispatcher
-        val n:Int = dispatcher.getNumManifolds
-        
+        val n: Int = dispatcher.getNumManifolds
+
         for (i <- 0 until n) {
             val manifold = dispatcher.getManifoldByIndexInternal(i)
             val leftBody = manifold.getBody0.asInstanceOf[RigidBody]
@@ -59,13 +59,13 @@ class Space extends Actor {
             val right = rightBody.getUserPointer
 
             left match {
-                case b:Bullet => right match {
-                    case _:Wall => b.energy -= 0.01f
+                case b: Bullet => right match {
+                    case _: Wall => b.energy -= 0.01f
                     case _ =>
                 }
                 case _ =>
             }
         }
     }
-    
+
 }
