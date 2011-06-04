@@ -2,11 +2,10 @@ package org.whiskeysierra.powpow
 
 import com.bulletphysics.collision.broadphase.AxisSweep3
 import com.bulletphysics.collision.dispatch.{CollisionConfiguration, CollisionDispatcher, DefaultCollisionConfiguration}
-import com.bulletphysics.dynamics.{DiscreteDynamicsWorld, DynamicsWorld, InternalTickCallback, RigidBody}
 import com.bulletphysics.dynamics.constraintsolver.SequentialImpulseConstraintSolver
 import de.bht.jvr.util.StopWatch
 import javax.vecmath.Vector3f
-
+import com.bulletphysics.dynamics._
 
 class Space extends Actor {
 
@@ -22,47 +21,54 @@ class Space extends Actor {
 
     private val time = new StopWatch
 
+    private val callback = new InternalTickCallback {
+        def internalTick(world: DynamicsWorld, timeStep: Float) {
+            val n: Int = world.getDispatcher.getNumManifolds
+
+            for (i <- 0 until n) {
+                val manifold = world.getDispatcher.getManifoldByIndexInternal(i)
+                if (manifold ne null) {
+                    val leftBody = manifold.getBody0.asInstanceOf[RigidBody]
+                    val rightBody = manifold.getBody1.asInstanceOf[RigidBody]
+
+                    if (manifold.getNumContacts > 0) {
+                        val left = leftBody.getUserPointer
+                        val right = rightBody.getUserPointer
+
+                        left match {
+                            case b:Bullet => right match {
+                                case w:Wall =>
+                                    b.kill()
+                                    world.removeRigidBody(b.body)
+                                case _ =>
+                            }
+                            // TODO simplify order matching
+                            case w:Wall => right match {
+                                case b:Bullet =>
+                                    b.kill()
+                                    world.removeRigidBody(b.body)
+                                case _ =>
+                            }
+                            case _ =>
+                        }
+                    }
+
+                }
+            }
+        }
+    }
+
     override def act(message:Any) {
         message match {
             case Start =>
                 world.setGravity(new Vector3f)
                 world.getDispatchInfo.allowedCcdPenetration = 0f
-                world.setInternalTickCallback(new InternalTickCallback {
-                    override def internalTick(world: DynamicsWorld, elapsed: Float) {
-                        handleCollisions()
-                    }
-                }, null)
+                world.setInternalTickCallback(callback, null)
             case AddBody(body, bit, mask) => world.addRigidBody(body, bit, mask)
             case RemoveBody(body) => world.removeRigidBody(body)
-            case Update => update()
+            case Update => world.stepSimulation(time.elapsed, 10)
             case PoisonPill => exit()
             case _ =>
-        }
-    }
-
-    private def update() {
-        world.stepSimulation(time.elapsed, 10)
-        handleCollisions()
-    }
-
-    private def handleCollisions() {
-        val dispatcher = world.getDispatcher
-        val n: Int = dispatcher.getNumManifolds
-
-        for (i <- 0 until n) {
-            val manifold = dispatcher.getManifoldByIndexInternal(i)
-            val leftBody = manifold.getBody0.asInstanceOf[RigidBody]
-            val rightBody = manifold.getBody1.asInstanceOf[RigidBody]
-            val left = leftBody.getUserPointer
-            val right = rightBody.getUserPointer
-
-            left match {
-                case b: Bullet => right match {
-                    case _: Wall => b.energy -= 0.01f
-                    case _ =>
-                }
-                case _ =>
-            }
         }
     }
 

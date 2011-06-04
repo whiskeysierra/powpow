@@ -8,6 +8,7 @@ import de.bht.jvr.math.Vector3
 import javax.media.opengl.{GL, GL3, GL2ES2, GL2GL3}
 import java.lang.Iterable
 import java.util.List
+import scala.collection.JavaConversions._
 
 class Gun(private val parent: GroupNode) extends Actor with ResourceLoader {
 
@@ -35,12 +36,10 @@ class Gun(private val parent: GroupNode) extends Actor with ResourceLoader {
         override def apply(b: Bullet) = b.direction
     });
 
-    private val energies: Array[Float] = Array.fill(max) {
-        0
-    }
+    private val energies: Array[Float] = Array.fill(max) {0f}
 
-    private val inactives: Iterable[Bullet] = Iterables.filter(bullets, new Predicate[Bullet] {
-        override def apply(b: Bullet) = b.energy <= 0f
+    private val deads: Iterable[Bullet] = Iterables.filter(bullets, new Predicate[Bullet] {
+        override def apply(b: Bullet) = b.dead
     })
 
     override def act(message:Any) {
@@ -65,9 +64,8 @@ class Gun(private val parent: GroupNode) extends Actor with ResourceLoader {
 
                 for (i <- 0 until max) {
                     val bullet = Bullet()
-                    bullet.energy = 0
+                    bullet.kill()
                     bullets add bullet
-                    sender ! AddBody(bullet.body, Collisions.BULLET, Collisions.WITH_BULLET)
                 }
 
                 update()
@@ -75,13 +73,14 @@ class Gun(private val parent: GroupNode) extends Actor with ResourceLoader {
                 sender ! Add(parent, shape)
             case Position(position) => this.position = position
             case Aim(direction) =>
-                var inactive = inactives.iterator
+                val dead = deads.iterator
                 for (i <- 0 until rateOfFire) {
-                    if (inactive.hasNext) {
-                        val bullet = inactive.next
+                    if (dead.hasNext) {
+                        val bullet = dead.next
                         bullet.position = position
                         bullet.direction = spread(direction, i)
-                        bullet.energy = 1
+                        bullet.revive()
+                        sender ! AddBody(bullet.body, Collisions.BULLET, Collisions.WITH_BULLET)
                     }
                 }
             case Update => update()
@@ -111,10 +110,6 @@ class Gun(private val parent: GroupNode) extends Actor with ResourceLoader {
         cloud.setAttribute("position", new AttributeVector3(positions))
         cloud.setAttribute("direction", new AttributeVector3(directions))
         cloud.setAttribute("energy", new AttributeFloat(energies))
-
-        //        bullets foreach {
-        //            bullet => bullet.energy -= 0.01f
-        //        }
     }
 
 }
