@@ -5,9 +5,8 @@ trait Enemy {
     var health = 0f
     val max: Float
 
-    def isAlive = health > 0
-
-    def isDead = !isAlive
+    def alive = health > 0
+    def dead = health <= 0
 
     def revive() {
         health = max

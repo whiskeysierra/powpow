@@ -7,9 +7,7 @@ import de.bht.jvr.util.StopWatch
 class Squadron(private val parent: GroupNode, private val sphere: SceneNode) extends Actor with Randomizer {
 
     private val bombers = new Array[Bomber](1)
-    private val dead = bombers.view.filter({
-        _.isDead
-    })
+    private val dead = bombers.view.filter({_.dead})
 
     private val time = new StopWatch
     private var elapsed = 0f
@@ -40,9 +38,7 @@ class Squadron(private val parent: GroupNode, private val sphere: SceneNode) ext
                 //                            sender ! Add(parent, bomber.node)
                 //                        }
                 //                    }
-                for (bomber <- bombers.filter({
-                    _.isAlive
-                })) {
+                for (bomber <- bombers.filter({_.alive})) {
                     bomber.node.setTransform(Transform.translate(bomber.position))
                 }
             case PoisonPill => exit()
