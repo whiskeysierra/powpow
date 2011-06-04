@@ -13,7 +13,7 @@ abstract class Actor {
 
     final def !(sender:Actor, message:Any) {
         s = sender
-        this.!(message)
+        this ! message
     }
 
     final def !(message:Any) {

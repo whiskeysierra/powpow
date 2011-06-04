@@ -36,17 +36,13 @@ class Space extends Actor {
                         val right = rightBody.getUserPointer
 
                         left match {
-                            case b:Bullet => right match {
-                                case w:Wall =>
-                                    b.kill()
-                                    world.removeRigidBody(b.body)
+                            case bullet:Bullet => right match {
+                                case wall:Wall => sender ! Miss(bullet)
                                 case _ =>
                             }
                             // TODO simplify order matching
-                            case w:Wall => right match {
-                                case b:Bullet =>
-                                    b.kill()
-                                    world.removeRigidBody(b.body)
+                            case wall:Wall => right match {
+                                case bullet:Bullet => sender ! Miss(bullet)
                                 case _ =>
                             }
                             case _ =>

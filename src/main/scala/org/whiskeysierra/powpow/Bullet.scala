@@ -9,7 +9,7 @@ object Bullet {
 
 class Bullet extends Physical with Collidable with Energetic {
 
-    val shape = new SphereShape(.25f)
+    val shape = new SphereShape(.1f)
     override val boost = 25f
 
 }

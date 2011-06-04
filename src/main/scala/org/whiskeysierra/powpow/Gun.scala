@@ -84,6 +84,9 @@ class Gun(private val parent: GroupNode) extends Actor with ResourceLoader {
                     }
                 }
             case Update => update()
+            case Miss(bullet) =>
+                bullet.kill()
+                sender ! RemoveBody(bullet.body)
             case PoisonPill => exit()
             case _ =>
         }
