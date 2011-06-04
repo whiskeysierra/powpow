@@ -60,7 +60,9 @@ private object CordlessRumblePad2 extends Template {
 trait GameController extends Actor
 
 private object FakeGameController extends GameController {
-    override def act(message:Any):Unit = Unit
+    override def act(message:Any) {
+        Unit
+    }
 }
 
 private class JInputGameController(val controller: Controller, val template: Template) extends GameController {
@@ -89,23 +91,25 @@ private class JInputGameController(val controller: Controller, val template: Tem
         }
     }
 
-    override def act(message:Any):Unit = message match {
-        case Update =>
-            poll()
+    override def act(message:Any) {
+        message match {
+            case Update =>
+                poll()
 
-            val movement = new Vector3(movementX, movementY, 0)
-            if (movement.length > 0.1) {
-                sender ! Move(movement)
-            } else {
-                sender ! Stop
-            }
+                val movement = new Vector3(movementX, movementY, 0)
+                if (movement.length > 0.1) {
+                    sender ! Move(movement)
+                } else {
+                    sender ! Stop
+                }
 
-            val aim = new Vector3(aimX, aimY, 0)
-            if (aim.length > 0.1) {
-                sender ! Aim(aim.normalize)
-            }
-        case PoisonPill => exit()
-        case _ =>
+                val aim = new Vector3(aimX, aimY, 0)
+                if (aim.length > 0.1) {
+                    sender ! Aim(aim.normalize)
+                }
+            case PoisonPill => exit()
+            case _ =>
+        }
     }
 
 }

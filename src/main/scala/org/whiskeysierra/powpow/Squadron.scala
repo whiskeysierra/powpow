@@ -14,38 +14,40 @@ class Squadron(private val parent: GroupNode, private val sphere: SceneNode) ext
     private val time = new StopWatch
     private var elapsed = 0f
 
-    override def act(message:Any):Unit = message match {
-        case Start =>
-            for (i <- 0 until bombers.length) {
-                bombers.update(i, new Bomber(new GroupNode(sphere)))
-            }
+    override def act(message:Any) {
+        message match {
+            case Start =>
+                for (i <- 0 until bombers.length) {
+                    bombers.update(i, new Bomber(new GroupNode(sphere)))
+                }
 
-            val bomber = dead.head
-            println("Bomber! " + bomber)
-            bomber.direction = new Vector3(1, 1, 0)
-            bomber.revive
-            sender ! AddBody(bomber.body, Collisions.BOMBER, Collisions.WITH_BOMBER)
-            sender ! Add(parent, bomber.node)
-        case Update =>
-            //                    elapsed += time.elapsed
-            //                    if (elapsed > 1) {
-            //                        elapsed = 0
-            //                        if (!dead.isEmpty) {
-            //                            val bomber = dead.head
-            //                            println("Bomber! " + bomber)
-            //                            bomber.direction = new Vector3(1, 1, 0)
-            //                            bomber.revive
-            //                            sender ! AddBody(bomber.body, Collisions.BOMBER, Collisions.WITH_BOMBER)
-            //                            sender ! Add(parent, bomber.node)
-            //                        }
-            //                    }
-            for (bomber <- bombers.filter({
-                _.isAlive
-            })) {
-                bomber.node.setTransform(Transform.translate(bomber.position))
-            }
-        case PoisonPill => exit()
-        case _ =>
+                val bomber = dead.head
+                println("Bomber! " + bomber)
+                bomber.direction = new Vector3(1, 1, 0)
+                bomber.revive
+                sender ! AddBody(bomber.body, Collisions.BOMBER, Collisions.WITH_BOMBER)
+                sender ! Add(parent, bomber.node)
+            case Update =>
+                //                    elapsed += time.elapsed
+                //                    if (elapsed > 1) {
+                //                        elapsed = 0
+                //                        if (!dead.isEmpty) {
+                //                            val bomber = dead.head
+                //                            println("Bomber! " + bomber)
+                //                            bomber.direction = new Vector3(1, 1, 0)
+                //                            bomber.revive
+                //                            sender ! AddBody(bomber.body, Collisions.BOMBER, Collisions.WITH_BOMBER)
+                //                            sender ! Add(parent, bomber.node)
+                //                        }
+                //                    }
+                for (bomber <- bombers.filter({
+                    _.isAlive
+                })) {
+                    bomber.node.setTransform(Transform.translate(bomber.position))
+                }
+            case PoisonPill => exit()
+            case _ =>
+        }
     }
 
 }

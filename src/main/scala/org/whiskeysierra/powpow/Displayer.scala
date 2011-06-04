@@ -48,25 +48,27 @@ class Displayer(val pipeline: Pipeline, private val input: InputState) extends A
 
     }
 
-    override def act(message:Any):Unit = message match {
-        case Start =>
-            canvas.addGLEventListener(this)
-            canvas.addKeyListener(input)
-            frame.getContentPane.add(canvas)
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE)
-            // TODO make configurable
-            frame.setMinimumSize(new Dimension(600, 600))
-            frame.setVisible(true)
-            canvas.requestFocusInWindow
-            animator.start
-        case Add(parent, child) => parent.addChildNodes(child)
-        case Remove(parent, orphan) => parent.removeChildNode(orphan)
-        case PoisonPill =>
-            animator.stop
-            frame.setVisible(false)
-            frame.dispose()
-            exit()
-        case _ =>
+    override def act(message:Any) {
+        message match {
+            case Start =>
+                canvas.addGLEventListener(this)
+                canvas.addKeyListener(input)
+                frame.getContentPane.add(canvas)
+                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE)
+                // TODO make configurable
+                frame.setMinimumSize(new Dimension(600, 600))
+                frame.setVisible(true)
+                canvas.requestFocusInWindow
+                animator.start
+            case Add(parent, child) => parent.addChildNodes(child)
+            case Remove(parent, orphan) => parent.removeChildNode(orphan)
+            case PoisonPill =>
+                animator.stop
+                frame.setVisible(false)
+                frame.dispose()
+                exit()
+            case _ =>
+        }
     }
 
 }

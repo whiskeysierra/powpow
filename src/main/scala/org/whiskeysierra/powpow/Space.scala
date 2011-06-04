@@ -22,25 +22,27 @@ class Space extends Actor {
 
     private val time = new StopWatch
 
-    override def act(message:Any):Unit = message match {
-        case Start =>
-            world.setGravity(new Vector3f)
-            world.getDispatchInfo.allowedCcdPenetration = 0f
-            world.setInternalTickCallback(new InternalTickCallback {
-                override def internalTick(world: DynamicsWorld, elapsed: Float) {
-                    handleCollisions
-                }
-            }, null)
-        case AddBody(body, bit, mask) => world.addRigidBody(body, bit, mask)
-        case RemoveBody(body) => world.removeRigidBody(body)
-        case Update => update
-        case PoisonPill => exit()
-        case _ =>
+    override def act(message:Any) {
+        message match {
+            case Start =>
+                world.setGravity(new Vector3f)
+                world.getDispatchInfo.allowedCcdPenetration = 0f
+                world.setInternalTickCallback(new InternalTickCallback {
+                    override def internalTick(world: DynamicsWorld, elapsed: Float) {
+                        handleCollisions()
+                    }
+                }, null)
+            case AddBody(body, bit, mask) => world.addRigidBody(body, bit, mask)
+            case RemoveBody(body) => world.removeRigidBody(body)
+            case Update => update()
+            case PoisonPill => exit()
+            case _ =>
+        }
     }
 
     private def update() {
         world.stepSimulation(time.elapsed, 10)
-        handleCollisions
+        handleCollisions()
     }
 
     private def handleCollisions() {

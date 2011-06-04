@@ -4,19 +4,19 @@ abstract class Actor {
 
     private var s:Actor = null
 
+    final def sender = s
+
     def start() = Unit
     def exit() = Unit
 
-    final def sender = s
-
     def act(message:Any)
 
-    def !(sender:Actor, message:Any):Unit = {
+    final def !(sender:Actor, message:Any) {
         s = sender
         this.!(message)
     }
 
-    def !(message:Any):Unit = {
+    final def !(message:Any) {
         act(message)
     }
 

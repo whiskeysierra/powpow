@@ -10,13 +10,15 @@ class Grid(private val parent: GroupNode) extends Actor with ResourceLoader {
 
     val size = 50
 
-    override def act(message:Any):Unit = message match {
-        case Start =>
-            generateWalls
-            grid(75, size)
-            grid(100, size, -50, 0.2f)
-        case PoisonPill => exit()
-        case _ =>
+    override def act(message:Any) {
+        message match {
+            case Start =>
+                generateWalls()
+                grid(75, size)
+                grid(100, size, -50, 0.2f)
+            case PoisonPill => exit()
+            case _ =>
+        }
     }
 
     private def normals = Array(

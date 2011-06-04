@@ -11,19 +11,21 @@ class Ship(private val node: SceneNode) extends Actor with Physical with Collida
     val shape = new SphereShape(.5f)
     override val boost = 15f
 
-    override def act(message:Any):Unit = message match {
-        case Start =>
-            sender ! AddBody(body, Collisions.SHIP, Collisions.WITH_SHIP)
-        case Move(movement) =>
-            velocity = 1
-            direction = movement.normalize
-        case Stop =>
-            velocity = 0
-        case Update =>
-            update
-            sender ! Position(position)
-        case PoisonPill => exit()
-        case _ =>
+    override def act(message:Any) {
+        message match {
+            case Start =>
+                sender ! AddBody(body, Collisions.SHIP, Collisions.WITH_SHIP)
+            case Move(movement) =>
+                velocity = 1
+                direction = movement.normalize
+            case Stop =>
+                velocity = 0
+            case Update =>
+                update
+                sender ! Position(position)
+            case PoisonPill => exit()
+            case _ =>
+        }
     }
 
     private def angle: Float = {

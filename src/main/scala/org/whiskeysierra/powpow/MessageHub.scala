@@ -21,11 +21,13 @@ final class MessageHub(private val actors: Map[String, Actor]) extends Actor {
         super.start()
     }
 
-    override def act(message:Any):Unit = message match {
-        case Quit =>
-            broadcast(PoisonPill)
-            exit()
-        case other => broadcast(other)
+    override def act(message:Any) {
+        message match {
+            case Quit =>
+                broadcast(PoisonPill)
+                exit()
+            case other => broadcast(other)
+        }
     }
 
     private def deliver(name: String, message: Any) {
