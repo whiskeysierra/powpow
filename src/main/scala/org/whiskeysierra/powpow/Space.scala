@@ -7,7 +7,6 @@ import com.bulletphysics.dynamics.constraintsolver.SequentialImpulseConstraintSo
 import de.bht.jvr.util.StopWatch
 import javax.vecmath.Vector3f
 
-import scala.actors.Actor
 
 class Space extends Actor {
 
@@ -23,23 +22,20 @@ class Space extends Actor {
 
     private val time = new StopWatch
 
-    override def act() {
-        loop {
-            react {
-                case Start =>
-                    world.setGravity(new Vector3f)
-                    world.getDispatchInfo.allowedCcdPenetration = 0
-                    world.setInternalTickCallback(new InternalTickCallback {
-                        override def internalTick(world: DynamicsWorld, elapsed: Float) {
-                            handleCollisions
-                        }
-                    }, null)
-                case AddBody(body, bit, mask) => world.addRigidBody(body, bit, mask)
-                case RemoveBody(body) => world.removeRigidBody(body)
-                case Update => update
-                case PoisonPill => exit()
-            }
-        }
+    override def act(message:Any):Unit = message match {
+        case Start =>
+            world.setGravity(new Vector3f)
+            world.getDispatchInfo.allowedCcdPenetration = 0f
+            world.setInternalTickCallback(new InternalTickCallback {
+                override def internalTick(world: DynamicsWorld, elapsed: Float) {
+                    handleCollisions
+                }
+            }, null)
+        case AddBody(body, bit, mask) => world.addRigidBody(body, bit, mask)
+        case RemoveBody(body) => world.removeRigidBody(body)
+        case Update => update
+        case PoisonPill => exit()
+        case _ =>
     }
 
     private def update() {

@@ -5,7 +5,6 @@ import de.bht.jvr.core.{SceneNode, GroupNode, PointLightNode, CameraNode, Transf
 import de.bht.jvr.core.pipeline.Pipeline
 import de.bht.jvr.util.Color
 import de.bht.jvr.util.awt.InputState
-import scala.actors.Actor
 
 object PowPow extends ResourceLoader {
 
@@ -64,8 +63,9 @@ object PowPow extends ResourceLoader {
             "keyboard" -> new Keyboard(input),
             "controller1" -> GameController(0),
             "controller2" -> GameController(1)
-        )).start
+        ))
 
+        hub.start()
         hub ! Start
     }
 

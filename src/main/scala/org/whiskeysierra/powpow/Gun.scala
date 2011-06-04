@@ -8,7 +8,6 @@ import de.bht.jvr.math.Vector3
 import javax.media.opengl.{GL, GL3, GL2ES2, GL2GL3}
 import java.lang.Iterable
 import java.util.List
-import scala.actors.Actor
 
 class Gun(private val parent: GroupNode) extends Actor with ResourceLoader {
 
@@ -44,52 +43,49 @@ class Gun(private val parent: GroupNode) extends Actor with ResourceLoader {
         override def apply(b: Bullet) = b.energy <= 0f
     })
 
-    override def act() {
-        loop {
-            react {
-                case Start =>
-                    val shape: ShapeNode = new ShapeNode("Gun")
+    override def act(message:Any):Unit = message match {
+        case Start =>
+            val shape: ShapeNode = new ShapeNode("Gun")
 
-                    val vs = new Shader(load("bullets.vs"), GL2ES2.GL_VERTEX_SHADER)
-                    val gs = new Shader(load("bullets.gs"), GL3.GL_GEOMETRY_SHADER)
-                    val fs = new Shader(load("bullets.fs"), GL2ES2.GL_FRAGMENT_SHADER)
+            val vs = new Shader(load("bullets.vs"), GL2ES2.GL_VERTEX_SHADER)
+            val gs = new Shader(load("bullets.gs"), GL3.GL_GEOMETRY_SHADER)
+            val fs = new Shader(load("bullets.fs"), GL2ES2.GL_FRAGMENT_SHADER)
 
-                    val program = new ShaderProgram(vs, fs, gs)
+            val program = new ShaderProgram(vs, fs, gs)
 
-                    program.setParameter(GL2GL3.GL_GEOMETRY_INPUT_TYPE_ARB, GL.GL_POINTS)
-                    program.setParameter(GL2GL3.GL_GEOMETRY_OUTPUT_TYPE_ARB, GL.GL_LINE_STRIP)
-                    program.setParameter(GL2GL3.GL_GEOMETRY_VERTICES_OUT_ARB, 3)
+            program.setParameter(GL2GL3.GL_GEOMETRY_INPUT_TYPE_ARB, GL.GL_POINTS)
+            program.setParameter(GL2GL3.GL_GEOMETRY_OUTPUT_TYPE_ARB, GL.GL_LINE_STRIP)
+            program.setParameter(GL2GL3.GL_GEOMETRY_VERTICES_OUT_ARB, 3)
 
-                    val material = new ShaderMaterial("AMBIENT", program)
+            val material = new ShaderMaterial("AMBIENT", program)
 
-                    shape.setGeometry(cloud)
-                    shape.setMaterial(material)
+            shape.setGeometry(cloud)
+            shape.setMaterial(material)
 
-                    for (i <- 0 until max) {
-                        val bullet = Bullet()
-                        bullet.energy = 0
-                        bullets add bullet
-                        sender ! AddBody(bullet.body, Collisions.BULLET, Collisions.WITH_BULLET)
-                    }
-
-                    update
-
-                    sender ! Add(parent, shape)
-                case Position(position) => this.position = position
-                case Aim(direction) =>
-                    var inactive = inactives.iterator
-                    for (i <- 0 until rateOfFire) {
-                        if (inactive.hasNext) {
-                            val bullet = inactive.next
-                            bullet.position = position
-                            bullet.direction = spread(direction, i)
-                            bullet.energy = 1
-                        }
-                    }
-                case Update => update
-                case PoisonPill => exit()
+            for (i <- 0 until max) {
+                val bullet = Bullet()
+                bullet.energy = 0
+                bullets add bullet
+                sender ! AddBody(bullet.body, Collisions.BULLET, Collisions.WITH_BULLET)
             }
-        }
+
+            update
+
+            sender ! Add(parent, shape)
+        case Position(position) => this.position = position
+        case Aim(direction) =>
+            var inactive = inactives.iterator
+            for (i <- 0 until rateOfFire) {
+                if (inactive.hasNext) {
+                    val bullet = inactive.next
+                    bullet.position = position
+                    bullet.direction = spread(direction, i)
+                    bullet.energy = 1
+                }
+            }
+        case Update => update
+        case PoisonPill => exit()
+        case _ =>
     }
 
     private def cos(a: Float) = math.cos(a).toFloat

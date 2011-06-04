@@ -8,7 +8,6 @@ import javax.media.opengl.{GL, GL2GL3, GLAutoDrawable, GLEventListener}
 import javax.media.opengl.awt.GLCanvas
 import javax.swing.JFrame
 import java.awt.Dimension
-import scala.actors.Actor
 
 class Displayer(val pipeline: Pipeline, private val input: InputState) extends Actor with GLEventListener {
 
@@ -20,13 +19,17 @@ class Displayer(val pipeline: Pipeline, private val input: InputState) extends A
     private var context: Context = null
 
     override def init(drawable: GLAutoDrawable) {
-        gl = drawable.getGL.getGL2GL3
-        gl.setSwapInterval(1);
-        context = new Context(gl)
+        if (drawable.getGL eq null) {
+            return
+        } else {
+            gl = drawable.getGL.getGL2GL3
+            gl.setSwapInterval(1);
+            context = new Context(gl)
 
-        gl.glPolygonMode(GL.GL_FRONT, GL2GL3.GL_LINE);
-        gl.glEnable(GL.GL_LINE_SMOOTH);
-        gl.glHint(GL.GL_LINE_SMOOTH_HINT, GL.GL_NICEST);
+            gl.glPolygonMode(GL.GL_FRONT, GL2GL3.GL_LINE);
+            gl.glEnable(GL.GL_LINE_SMOOTH);
+            gl.glHint(GL.GL_LINE_SMOOTH_HINT, GL.GL_NICEST);
+        }
     }
 
     override def display(drawable: GLAutoDrawable) {
@@ -45,28 +48,25 @@ class Displayer(val pipeline: Pipeline, private val input: InputState) extends A
 
     }
 
-    override def act() {
-        loop {
-            react {
-                case Start =>
-                    canvas.addGLEventListener(this)
-                    canvas.addKeyListener(input)
-                    frame.getContentPane.add(canvas)
-                    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE)
-                    // TODO make configurable
-                    frame.setMinimumSize(new Dimension(600, 600))
-                    frame.setVisible(true)
-                    canvas.requestFocusInWindow
-                    animator.start
-                case Add(parent, child) => parent.addChildNodes(child)
-                case Remove(parent, orphan) => parent.removeChildNode(orphan)
-                case PoisonPill =>
-                    animator.stop
-                    frame.setVisible(false)
-                    frame.dispose()
-                    exit()
-            }
-        }
+    override def act(message:Any):Unit = message match {
+        case Start =>
+            canvas.addGLEventListener(this)
+            canvas.addKeyListener(input)
+            frame.getContentPane.add(canvas)
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE)
+            // TODO make configurable
+            frame.setMinimumSize(new Dimension(600, 600))
+            frame.setVisible(true)
+            canvas.requestFocusInWindow
+            animator.start
+        case Add(parent, child) => parent.addChildNodes(child)
+        case Remove(parent, orphan) => parent.removeChildNode(orphan)
+        case PoisonPill =>
+            animator.stop
+            frame.setVisible(false)
+            frame.dispose()
+            exit()
+        case _ =>
     }
 
 }

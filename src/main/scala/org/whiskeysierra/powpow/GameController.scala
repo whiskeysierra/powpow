@@ -2,7 +2,6 @@ package org.whiskeysierra.powpow
 
 import de.bht.jvr.math.Vector3
 import net.java.games.input.{Controller, ControllerEnvironment, EventQueue, Event}
-import scala.actors.Actor
 
 object GameController {
 
@@ -61,14 +60,12 @@ private object CordlessRumblePad2 extends Template {
 trait GameController extends Actor
 
 private object FakeGameController extends GameController {
-    override def act() {
-        Unit
-    }
+    override def act(message:Any):Unit = Unit
 }
 
 private class JInputGameController(val controller: Controller, val template: Template) extends GameController {
 
-    private var queue: EventQueue = controller.getEventQueue
+    private val queue: EventQueue = controller.getEventQueue
     private val event: Event = new Event
 
     private var movementX = 0f
@@ -92,26 +89,23 @@ private class JInputGameController(val controller: Controller, val template: Tem
         }
     }
 
-    override def act() {
-        loop {
-            react {
-                case Update =>
-                    poll()
+    override def act(message:Any):Unit = message match {
+        case Update =>
+            poll()
 
-                    val movement = new Vector3(movementX, movementY, 0)
-                    if (movement.length > 0.1) {
-                        sender ! Move(movement)
-                    } else {
-                        sender ! Stop
-                    }
-
-                    val aim = new Vector3(aimX, aimY, 0)
-                    if (aim.length > 0.1) {
-                        sender ! Aim(aim.normalize)
-                    }
-                case PoisonPill => exit()
+            val movement = new Vector3(movementX, movementY, 0)
+            if (movement.length > 0.1) {
+                sender ! Move(movement)
+            } else {
+                sender ! Stop
             }
-        }
+
+            val aim = new Vector3(aimX, aimY, 0)
+            if (aim.length > 0.1) {
+                sender ! Aim(aim.normalize)
+            }
+        case PoisonPill => exit()
+        case _ =>
     }
 
 }

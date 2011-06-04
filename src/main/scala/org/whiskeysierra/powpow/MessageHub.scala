@@ -1,7 +1,5 @@
 package org.whiskeysierra.powpow
 
-import scala.actors.Actor
-
 final class MessageHub(private val actors: Map[String, Actor]) extends Actor {
 
     private def each(f: (Actor) => Unit) {
@@ -11,27 +9,23 @@ final class MessageHub(private val actors: Map[String, Actor]) extends Actor {
     }
 
     private def broadcast(message: Any) {
-        each {
-            _ ! message
+        each {a =>
+            a.!(this, message)
         }
     }
 
     override def start() = {
-        each {
-            _.start()
+        each {a =>
+            a.start()
         }
         super.start()
     }
 
-    override def act() {
-        loop {
-            react {
-                case Quit =>
-                    broadcast(PoisonPill)
-                    exit()
-                case other => broadcast(other)
-            }
-        }
+    override def act(message:Any):Unit = message match {
+        case Quit =>
+            broadcast(PoisonPill)
+            exit()
+        case other => broadcast(other)
     }
 
     private def deliver(name: String, message: Any) {

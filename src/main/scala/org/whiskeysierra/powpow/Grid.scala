@@ -5,22 +5,18 @@ import de.bht.jvr.core.uniforms.{UniformFloat, UniformVector4}
 import de.bht.jvr.math.Vector4
 import javax.media.opengl.{GL, GL3, GL2ES2, GL2GL3}
 import javax.vecmath.Vector3f
-import scala.actors.Actor
 
 class Grid(private val parent: GroupNode) extends Actor with ResourceLoader {
 
     val size = 50
 
-    override def act() {
-        loop {
-            react {
-                case Start =>
-                    generateWalls
-                    grid(75, size)
-                    grid(100, size, -50, 0.2f)
-                case PoisonPill => exit()
-            }
-        }
+    override def act(message:Any):Unit = message match {
+        case Start =>
+            generateWalls
+            grid(75, size)
+            grid(100, size, -50, 0.2f)
+        case PoisonPill => exit()
+        case _ =>
     }
 
     private def normals = Array(
