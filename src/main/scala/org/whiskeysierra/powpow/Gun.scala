@@ -4,18 +4,19 @@ import com.google.common.base.{Function, Predicate}
 import com.google.common.collect.{Iterables, Lists}
 import de.bht.jvr.core.{AttributeCloud, GroupNode, Shader, ShaderMaterial, ShaderProgram, ShapeNode}
 import de.bht.jvr.core.attributes.{AttributeFloat, AttributeVector3}
-import de.bht.jvr.math.Vector3
 import javax.media.opengl.{GL, GL3, GL2ES2, GL2GL3}
 import java.lang.Iterable
 import java.util.List
 import scala.collection.JavaConversions._
+import de.bht.jvr.core.uniforms.UniformVector4
+import de.bht.jvr.math.{Vector4, Vector3}
 
 class Gun(private val parent: GroupNode) extends Actor with ResourceLoader {
 
     private var position = new Vector3
 
-    private val rateOfFire = 5
-    private val spreading = 30 // in degrees
+    private val rateOfFire = 3
+    private val spreading = 25 // in degrees
 
     private val angles = {
         val size = spreading / (rateOfFire - 1)
@@ -49,7 +50,7 @@ class Gun(private val parent: GroupNode) extends Actor with ResourceLoader {
 
                 val vs = new Shader(load("bullets.vs"), GL2ES2.GL_VERTEX_SHADER)
                 val gs = new Shader(load("bullets.gs"), GL3.GL_GEOMETRY_SHADER)
-                val fs = new Shader(load("bullets.fs"), GL2ES2.GL_FRAGMENT_SHADER)
+                val fs = new Shader(load("color.fs"), GL2ES2.GL_FRAGMENT_SHADER)
 
                 val program = new ShaderProgram(vs, fs, gs)
 
@@ -58,6 +59,8 @@ class Gun(private val parent: GroupNode) extends Actor with ResourceLoader {
                 program.setParameter(GL2GL3.GL_GEOMETRY_VERTICES_OUT_ARB, 3)
 
                 val material = new ShaderMaterial("AMBIENT", program)
+
+                material.setUniform("AMBIENT", "color", new UniformVector4(new Vector4(1, 0, 0, 1)))
 
                 shape.setGeometry(cloud)
                 shape.setMaterial(material)
@@ -70,7 +73,7 @@ class Gun(private val parent: GroupNode) extends Actor with ResourceLoader {
 
                 update()
 
-                sender ! Add(parent, shape)
+                sender ! AddNode(parent, shape)
             case Position(position) => this.position = position
             case Aim(direction) =>
                 val dead = deads.iterator

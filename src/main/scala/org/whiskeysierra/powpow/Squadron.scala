@@ -1,13 +1,13 @@
 package org.whiskeysierra.powpow
 
 import de.bht.jvr.core.{SceneNode, GroupNode, Transform}
-import de.bht.jvr.math.Vector3
 import de.bht.jvr.util.StopWatch
+import collection.mutable.HashSet
 
 class Squadron(private val parent: GroupNode, private val sphere: SceneNode) extends Actor with Randomizer {
 
-    private val bombers = new Array[Bomber](1)
-    private val dead = bombers.view.filter({_.dead})
+    private val bombers = new HashSet[Bomber]
+    private val max = 10
 
     private val time = new StopWatch
     private var elapsed = 0f
@@ -15,31 +15,29 @@ class Squadron(private val parent: GroupNode, private val sphere: SceneNode) ext
     override def act(message:Any) {
         message match {
             case Start =>
-                for (i <- 0 until bombers.length) {
-                    bombers.update(i, new Bomber(new GroupNode(sphere)))
-                }
-
-                val bomber = dead.head
-                println("Bomber! " + bomber)
-                bomber.direction = new Vector3(1, 1, 0)
-                bomber.revive
-                sender ! AddBody(bomber.body, Collisions.BOMBER, Collisions.WITH_BOMBER)
-                sender ! Add(parent, bomber.node)
+                sphere.setTransform(Transform.scale(2))
             case Update =>
-                //                    elapsed += time.elapsed
-                //                    if (elapsed > 1) {
-                //                        elapsed = 0
-                //                        if (!dead.isEmpty) {
-                //                            val bomber = dead.head
-                //                            println("Bomber! " + bomber)
-                //                            bomber.direction = new Vector3(1, 1, 0)
-                //                            bomber.revive
-                //                            sender ! AddBody(bomber.body, Collisions.BOMBER, Collisions.WITH_BOMBER)
-                //                            sender ! Add(parent, bomber.node)
-                //                        }
-                //                    }
-                for (bomber <- bombers.filter({_.alive})) {
+                elapsed += time.elapsed
+                if (elapsed > 1) {
+                    elapsed = 0
+                    if (bombers.size < max) {
+                        val bomber = new Bomber(new GroupNode(sphere))
+                        bomber.position = randomPosition
+                        bomber.direction = randomDirection
+                        sender ! AddNode(parent, bomber.node)
+                        sender ! AddBody(bomber.body, Collisions.BOMBER, Collisions.WITH_BOMBER)
+                        bombers.add(bomber)
+                    }
+                }
+                for (bomber <- bombers) {
                     bomber.node.setTransform(Transform.translate(bomber.position))
+                }
+            case BomberHit(bomber, _) =>
+                bomber.hit
+                if (bomber.dead) {
+                    sender ! RemoveNode(parent, bomber.node)
+                    sender ! RemoveBody(bomber.body)
+                    bombers.remove(bomber)
                 }
             case PoisonPill => exit()
             case _ =>

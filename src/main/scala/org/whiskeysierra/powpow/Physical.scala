@@ -2,12 +2,12 @@ package org.whiskeysierra.powpow
 
 import com.bulletphysics.collision.dispatch.CollisionObject
 import com.bulletphysics.collision.shapes.CollisionShape
-import com.bulletphysics.dynamics.RigidBody
 import com.bulletphysics.linearmath.{Transform, MotionState}
 import de.bht.jvr.math.Vector3
 import javax.vecmath.{Vector3f, Matrix4f}
 import Vector.toVector3f
 import Vector.toVector3
+import com.bulletphysics.dynamics.{RigidBodyConstructionInfo, RigidBody}
 
 private object Physical {
 
@@ -85,7 +85,12 @@ trait Physical {
 
         }
 
-        val body = new RigidBody(mass, state, shape, inertia)
+        val info = new RigidBodyConstructionInfo(mass, state, shape, inertia)
+        info.restitution = 0f
+        info.linearDamping = 0f
+        info.angularDamping = 0f
+
+        val body = new RigidBody(info)
         body.setActivationState(CollisionObject.DISABLE_DEACTIVATION)
         body.setUserPointer(this)
         body

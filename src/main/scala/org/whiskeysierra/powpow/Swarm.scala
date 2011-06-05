@@ -1,16 +1,78 @@
 package org.whiskeysierra.powpow
 
-import de.bht.jvr.core.GroupNode
+import collection.mutable.HashSet
+import javax.media.opengl.{GL2GL3, GL3, GL2ES2, GL}
+import de.bht.jvr.core._
+import attributes.{AttributeFloat, AttributeVector3}
+import uniforms.UniformVector4
+import com.google.common.collect.Lists
+import java.util.List
+import de.bht.jvr.math.{Vector3, Vector4}
+import com.google.common.base.Function
 
-class Swarm(private val parent: GroupNode) extends Actor {
+class Swarm(private val parent: GroupNode) extends Actor with ResourceLoader with Randomizer {
 
-    private val seekers = new Array[Seeker](100)
+    private val max = 100
+    private val cloud = new AttributeCloud(max, GL.GL_POINTS)
+
+    private val seekers: List[Seeker] = Lists.newArrayListWithCapacity(max)
+
+    private val positions: List[Vector3] = Lists.transform(seekers, new Function[Seeker, Vector3] {
+        override def apply(s: Seeker) = s.position
+    });
+
+    private val directions: List[Vector3] = Lists.transform(seekers, new Function[Seeker, Vector3] {
+        override def apply(s: Seeker) = s.direction
+    });
+
+    private val health: Array[Float] = Array.fill(max) {0f}
 
     override def act(message:Any) {
         message match {
+            case Start =>
+                val shape: ShapeNode = new ShapeNode("Gun")
+
+                val vs = new Shader(load("seekers.vs"), GL2ES2.GL_VERTEX_SHADER)
+                val gs = new Shader(load("seekers.gs"), GL3.GL_GEOMETRY_SHADER)
+                val fs = new Shader(load("color.fs"), GL2ES2.GL_FRAGMENT_SHADER)
+
+                val program = new ShaderProgram(vs, fs, gs)
+
+                program.setParameter(GL2GL3.GL_GEOMETRY_INPUT_TYPE_ARB, GL.GL_POINTS)
+                program.setParameter(GL2GL3.GL_GEOMETRY_OUTPUT_TYPE_ARB, GL.GL_LINE_STRIP)
+                program.setParameter(GL2GL3.GL_GEOMETRY_VERTICES_OUT_ARB, 3)
+
+                val material = new ShaderMaterial("AMBIENT", program)
+
+                material.setUniform("AMBIENT", "color", new UniformVector4(new Vector4(0, .7f, 1, 1)))
+
+                shape.setGeometry(cloud)
+                shape.setMaterial(material)
+
+                for (i <- 0 until max) {
+                    val seeker = new Seeker()
+                    seeker.position = randomPosition
+                    seeker.direction = randomDirection
+                    sender ! AddBody(seeker.body, Collisions.SEEKER, Collisions.WITH_SEEKER)
+                    seekers.add(seeker)
+                }
+
+                sender ! AddNode(parent, shape)
+
+            case Update => update()
             case PoisonPill => exit()
             case _ =>
         }
+    }
+
+    private def update() {
+        for (i <- 0 until max) {
+            health.update(i, seekers.get(i).health)
+        }
+
+        cloud.setAttribute("position", new AttributeVector3(positions))
+        cloud.setAttribute("direction", new AttributeVector3(directions))
+        cloud.setAttribute("health", new AttributeFloat(health))
     }
 
 }

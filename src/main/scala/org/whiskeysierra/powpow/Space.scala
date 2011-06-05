@@ -7,6 +7,12 @@ import de.bht.jvr.util.StopWatch
 import javax.vecmath.Vector3f
 import com.bulletphysics.dynamics._
 
+object Space {
+
+    val MAX_SIZE = 15f
+
+}
+
 class Space extends Actor {
 
     private val config: CollisionConfiguration = new DefaultCollisionConfiguration
@@ -38,11 +44,16 @@ class Space extends Actor {
                         left match {
                             case bullet:Bullet => right match {
                                 case wall:Wall => sender ! Miss(bullet)
+                                case bomber:Bomber => sender ! BomberHit(bomber, bullet)
                                 case _ =>
                             }
                             // TODO simplify order matching
                             case wall:Wall => right match {
                                 case bullet:Bullet => sender ! Miss(bullet)
+                                case _ =>
+                            }
+                            case bomber:Bomber => right match {
+                                case bullet:Bullet => sender ! BomberHit(bomber, bullet)
                                 case _ =>
                             }
                             case _ =>

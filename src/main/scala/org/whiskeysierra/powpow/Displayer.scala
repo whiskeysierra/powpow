@@ -60,8 +60,8 @@ class Displayer(val pipeline: Pipeline, private val input: InputState) extends A
                 frame.setVisible(true)
                 canvas.requestFocusInWindow
                 animator.start
-            case Add(parent, child) => parent.addChildNodes(child)
-            case Remove(parent, orphan) => parent.removeChildNode(orphan)
+            case AddNode(parent, child) => parent.addChildNodes(child)
+            case RemoveNode(parent, orphan) => parent.removeChildNode(orphan)
             case PoisonPill =>
                 animator.stop
                 frame.setVisible(false)

@@ -12,9 +12,9 @@ case object Update extends Message
 
 case class Resize(width: Int, height: Int) extends Message
 
-case class Add(parent: GroupNode, child: SceneNode) extends Message
+case class AddNode(parent: GroupNode, child: SceneNode) extends Message
 
-case class Remove(parent: GroupNode, orphan: SceneNode) extends Message
+case class RemoveNode(parent: GroupNode, orphan: SceneNode) extends Message
 
 case class Move(movement: Vector3) extends Message
 

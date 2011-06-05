@@ -8,7 +8,7 @@ object Wall {
 
     def apply(normal: Vector3f) = {
         val position = new Vector3f(normal)
-        position.scale(-15)
+        position.scale(-Space.MAX_SIZE)
         val shape = new StaticPlaneShape(normal, 1)
         val wall = new Wall(shape)
         wall.position = position

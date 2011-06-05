@@ -12,18 +12,7 @@ object PowPow extends ResourceLoader {
 
         val root: GroupNode = new GroupNode("scene root")
 
-        val boxNode: SceneNode = loadModel("box")
-
-        val boxAxis: SceneNode = loadModel("axis")
-        boxAxis.setTransform(Transform.scale(0.01f))
-
-        val box: GroupNode = new GroupNode("Box+Axis")
-        box.addChildNodes(boxNode, boxAxis)
-
-        val axis: SceneNode = loadModel("axis")
-        axis.setTransform(Transform.scale(0.01f))
-
-        val sphere: SceneNode = loadModel("sphere")
+        val box: SceneNode = loadModel("box")
 
         val light: PointLightNode = new PointLightNode("sun")
         light.setTransform(Transform.translate(3, 0, 3))
@@ -39,7 +28,7 @@ object PowPow extends ResourceLoader {
         val swarm: GroupNode = new GroupNode("Swarm")
         val squadron: GroupNode = new GroupNode("Squadron")
 
-        root.addChildNodes(axis, box, sphere, bullets, grid, swarm, squadron, light, cameraNode)
+        root.addChildNodes(box, bullets, grid, swarm, squadron, light, cameraNode)
 
         Printer.print(root)
 
