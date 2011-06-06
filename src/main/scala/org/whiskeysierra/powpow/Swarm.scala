@@ -1,18 +1,19 @@
 package org.whiskeysierra.powpow
 
-import collection.mutable.HashSet
 import javax.media.opengl.{GL2GL3, GL3, GL2ES2, GL}
 import de.bht.jvr.core._
 import attributes.{AttributeFloat, AttributeVector3}
 import uniforms.UniformVector4
-import com.google.common.collect.Lists
 import java.util.List
 import de.bht.jvr.math.{Vector3, Vector4}
-import com.google.common.base.Function
-
-class Swarm(private val parent: GroupNode) extends Actor with ResourceLoader with Randomizer {
+import java.lang.Iterable
+import com.google.common.collect.{Iterables, Lists}
+import com.google.common.base.{Predicate, Function}
+class Swarm(private val parent: GroupNode) extends Actor with ResourceLoader with Randomizer with Clock {
 
     private val max = 100
+    val loop = 5f
+    private val reviveRate = 25
     private val cloud = new AttributeCloud(max, GL.GL_POINTS)
 
     private val seekers: List[Seeker] = Lists.newArrayListWithCapacity(max)
@@ -25,9 +26,16 @@ class Swarm(private val parent: GroupNode) extends Actor with ResourceLoader wit
         override def apply(s: Seeker) = s.direction
     });
 
-    private val health: Array[Float] = Array.fill(max) {0f}
+    private val deads: Iterable[Seeker] = Iterables.filter(seekers, new Predicate[Seeker] {
+        override def apply(s: Seeker) = s.dead
+    })
 
-    override def act(message:Any) {
+    private val health: Array[Float] = Array.fill(max) {
+        0f
+    }
+
+
+    override def act(message: Any) {
         message match {
             case Start =>
                 val shape: ShapeNode = new ShapeNode("Gun")
@@ -51,21 +59,38 @@ class Swarm(private val parent: GroupNode) extends Actor with ResourceLoader wit
 
                 for (i <- 0 until max) {
                     val seeker = new Seeker()
-                    seeker.position = randomPosition
-                    seeker.direction = randomDirection
-                    sender ! AddBody(seeker.body, Collisions.SEEKER, Collisions.WITH_SEEKER)
+                    seeker.kill()
                     seekers.add(seeker)
                 }
 
                 sender ! AddNode(parent, shape)
 
             case Update => update()
+            case SeekerHit(seeker, _) =>
+                sender ! RemoveBody(seeker.body)
+                seeker.kill()
             case PoisonPill => exit()
             case _ =>
         }
     }
 
     private def update() {
+
+        if (tick()) {
+            val it = deads.iterator()
+            val position = randomCorner
+            val direction = position.normalize().mul(-.01f)
+            for (i <- 0 until reviveRate) {
+                if (it.hasNext) {
+                    val seeker = it.next();
+                    seeker.revive()
+                    seeker.position = position
+                    seeker.direction = spread(direction, randomAngle(45f))
+                    sender ! AddBody(seeker.body, Collisions.SEEKER, Collisions.WITH_SEEKER)
+                }
+            }
+        }
+
         for (i <- 0 until max) {
             health.update(i, seekers.get(i).health)
         }

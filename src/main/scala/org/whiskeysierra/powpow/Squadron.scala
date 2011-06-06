@@ -4,22 +4,19 @@ import de.bht.jvr.core.{SceneNode, GroupNode, Transform}
 import de.bht.jvr.util.StopWatch
 import collection.mutable.HashSet
 
-class Squadron(private val parent: GroupNode, private val sphere: SceneNode) extends Actor with Randomizer {
+class Squadron(private val parent: GroupNode, private val sphere: SceneNode) extends Actor with Randomizer with Clock {
 
     private val bombers = new HashSet[Bomber]
     private val max = 10
 
-    private val time = new StopWatch
-    private var elapsed = 0f
+    val loop = 10f
 
     override def act(message:Any) {
         message match {
             case Start =>
                 sphere.setTransform(Transform.scale(2))
             case Update =>
-                elapsed += time.elapsed
-                if (elapsed > 1) {
-                    elapsed = 0
+                if (tick()) {
                     if (bombers.size < max) {
                         val bomber = new Bomber(new GroupNode(sphere))
                         bomber.position = randomPosition
@@ -33,7 +30,7 @@ class Squadron(private val parent: GroupNode, private val sphere: SceneNode) ext
                     bomber.node.setTransform(Transform.translate(bomber.position))
                 }
             case BomberHit(bomber, _) =>
-                bomber.hit
+                bomber.hit()
                 if (bomber.dead) {
                     sender ! RemoveNode(parent, bomber.node)
                     sender ! RemoveBody(bomber.body)

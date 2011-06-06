@@ -4,10 +4,11 @@ import com.bulletphysics.collision.dispatch.CollisionObject
 import com.bulletphysics.collision.shapes.CollisionShape
 import com.bulletphysics.linearmath.{Transform, MotionState}
 import de.bht.jvr.math.Vector3
-import javax.vecmath.{Vector3f, Matrix4f}
 import Vector.toVector3f
 import Vector.toVector3
 import com.bulletphysics.dynamics.{RigidBodyConstructionInfo, RigidBody}
+import com.bulletphysics.dynamics.constraintsolver.Generic6DofConstraint
+import javax.vecmath.{Vector3f, Matrix4f}
 
 private object Physical {
 
@@ -80,6 +81,8 @@ trait Physical {
                 val translation = new Vector3f
                 // TODO extract rotation into direction
                 matrix.get(translation)
+                // FIXME as sonn as jBullet supports RigidBody.setLinearFactor(Vector3f)
+                translation.z = 0f
                 position = translation
             }
 

@@ -16,7 +16,7 @@ class Gun(private val parent: GroupNode) extends Actor with ResourceLoader {
     private var position = new Vector3
 
     private val rateOfFire = 3
-    private val spreading = 25 // in degrees
+    private val spreading = 20 // in degrees
 
     private val angles = {
         val size = spreading / (rateOfFire - 1)
@@ -88,6 +88,12 @@ class Gun(private val parent: GroupNode) extends Actor with ResourceLoader {
                 }
             case Update => update()
             case Miss(bullet) =>
+                bullet.kill()
+                sender ! RemoveBody(bullet.body)
+            case BomberHit(_, bullet) =>
+                bullet.kill()
+                sender ! RemoveBody(bullet.body)
+            case SeekerHit(_, bullet) =>
                 bullet.kill()
                 sender ! RemoveBody(bullet.body)
             case PoisonPill => exit()

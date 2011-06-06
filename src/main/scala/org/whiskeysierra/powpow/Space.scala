@@ -45,6 +45,7 @@ class Space extends Actor {
                             case bullet:Bullet => right match {
                                 case wall:Wall => sender ! Miss(bullet)
                                 case bomber:Bomber => sender ! BomberHit(bomber, bullet)
+                                case seeker:Seeker => sender ! SeekerHit(seeker, bullet)
                                 case _ =>
                             }
                             // TODO simplify order matching
@@ -54,6 +55,10 @@ class Space extends Actor {
                             }
                             case bomber:Bomber => right match {
                                 case bullet:Bullet => sender ! BomberHit(bomber, bullet)
+                                case _ =>
+                            }
+                            case seeker:Seeker => right match {
+                                case bullet:Bullet => sender ! SeekerHit(seeker, bullet)
                                 case _ =>
                             }
                             case _ =>
