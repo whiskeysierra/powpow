@@ -4,7 +4,7 @@ import com.jogamp.opengl.util.FPSAnimator
 import de.bht.jvr.core.Context
 import de.bht.jvr.core.pipeline.Pipeline
 import de.bht.jvr.util.awt.InputState
-import javax.media.opengl.{GL, GL2GL3, GL3, GLAutoDrawable, GLEventListener}
+import javax.media.opengl.{GL, GL2GL3, GLAutoDrawable, GLEventListener}
 import javax.media.opengl.awt.GLCanvas
 import javax.swing.JFrame
 import java.awt.Dimension
@@ -29,10 +29,6 @@ class Displayer(val pipeline: Pipeline, private val input: InputState) extends A
             gl.glPolygonMode(GL.GL_FRONT, GL2GL3.GL_LINE);
             gl.glEnable(GL.GL_LINE_SMOOTH);
             gl.glHint(GL.GL_LINE_SMOOTH_HINT, GL.GL_NICEST);
-            
-            val i:Array[Int] = new Array[Int](1)
-            gl.glGetIntegerv(GL3.GL_MAX_GEOMETRY_OUTPUT_VERTICES, i, 0)
-            println("Max vertices: " + i(0))
         }
     }
 

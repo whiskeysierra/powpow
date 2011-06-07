@@ -8,6 +8,8 @@ object GameController {
     private val controllers: Array[Controller] = ControllerEnvironment.getDefaultEnvironment.getControllers filter {
         c => c.getType == Controller.Type.GAMEPAD || c.getType == Controller.Type.STICK
     }
+    
+    def isAbsent = controllers.isEmpty
 
     def apply(index: Int): GameController = {
         if (index < controllers.length) {

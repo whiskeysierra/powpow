@@ -12,8 +12,8 @@ import com.google.common.base.{Predicate, Function}
 class Swarm(private val parent: GroupNode) extends Actor with ResourceLoader with Randomizer with Clock {
 
     private val max = 100
-    val loop = 5f
-    private val reviveRate = 25
+    val loop = 1f
+    private val reviveRate = 10
     private val cloud = new AttributeCloud(max, GL.GL_POINTS)
 
     private val seekers: List[Seeker] = Lists.newArrayListWithCapacity(max)
@@ -33,7 +33,6 @@ class Swarm(private val parent: GroupNode) extends Actor with ResourceLoader wit
     private val health: Array[Float] = Array.fill(max) {
         0f
     }
-
 
     override def act(message: Any) {
         message match {
@@ -79,13 +78,12 @@ class Swarm(private val parent: GroupNode) extends Actor with ResourceLoader wit
         if (tick()) {
             val it = deads.iterator()
             val position = randomCorner
-            val direction = position.normalize().mul(-.01f)
             for (i <- 0 until reviveRate) {
                 if (it.hasNext) {
                     val seeker = it.next();
                     seeker.revive()
+                    seeker.direction = randomDirection
                     seeker.position = position
-                    seeker.direction = spread(direction, randomAngle(45f))
                     sender ! AddBody(seeker.body, Collisions.SEEKER, Collisions.WITH_SEEKER)
                 }
             }

@@ -7,7 +7,6 @@ import de.bht.jvr.math.Vector3
 import Vector.toVector3f
 import Vector.toVector3
 import com.bulletphysics.dynamics.{RigidBodyConstructionInfo, RigidBody}
-import com.bulletphysics.dynamics.constraintsolver.Generic6DofConstraint
 import javax.vecmath.{Vector3f, Matrix4f}
 
 private object Physical {
@@ -89,7 +88,8 @@ trait Physical {
         }
 
         val info = new RigidBodyConstructionInfo(mass, state, shape, inertia)
-        info.restitution = 0f
+        info.friction = 0f
+        info.restitution = .25f
         info.linearDamping = 0f
         info.angularDamping = 0f
 

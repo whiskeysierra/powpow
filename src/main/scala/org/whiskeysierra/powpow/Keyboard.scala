@@ -30,8 +30,9 @@ class Keyboard(private val input: InputState) extends Actor {
 
                 val direction = new Vector3(directionX, directionY, 0)
                 if (direction.length == 0) {
-                    // FIXME stop if and only if we are using the keyboard
-                    //sender ! Stop
+                    if (GameController.isAbsent) {
+                        sender ! Stop
+                    }
                 } else {
                     // keyboard moves with full speed, hence the normalize
                     sender ! Move(direction.normalize)

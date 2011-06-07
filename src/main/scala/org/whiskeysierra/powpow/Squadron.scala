@@ -1,7 +1,6 @@
 package org.whiskeysierra.powpow
 
 import de.bht.jvr.core.{SceneNode, GroupNode, Transform}
-import de.bht.jvr.util.StopWatch
 import collection.mutable.HashSet
 
 class Squadron(private val parent: GroupNode, private val sphere: SceneNode) extends Actor with Randomizer with Clock {
@@ -9,7 +8,7 @@ class Squadron(private val parent: GroupNode, private val sphere: SceneNode) ext
     private val bombers = new HashSet[Bomber]
     private val max = 10
 
-    val loop = 10f
+    val loop = 1f
 
     override def act(message:Any) {
         message match {

@@ -47,9 +47,7 @@ class Grid(private val parent: GroupNode) extends Actor with ResourceLoader {
 
         program.setParameter(GL2GL3.GL_GEOMETRY_INPUT_TYPE_ARB, GL.GL_POINTS)
         program.setParameter(GL2GL3.GL_GEOMETRY_OUTPUT_TYPE_ARB, GL.GL_LINE_STRIP)
-        val gridMax:Int = (math.floor(max / size) * 8).toInt
-        program.setParameter(GL2GL3.GL_GEOMETRY_VERTICES_OUT_ARB, gridMax)
-        println("Grid max: " + gridMax)
+        program.setParameter(GL2GL3.GL_GEOMETRY_VERTICES_OUT_ARB, math.floor(max / size) * 8 toInt)
 
         val material = new ShaderMaterial("AMBIENT", program)
         material.setUniform("AMBIENT", "maximum", new UniformFloat(max))
