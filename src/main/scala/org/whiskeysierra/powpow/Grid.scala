@@ -1,8 +1,9 @@
 package org.whiskeysierra.powpow
 
 import de.bht.jvr.core.{AttributeCloud, GroupNode, Shader, ShaderMaterial, ShaderProgram, ShapeNode}
+import de.bht.jvr.core.attributes.AttributeVector3
 import de.bht.jvr.core.uniforms.{UniformFloat, UniformVector4}
-import de.bht.jvr.math.Vector4
+import de.bht.jvr.math.{Vector3, Vector4}
 import javax.media.opengl.{GL, GL3, GL2ES2, GL2GL3}
 import javax.vecmath.Vector3f
 
@@ -46,15 +47,19 @@ class Grid(private val parent: GroupNode) extends Actor with ResourceLoader {
 
         program.setParameter(GL2GL3.GL_GEOMETRY_INPUT_TYPE_ARB, GL.GL_POINTS)
         program.setParameter(GL2GL3.GL_GEOMETRY_OUTPUT_TYPE_ARB, GL.GL_LINE_STRIP)
-        program.setParameter(GL2GL3.GL_GEOMETRY_VERTICES_OUT_ARB, math.floor(max / size) * 8 toInt)
+        val gridMax:Int = (math.floor(max / size) * 8).toInt
+        program.setParameter(GL2GL3.GL_GEOMETRY_VERTICES_OUT_ARB, gridMax)
+        println("Grid max: " + gridMax)
 
         val material = new ShaderMaterial("AMBIENT", program)
-        material.setUniform("AMBIENT", "z", new UniformFloat(z))
         material.setUniform("AMBIENT", "maximum", new UniformFloat(max))
         material.setUniform("AMBIENT", "size", new UniformFloat(size))
         material.setUniform("AMBIENT", "color", new UniformVector4(new Vector4(1, 1, 1, alpha)))
 
-        shape.setGeometry(new AttributeCloud(1))
+        val cloud = new AttributeCloud(1)
+        cloud.setAttribute("center", new AttributeVector3(java.util.Collections.singletonList(new Vector3(0, 0, z))))
+        
+        shape.setGeometry(cloud)
         shape.setMaterial(material)
 
         sender ! AddNode(parent, shape)

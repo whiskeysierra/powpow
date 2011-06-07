@@ -50,7 +50,7 @@ private object WingManRumblePad extends Template {
 
 private object CordlessRumblePad2 extends Template {
 
-    val name = "Logitech Logitech Cordless RumblePad 2"
+    val name = "Logitech Cordless RumblePad 2"
 
     val rightX = "z"
     val rightY = "rz"

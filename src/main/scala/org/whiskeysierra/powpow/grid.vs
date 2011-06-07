@@ -1,7 +1,7 @@
 uniform mat4 jvr_ModelViewProjectionMatrix;
 
-uniform float z;
+attribute vec3 center;
 
 void main(void) {
-    gl_Position = jvr_ModelViewProjectionMatrix * vec4(0.0, 0.0, z, 1.0);
+    gl_Position = jvr_ModelViewProjectionMatrix * vec4(center, 1.0);
 }

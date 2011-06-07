@@ -16,7 +16,7 @@ class Ship(private val node: SceneNode) extends Actor with Physical with Collida
             case Start =>
                 sender ! AddBody(body, Collisions.SHIP, Collisions.WITH_SHIP)
             case Move(movement) =>
-                velocity = 1
+                velocity = movement.length
                 direction = movement.normalize
             case Stop =>
                 velocity = 0
