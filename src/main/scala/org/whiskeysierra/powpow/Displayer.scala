@@ -26,9 +26,9 @@ class Displayer(val pipeline: Pipeline, private val input: InputState) extends A
             gl.setSwapInterval(1);
             context = new Context(gl)
 
-            gl.glPolygonMode(GL.GL_FRONT, GL2GL3.GL_LINE);
-            gl.glEnable(GL.GL_LINE_SMOOTH);
-            gl.glHint(GL.GL_LINE_SMOOTH_HINT, GL.GL_NICEST);
+            gl.glPolygonMode(GL.GL_FRONT, GL2GL3.GL_LINE)
+            gl.glEnable(GL.GL_LINE_SMOOTH)
+            gl.glHint(GL.GL_LINE_SMOOTH_HINT, GL.GL_NICEST)
         }
     }
 
