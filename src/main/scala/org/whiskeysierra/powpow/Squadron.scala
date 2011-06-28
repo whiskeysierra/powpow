@@ -1,9 +1,13 @@
 package org.whiskeysierra.powpow
 
-import de.bht.jvr.core.{SceneNode, GroupNode, Transform}
 import collection.mutable.HashSet
+import javax.media.opengl.{GL3, GL2ES2}
+import de.bht.jvr.core._
+import uniforms.UniformVector4
+import de.bht.jvr.math.Vector4
 
-class Squadron(private val parent: GroupNode, private val sphere: SceneNode) extends Actor with Randomizer with Clock {
+class Squadron(private val parent: GroupNode, private val sphere: SceneNode) extends Actor with Randomizer with Clock
+    with ResourceLoader {
 
     private val bombers = new HashSet[Bomber]
     private val max = 10
@@ -14,6 +18,17 @@ class Squadron(private val parent: GroupNode, private val sphere: SceneNode) ext
         message match {
             case Start =>
                 sphere.setTransform(Transform.scale(2))
+
+                val vs = new Shader(load("minimal.vs"), GL2ES2.GL_VERTEX_SHADER)
+                val fs = new Shader(load("color.fs"), GL2ES2.GL_FRAGMENT_SHADER)
+
+                val program = new ShaderProgram(vs, fs)
+                val material = new ShaderMaterial("AMBIENT", program)
+
+                material.setUniform("AMBIENT", "color", new UniformVector4(new Vector4(0, 1, 0, .5f)))
+
+                Finder.find(sphere, classOf[ShapeNode], null).setMaterial(material)
+
             case Update =>
                 if (tick()) {
                     if (bombers.size < max) {

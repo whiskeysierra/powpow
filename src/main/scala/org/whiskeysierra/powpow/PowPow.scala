@@ -1,7 +1,7 @@
 package org.whiskeysierra.powpow
 
 import de.bht.jvr.collada14.loader.ColladaLoader
-import de.bht.jvr.core.{SceneNode, GroupNode, PointLightNode, CameraNode, Transform, Printer}
+import de.bht.jvr.core.{SceneNode, GroupNode, CameraNode, Printer}
 import de.bht.jvr.core.pipeline.Pipeline
 import de.bht.jvr.util.Color
 import de.bht.jvr.util.awt.InputState
@@ -14,21 +14,17 @@ object PowPow extends ResourceLoader {
 
         val box: SceneNode = loadModel("box")
 
-        val light: PointLightNode = new PointLightNode("sun")
-        light.setTransform(Transform.translate(3, 0, 3))
-
         // TODO this should be somewhere else
         val width: Int = 600
         val height: Int = 600
 
         val cameraNode: CameraNode = new CameraNode("camera", width.toFloat / height.toFloat, 60)
-
         val bullets: GroupNode = new GroupNode("Bullets")
         val grid: GroupNode = new GroupNode("Grid")
         val swarm: GroupNode = new GroupNode("Swarm")
         val squadron: GroupNode = new GroupNode("Squadron")
 
-        root.addChildNodes(box, bullets, grid, swarm, squadron, light, cameraNode)
+        root.addChildNodes(box, bullets, grid, swarm, squadron, cameraNode)
 
         Printer.print(root)
 

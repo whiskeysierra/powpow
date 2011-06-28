@@ -1,10 +1,13 @@
 package org.whiskeysierra.powpow
 
 import com.bulletphysics.collision.shapes.SphereShape
-import de.bht.jvr.core.{Transform, SceneNode}
 import javax.vecmath.Vector3f
+import javax.media.opengl.GL2ES2
+import de.bht.jvr.math.Vector4
+import de.bht.jvr.core.uniforms.UniformVector4
+import de.bht.jvr.core._
 
-class Ship(private val node: SceneNode) extends Actor with Physical with Collidable {
+class Ship(private val node: SceneNode) extends Actor with Physical with Collidable with ResourceLoader {
 
     private val stopped = new Vector3f
 
@@ -15,6 +18,17 @@ class Ship(private val node: SceneNode) extends Actor with Physical with Collida
         message match {
             case Start =>
                 sender ! AddBody(body, Collisions.SHIP, Collisions.WITH_SHIP)
+
+                val vs = new Shader(load("minimal.vs"), GL2ES2.GL_VERTEX_SHADER)
+                val fs = new Shader(load("color.fs"), GL2ES2.GL_FRAGMENT_SHADER)
+
+                val program = new ShaderProgram(vs, fs)
+                val material = new ShaderMaterial("AMBIENT", program)
+
+                material.setUniform("AMBIENT", "color", new UniformVector4(new Vector4(1, 1, 0, .75f)))
+
+                Finder.find(node, classOf[ShapeNode], null).setMaterial(material)
+
             case Move(movement) =>
                 velocity = movement.length
                 direction = movement.normalize
