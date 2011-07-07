@@ -10,6 +10,5 @@ vec4 fastblur(float intensity) {
 }
 
 void main (void) {
-    //gl_FragColor = fastblur(5.5) + texture2D(jvr_Texture1, texCoord);
-    gl_FragColor = texture2D(jvr_Texture1, texCoord);
+    gl_FragColor = fastblur(5.5) + texture2D(jvr_Texture1, texCoord);
 }
