@@ -2,8 +2,8 @@ package org.whiskeysierra.powpow
 
 trait Enemy {
 
-    var health = max
     val max: Float
+    var health = max
 
     def alive = health > 0
     def dead = health <= 0

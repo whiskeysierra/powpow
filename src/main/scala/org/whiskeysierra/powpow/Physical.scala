@@ -80,7 +80,7 @@ trait Physical {
                 val translation = new Vector3f
                 // TODO extract rotation into direction
                 matrix.get(translation)
-                // FIXME as sonn as jBullet supports RigidBody.setLinearFactor(Vector3f)
+                // FIXME as soon as jBullet supports RigidBody.setLinearFactor(Vector3f)
                 translation.z = 0f
                 position = translation
             }
@@ -89,7 +89,7 @@ trait Physical {
 
         val info = new RigidBodyConstructionInfo(mass, state, shape, inertia)
         info.friction = 0f
-        info.restitution = .25f
+        info.restitution = .05f
         info.linearDamping = 0f
         info.angularDamping = 0f
 

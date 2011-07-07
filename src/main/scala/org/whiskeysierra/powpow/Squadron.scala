@@ -33,6 +33,7 @@ class Squadron(private val parent: GroupNode, private val sphere: SceneNode) ext
                 if (tick()) {
                     if (bombers.size < max) {
                         val bomber = new Bomber(new GroupNode(sphere))
+                        bomber.health = bomber.max
                         bomber.position = randomPosition
                         bomber.direction = randomDirection
                         sender ! AddNode(parent, bomber.node)

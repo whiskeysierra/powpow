@@ -9,10 +9,8 @@ import de.bht.jvr.core._
 
 class Ship(private val node: SceneNode) extends Actor with Physical with Collidable with ResourceLoader {
 
-    private val stopped = new Vector3f
-
     val shape = new SphereShape(.5f)
-    override val boost = 15f
+    override val boost = 7f
 
     override def act(message:Any) {
         message match {

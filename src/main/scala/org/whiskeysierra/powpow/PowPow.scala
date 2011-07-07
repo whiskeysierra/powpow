@@ -1,12 +1,13 @@
 package org.whiskeysierra.powpow
 
 import de.bht.jvr.collada14.loader.ColladaLoader
-import de.bht.jvr.core.pipeline.Pipeline
 import de.bht.jvr.util.Color
 import de.bht.jvr.util.awt.InputState
 import javax.media.opengl.GL2ES2
 import de.bht.jvr.core._
+import pipeline.{PipelineCommandPtr, Pipeline}
 import uniforms.UniformFloat
+import java.io.File
 
 object PowPow extends ResourceLoader {
 
@@ -30,20 +31,23 @@ object PowPow extends ResourceLoader {
 
         Printer.print(root)
 
-        val pipeline: Pipeline = new Pipeline(root)
-        pipeline.switchCamera(cameraNode)
-        pipeline.createFrameBufferObject("GlowMap", false, 1, 2048, 2048, 4)
-        pipeline.switchFrameBufferObject("GlowMap")
-        pipeline.clearBuffers(true, true, new Color(.5f, .7f, 1f))
-        pipeline.drawGeometry("AMBIENT", null)
-
         val vs = new Shader(load("quad.vs"), GL2ES2.GL_VERTEX_SHADER)
         val fs = new Shader(load("default.fs"), GL2ES2.GL_FRAGMENT_SHADER)
         val program = new ShaderProgram(vs, fs)
 
         val material = new ShaderMaterial("GlowPass", program)
 
+        val pipeline: Pipeline = new Pipeline(root)
+
+        pipeline.createFrameBufferObject("GlowMap", true, 1, 1.0f, 0)
+        pipeline.switchFrameBufferObject("GlowMap")
+
+        pipeline.clearBuffers(true, true, new Color(0, 0, 0))
+        pipeline.switchCamera(cameraNode)
+        pipeline.drawGeometry("AMBIENT", null)
+
         pipeline.switchFrameBufferObject(null)
+
         pipeline.clearBuffers(true, true, new Color(0, 0, 0))
         pipeline.bindColorBuffer("jvr_Texture0", "GlowMap", 0)
         pipeline.drawQuad(material, "GlowPass")
