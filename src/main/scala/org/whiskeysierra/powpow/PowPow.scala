@@ -32,7 +32,7 @@ object PowPow extends ResourceLoader {
         Printer.print(root)
 
         val vs = new Shader(load("quad.vs"), GL2ES2.GL_VERTEX_SHADER)
-        val fs = new Shader(load("default.fs"), GL2ES2.GL_FRAGMENT_SHADER)
+        val fs = new Shader(load("blur.fs"), GL2ES2.GL_FRAGMENT_SHADER)
         val program = new ShaderProgram(vs, fs)
 
         val material = new ShaderMaterial("GlowPass", program)

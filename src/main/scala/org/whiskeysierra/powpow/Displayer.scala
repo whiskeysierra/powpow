@@ -8,6 +8,8 @@ import javax.media.opengl.{GL, GL2GL3, GLAutoDrawable, GLEventListener}
 import javax.media.opengl.awt.GLCanvas
 import javax.swing.JFrame
 import java.awt.Dimension
+import de.bht.jvr.util.StopWatch
+import de.bht.jvr.renderer.{Viewer, AwtRenderWindow, RenderWindow}
 
 class Displayer(val pipeline: Pipeline, private val input: InputState) extends Actor with GLEventListener {
 
@@ -26,9 +28,10 @@ class Displayer(val pipeline: Pipeline, private val input: InputState) extends A
             gl.setSwapInterval(1);
             context = new Context(gl)
 
-            gl.glPolygonMode(GL.GL_FRONT, GL2GL3.GL_LINE)
-            gl.glEnable(GL.GL_LINE_SMOOTH)
-            gl.glHint(GL.GL_LINE_SMOOTH_HINT, GL.GL_NICEST)
+            // FIXME make wireframe work with blur
+            // gl.glPolygonMode(GL.GL_FRONT, GL2GL3.GL_LINE)
+            // gl.glEnable(GL.GL_LINE_SMOOTH)
+            // gl.glHint(GL.GL_LINE_SMOOTH_HINT, GL.GL_NICEST)
         }
     }
 
