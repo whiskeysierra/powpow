@@ -5,8 +5,8 @@ import de.bht.jvr.core.GroupNode
 
 class Bomber(val node: GroupNode) extends Physical with Enemy {
 
-    val max = 10f
-    override val mass = 100f
+    val max = 75f
+    override val mass = 350f
     val shape = new SphereShape(1.5f)
 
     def hit() {

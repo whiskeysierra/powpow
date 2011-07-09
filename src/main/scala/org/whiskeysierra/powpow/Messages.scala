@@ -24,6 +24,8 @@ case class RemoveBody(body: RigidBody)
 
 case class Miss(bullet: Bullet)
 
+case class Bounce(seeker: Seeker)
+
 case class SeekerHit(seeker: Seeker, bullet: Bullet)
 
 case class BomberHit(bomber: Bomber, bullet: Bullet)

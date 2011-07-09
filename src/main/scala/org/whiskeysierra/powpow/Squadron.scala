@@ -1,7 +1,7 @@
 package org.whiskeysierra.powpow
 
 import collection.mutable.HashSet
-import javax.media.opengl.{GL3, GL2ES2}
+import javax.media.opengl.GL2ES2
 import de.bht.jvr.core._
 import uniforms.UniformVector4
 import de.bht.jvr.math.Vector4

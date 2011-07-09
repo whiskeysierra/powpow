@@ -12,7 +12,7 @@ void main(void) {
     if (h[0] > 0.0) {
 	    vec4 bottom = gl_PositionIn[0];
 	    vec4 direction = vec4(d[0], 0.0);
-	    vec4 top = normalize(direction) * 1.0 + bottom;
+	    vec4 top = normalize(direction) * 1.5 + bottom;
 	    vec4 orthogonal = vec4(normalize(cross(zAxis, d[0])) * 0.25, 0.0);
 	    vec4 left = bottom + orthogonal;
 	    vec4 right = bottom + -orthogonal;

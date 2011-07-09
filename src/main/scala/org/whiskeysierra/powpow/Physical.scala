@@ -99,8 +99,6 @@ trait Physical {
         body
     }
 
-    private val name = getClass.getSimpleName
-
     override def toString = {
         "%s [%s, %s, %f]" format (super.toString, position, direction, velocity)
     }

@@ -14,7 +14,7 @@ object Collisions {
     val WITH_SHIP: Short = (WALL | BOMBER | SEEKER).toShort
     val WITH_BULLET: Short = (WALL | SEEKER | BOMBER).toShort
     val WITH_SEEKER: Short = (WALL | SHIP | BULLET).toShort
-    val WITH_BOMBER: Short = (WALL | SHIP | BULLET | BOMBER).toShort
+    val WITH_BOMBER: Short = (WALL | SHIP | BULLET).toShort
     val WITH_BOMBS: Short = (WALL | SHIP).toShort
 
     private def bit(s: Short) = (1 << s).toShort

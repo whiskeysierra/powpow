@@ -5,15 +5,16 @@ import de.bht.jvr.core._
 import attributes.{AttributeFloat, AttributeVector3}
 import uniforms.UniformVector4
 import java.util.List
-import de.bht.jvr.math.{Vector3, Vector4}
 import java.lang.Iterable
 import com.google.common.collect.{Iterables, Lists}
 import com.google.common.base.{Predicate, Function}
+import de.bht.jvr.math.{Vector3, Vector4}
+
 class Swarm(private val parent: GroupNode) extends Actor with ResourceLoader with Randomizer with Clock {
 
     private val max = 100
     val loop = 1f
-    private val reviveRate = 10
+    private val reviveRate = 20
     private val cloud = new AttributeCloud(max, GL.GL_POINTS)
 
     private val seekers: List[Seeker] = Lists.newArrayListWithCapacity(max)
@@ -64,6 +65,9 @@ class Swarm(private val parent: GroupNode) extends Actor with ResourceLoader wit
 
                 parent.addChildNode(shape)
             case Update => update()
+            case Bounce(seeker) =>
+                sender ! RemoveBody(seeker.body)
+                seeker.kill()
             case SeekerHit(seeker, _) =>
                 sender ! RemoveBody(seeker.body)
                 seeker.kill()
@@ -76,7 +80,7 @@ class Swarm(private val parent: GroupNode) extends Actor with ResourceLoader wit
 
         if (tick()) {
             val it = deads.iterator()
-            val position = randomCorner
+            val position = randomPosition
             for (i <- 0 until reviveRate) {
                 if (it.hasNext) {
                     val seeker = it.next();
