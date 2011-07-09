@@ -4,8 +4,11 @@ import com.bulletphysics.collision.broadphase.AxisSweep3
 import com.bulletphysics.collision.dispatch.{CollisionConfiguration, CollisionDispatcher, DefaultCollisionConfiguration}
 import com.bulletphysics.dynamics.constraintsolver.SequentialImpulseConstraintSolver
 import de.bht.jvr.util.StopWatch
-import javax.vecmath.Vector3f
 import com.bulletphysics.dynamics._
+import com.sun.xml.internal.ws.developer.MemberSubmissionAddressing.Validation
+import com.bulletphysics.collision.narrowphase.PersistentManifold
+import javax.vecmath.Vector3f
+import de.bht.jvr.math.Vector3
 
 object Space {
 
@@ -58,12 +61,12 @@ class Space extends Actor {
                             }
                             case bomber:Bomber => right match {
                                 case bullet:Bullet => sender ! BomberHit(bomber, bullet)
-                                case _:Ship => sender ! BomberCollision(bomber)
+                                case ship:Ship => sender ! BomberCollision(bomber, ship, pointOfContact(manifold))
                                 case _ =>
                             }
                             case seeker:Seeker => right match {
                                 case bullet:Bullet => sender ! SeekerHit(seeker, bullet)
-                                case _:Ship => sender ! SeekerCollision(seeker)
+                                case ship:Ship => sender ! SeekerCollision(seeker, ship, pointOfContact(manifold))
                                 case _:Wall => sender ! SeekerWallHit(seeker)
                                 case _ =>
                             }
@@ -73,13 +76,13 @@ class Space extends Actor {
                             }
                             case bomb:Bomb => right match {
                                 case wall:Wall => sender ! BombWallHit(bomb)
-                                case ship:Ship => sender ! BombCollision(bomb)
+                                case ship:Ship => sender ! BombCollision(bomb, ship, pointOfContact(manifold))
                                 case _ =>
                             }
                             case ship:Ship => right match {
-                                case bomber:Bomber => sender ! BomberCollision(bomber)
-                                case seeker:Seeker => sender ! SeekerCollision(seeker)
-                                case bomb:Bomb => sender ! BombCollision(bomb)
+                                case bomber:Bomber => sender ! BomberCollision(bomber, ship, pointOfContact(manifold))
+                                case seeker:Seeker => sender ! SeekerCollision(seeker, ship, pointOfContact(manifold))
+                                case bomb:Bomb => sender ! BombCollision(bomb, ship, pointOfContact(manifold))
                                 case _ =>
                             }
                             case _ =>
@@ -89,6 +92,12 @@ class Space extends Actor {
                 }
             }
         }
+    }
+
+    private def pointOfContact(manifold: PersistentManifold):Vector3 = {
+        val v = new Vector3f()
+        manifold.getContactPoint(0).getPositionWorldOnA(v)
+        return new Vector3(v.x, v.y, 0)
     }
 
     override def act(message:Any) {

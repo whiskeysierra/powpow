@@ -51,7 +51,7 @@ class Squadron(private val parent: GroupNode, private val sphere: SceneNode) ext
                     bombers.remove(bomber)
                     sender ! BomberKill(bomber)
                 }
-            case BomberCollision(bomber) =>
+            case BomberCollision(bomber, _, _) =>
                 parent.removeChildNode(bomber.node)
                 sender ! RemoveBody(bomber.body)
                 bombers.remove(bomber)

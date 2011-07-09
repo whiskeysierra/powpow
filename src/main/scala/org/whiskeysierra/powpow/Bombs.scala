@@ -80,7 +80,7 @@ class Bombs(private val parent: GroupNode) extends Actor with ResourceLoader {
             case BombWallHit(bomb) =>
                 bomb.kill()
                 sender ! RemoveBody(bomb.body)
-            case BombCollision(bomb) =>
+            case BombCollision(bomb, _, _) =>
                 bomb.kill()
                 sender ! RemoveBody(bomb.body)
             case PoisonPill => exit()

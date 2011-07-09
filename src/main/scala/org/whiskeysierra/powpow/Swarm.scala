@@ -71,7 +71,7 @@ class Swarm(private val parent: GroupNode) extends Actor with ResourceLoader wit
             case SeekerHit(seeker, _) =>
                 sender ! RemoveBody(seeker.body)
                 seeker.kill()
-            case SeekerCollision(seeker) =>
+            case SeekerCollision(seeker, _, _) =>
                 sender ! RemoveBody(seeker.body)
                 seeker.kill()
             case PoisonPill => exit()
@@ -80,7 +80,6 @@ class Swarm(private val parent: GroupNode) extends Actor with ResourceLoader wit
     }
 
     private def update() {
-
         if (tick()) {
             val it = deads.iterator()
             val position = randomPosition

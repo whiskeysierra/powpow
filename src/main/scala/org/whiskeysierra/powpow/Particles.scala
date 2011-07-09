@@ -13,7 +13,7 @@ class Particles(private val parent: GroupNode) extends Actor with ResourceLoader
 
     private val max = 100
     val loop = 1f
-    private val emitRate = 5
+    private val emitRate = 10
     private val cloud = new AttributeCloud(max, GL.GL_POINTS)
 
     private val particles: List[Particle] = Lists.newArrayListWithCapacity(max)
@@ -70,8 +70,16 @@ class Particles(private val parent: GroupNode) extends Actor with ResourceLoader
             case BomberHit(bomber, bullet) => emit(bullet.position, Colors.GREEN)
             case SeekerHit(seeker, bullet) => emit(bullet.position, Colors.BLUE)
             case SeekerWallHit(seeker) => emit(seeker.position, Colors.BLUE)
-            case SeekerCollision(seeker) => emit(seeker.position, Colors.BLUE)
             case BombWallHit(bomb) => emit(bomb.position, Colors.GREEN)
+            case BomberCollision(_, _, point) =>
+                emit(point, Colors.GREEN)
+                emit(point, Colors.YELLOW)
+            case SeekerCollision(_, _, point) =>
+                emit(point, Colors.BLUE)
+                emit(point, Colors.YELLOW)
+            case BombCollision(_, _, point) =>
+                emit(point, Colors.GREEN)
+                emit(point, Colors.YELLOW)
             case ParticleWallHit(particle) =>
                 sender ! RemoveBody(particle.body)
                 particle.energy = 0

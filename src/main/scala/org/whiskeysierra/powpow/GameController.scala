@@ -1,7 +1,7 @@
 package org.whiskeysierra.powpow
 
 import de.bht.jvr.math.Vector3
-import net.java.games.input.{Controller, ControllerEnvironment, EventQueue, Event}
+import net.java.games.input._
 
 object GameController {
 
@@ -39,7 +39,7 @@ private object FakeGameController extends GameController {
     }
 }
 
-private class JInputGameController(val controller: Controller, val template: Template) extends GameController {
+private class JInputGameController(val controller: Controller, val template: Template) extends GameController with Clock {
 
     private val queue: EventQueue = controller.getEventQueue
     private val event: Event = new Event
@@ -49,7 +49,28 @@ private class JInputGameController(val controller: Controller, val template: Tem
     private var aimX = 0f
     private var aimY = 0f
 
-    private val speed = 0.01f
+    override val loop = .5f
+    private var rumbling = false
+
+    private def enableRumbling() {
+        if (rumbling) {
+            return
+        } else {
+            rumbling = true
+            for (rumbler <- controller.getRumblers) {
+                rumbler.rumble(.5f)
+            }
+        }
+    }
+
+    private def disableRumbling() {
+        if (rumbling) {
+            for (rumbler <- controller.getRumblers) {
+                rumbler.rumble(0)
+            }
+            rumbling = false
+        }
+    }
 
     private def poll() {
         controller.poll
@@ -81,6 +102,13 @@ private class JInputGameController(val controller: Controller, val template: Tem
                 if (aim.length > 0.1) {
                     sender ! Aim(aim.normalize)
                 }
+
+                if (tick()) {
+                    disableRumbling();
+                }
+            case _:BomberCollision => enableRumbling()
+            case _:SeekerCollision => enableRumbling()
+            case _:BombCollision => enableRumbling()
             case PoisonPill => exit()
             case _ =>
         }

@@ -35,11 +35,11 @@ case class BomberKill(bomber: Bomber)
 
 case class BombWallHit(bomb: Bomb)
 
-case class SeekerCollision(seeker: Seeker)
+case class SeekerCollision(seeker: Seeker, ship: Ship, point: Vector3)
 
-case class BomberCollision(bomber: Bomber)
+case class BomberCollision(bomber: Bomber, ship: Ship, point: Vector3)
 
-case class BombCollision(bomb: Bomb)
+case class BombCollision(bomb: Bomb, ship: Ship, point: Vector3)
 
 case object PoisonPill
 
