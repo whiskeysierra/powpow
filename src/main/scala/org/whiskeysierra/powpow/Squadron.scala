@@ -17,7 +17,7 @@ class Squadron(private val parent: GroupNode, private val sphere: SceneNode) ext
     override def act(message:Any) {
         message match {
             case Start =>
-                sphere.setTransform(Transform.scale(2))
+                sphere.setTransform(Transform.scale(3))
 
                 val vs = new Shader(load("minimal.vs"), GL2ES2.GL_VERTEX_SHADER)
                 val fs = new Shader(load("color.fs"), GL2ES2.GL_FRAGMENT_SHADER)

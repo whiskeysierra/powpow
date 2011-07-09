@@ -60,7 +60,7 @@ private class JInputGameController(val controller: Controller, val template: Tem
                 case template.leftY => movementY = -value
                 case template.rightX => aimX = value
                 case template.rightY => aimY = -value
-                case a:AnyRef => println(a)
+                case _ =>
             }
         }
     }

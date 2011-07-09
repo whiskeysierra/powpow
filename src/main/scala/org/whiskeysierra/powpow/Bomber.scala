@@ -7,7 +7,7 @@ class Bomber(val node: GroupNode) extends Physical with Enemy {
 
     val max = 10f
     override val mass = 100f
-    val shape = new SphereShape(1)
+    val shape = new SphereShape(1.5f)
 
     def hit() {
         health -= 1

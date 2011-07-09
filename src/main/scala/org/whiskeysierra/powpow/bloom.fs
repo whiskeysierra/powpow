@@ -3,12 +3,11 @@ uniform sampler2D jvr_Texture1;
 
 varying vec2 texCoord;
 
-vec4 fastblur(float intensity) {
-    vec4 color = texture2DLod(jvr_Texture0, texCoord, intensity);
-    color.w = 1.0;
-    return color;
-}
+const float lod = 2.5;
+const float boost = 2.0;
 
 void main (void) {
-    gl_FragColor = fastblur(5.5) + texture2D(jvr_Texture1, texCoord);
+    vec4 color = texture2D(jvr_Texture0, texCoord);
+    vec4 glow = vec4(textureLod(jvr_Texture0, texCoord, lod).xyz * boost, 1.0);
+    gl_FragColor = color + glow;
 }
