@@ -65,7 +65,7 @@ class Swarm(private val parent: GroupNode) extends Actor with ResourceLoader wit
 
                 parent.addChildNode(shape)
             case Update => update()
-            case Bounce(seeker) =>
+            case SeekerWallHit(seeker) =>
                 sender ! RemoveBody(seeker.body)
                 seeker.kill()
             case SeekerHit(seeker, _) =>

@@ -1,7 +1,6 @@
 package org.whiskeysierra.powpow
 
 import com.bulletphysics.dynamics.RigidBody
-import de.bht.jvr.core.{GroupNode, SceneNode}
 import de.bht.jvr.math.Vector3
 
 case object Start
@@ -22,11 +21,11 @@ case class AddBody(body: RigidBody, bit: Short, mask: Short)
 
 case class RemoveBody(body: RigidBody)
 
-case class Miss(bullet: Bullet)
-
-case class Bounce(seeker: Seeker)
+case class BulletWallHit(bullet: Bullet)
 
 case class SeekerHit(seeker: Seeker, bullet: Bullet)
+
+case class SeekerWallHit(seeker: Seeker)
 
 case class BomberHit(bomber: Bomber, bullet: Bullet)
 

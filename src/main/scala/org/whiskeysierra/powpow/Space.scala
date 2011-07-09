@@ -43,15 +43,15 @@ class Space extends Actor {
 
                         left match {
                             case bullet:Bullet => right match {
-                                case wall:Wall => sender ! Miss(bullet)
+                                case wall:Wall => sender ! BulletWallHit(bullet)
                                 case bomber:Bomber => sender ! BomberHit(bomber, bullet)
                                 case seeker:Seeker => sender ! SeekerHit(seeker, bullet)
                                 case _ =>
                             }
                             // TODO simplify order matching
                             case wall:Wall => right match {
-                                case bullet:Bullet => sender ! Miss(bullet)
-                                case seeker:Seeker => sender ! Bounce(seeker)
+                                case bullet:Bullet => sender ! BulletWallHit(bullet)
+                                case seeker:Seeker => sender ! SeekerWallHit(seeker)
                                 case particle:Particle => sender ! ParticleWallHit(particle, wall)
                                 case _ =>
                             }
@@ -61,7 +61,7 @@ class Space extends Actor {
                             }
                             case seeker:Seeker => right match {
                                 case bullet:Bullet => sender ! SeekerHit(seeker, bullet)
-                                case _:Wall => sender ! Bounce(seeker)
+                                case _:Wall => sender ! SeekerWallHit(seeker)
                                 case _ =>
                             }
                             case particle:Particle => right match {

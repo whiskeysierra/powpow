@@ -68,10 +68,10 @@ class Explosions(private val parent: GroupNode) extends Actor with ResourceLoade
 
                 parent.addChildNode(shape)
             case Update => update()
-            case Miss(bullet) => emit(bullet.position, Colors.RED)
+            case BulletWallHit(bullet) => emit(bullet.position, Colors.RED)
             case BomberHit(bomber, bullet) => emit(bullet.position, Colors.GREEN)
             case SeekerHit(seeker, bullet) => emit(bullet.position, Colors.BLUE)
-            case Bounce(seeker) => emit(seeker.position, Colors.BLUE)
+            case SeekerWallHit(seeker) => emit(seeker.position, Colors.BLUE)
             case ParticleWallHit(particle, _) =>
                 sender ! RemoveBody(particle.body)
                 particle.energy = 0
