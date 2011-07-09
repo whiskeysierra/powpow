@@ -66,7 +66,7 @@ class Bombs(private val parent: GroupNode) extends Actor with ResourceLoader {
                 parent.addChildNode(shape)
             case Update => update()
             case BomberKill(bomber) =>
-                val step = 360f / emitRate
+                val step = math.Pi.toFloat * 2 / emitRate
                 for (i <- 0 until emitRate) {
                     val it = deads.iterator()
                     if (it.hasNext) {

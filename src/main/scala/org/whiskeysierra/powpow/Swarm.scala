@@ -79,15 +79,18 @@ class Swarm(private val parent: GroupNode) extends Actor with ResourceLoader wit
         }
     }
 
+    private def fromAngle(angle:Float) = new Vector3(math.sin(angle).toFloat, math.cos(angle).toFloat, 0)
+
     private def update() {
         if (tick()) {
             val it = deads.iterator()
             val position = randomPosition
+            val step = math.Pi.toFloat * 2 / reviveRate
             for (i <- 0 until reviveRate) {
                 if (it.hasNext) {
                     val seeker = it.next();
                     seeker.revive()
-                    seeker.direction = randomDirection
+                    seeker.direction = fromAngle(step * i)
                     seeker.position = position
                     sender ! AddBody(seeker.body, Collisions.SEEKER, Collisions.WITH_SEEKER)
                 }
