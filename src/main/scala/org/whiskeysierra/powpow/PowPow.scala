@@ -5,10 +5,7 @@ import de.bht.jvr.util.Color
 import de.bht.jvr.util.awt.InputState
 import javax.media.opengl.GL2ES2
 import de.bht.jvr.core._
-import pipeline.{PipelineState, PipelineCommand, PipelineCommandPtr, Pipeline}
-import uniforms.UniformFloat
-import java.io.File
-import java.lang.reflect.Field
+import pipeline.{PipelineCommand, Pipeline}
 
 object PowPow extends ResourceLoader {
 
@@ -18,17 +15,14 @@ object PowPow extends ResourceLoader {
 
         val box: SceneNode = loadModel("box")
 
-        // TODO this should be somewhere else
-        val width: Int = 600
-        val height: Int = 600
-
-        val cameraNode: CameraNode = new CameraNode("camera", width.toFloat / height.toFloat, 60)
+        val cameraNode: CameraNode = new CameraNode("camera", 1, 60)
         val bullets: GroupNode = new GroupNode("Bullets")
         val grid: GroupNode = new GroupNode("Grid")
         val swarm: GroupNode = new GroupNode("Swarm")
         val squadron: GroupNode = new GroupNode("Squadron")
+        val explosions: GroupNode = new GroupNode("Explosions")
 
-        root.addChildNodes(box, bullets, grid, swarm, squadron, cameraNode)
+        root.addChildNodes(box, bullets, grid, swarm, squadron, explosions, cameraNode)
 
         Printer.print(root)
 
@@ -68,6 +62,7 @@ object PowPow extends ResourceLoader {
             "gun" -> new Gun(bullets),
             "swarm" -> new Swarm(swarm),
             "squadron" -> new Squadron(squadron, loadModel("sphere")),
+            "explosions" -> new Explosions(explosions),
             "keyboard" -> new Keyboard(input),
             "controller1" -> GameController(0),
             "controller2" -> GameController(1)

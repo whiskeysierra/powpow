@@ -60,7 +60,7 @@ class Gun(private val parent: GroupNode) extends Actor with ResourceLoader {
 
                 val material = new ShaderMaterial("AMBIENT", program)
 
-                material.setUniform("AMBIENT", "color", new UniformVector4(new Vector4(1, 0, 0, 1)))
+                material.setUniform("AMBIENT", "color", new UniformVector4(Colors.RED))
 
                 shape.setGeometry(cloud)
                 shape.setMaterial(material)

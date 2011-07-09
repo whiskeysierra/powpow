@@ -38,7 +38,7 @@ class Swarm(private val parent: GroupNode) extends Actor with ResourceLoader wit
     override def act(message: Any) {
         message match {
             case Start =>
-                val shape: ShapeNode = new ShapeNode("Gun")
+                val shape: ShapeNode = new ShapeNode("Swarm")
 
                 val vs = new Shader(load("seekers.vs"), GL2ES2.GL_VERTEX_SHADER)
                 val gs = new Shader(load("seekers.gs"), GL3.GL_GEOMETRY_SHADER)
@@ -52,7 +52,7 @@ class Swarm(private val parent: GroupNode) extends Actor with ResourceLoader wit
 
                 val material = new ShaderMaterial("AMBIENT", program)
 
-                material.setUniform("AMBIENT", "color", new UniformVector4(new Vector4(0, .7f, 1, 1)))
+                material.setUniform("AMBIENT", "color", new UniformVector4(Colors.BLUE))
 
                 shape.setGeometry(cloud)
                 shape.setMaterial(material)

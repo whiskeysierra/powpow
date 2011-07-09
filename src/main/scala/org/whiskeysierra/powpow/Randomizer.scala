@@ -13,8 +13,6 @@ trait Randomizer {
 
     private def randomMax = if (random.nextBoolean()) Space.MAX_SIZE else -Space.MAX_SIZE
 
-    def randomCorner = new Vector3(randomMax * .7f, randomMax * .7f, 0)
-
     private def cos(a:Float) = math.cos(a.toDouble).toFloat
     private def sin(a:Float) = math.sin(a.toDouble).toFloat
 

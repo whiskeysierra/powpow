@@ -25,7 +25,7 @@ class Squadron(private val parent: GroupNode, private val sphere: SceneNode) ext
                 val program = new ShaderProgram(vs, fs)
                 val material = new ShaderMaterial("AMBIENT", program)
 
-                material.setUniform("AMBIENT", "color", new UniformVector4(new Vector4(0, 1, 0, 1)))
+                material.setUniform("AMBIENT", "color", new UniformVector4(Colors.GREEN))
 
                 Finder.find(sphere, classOf[ShapeNode], null).setMaterial(material)
 

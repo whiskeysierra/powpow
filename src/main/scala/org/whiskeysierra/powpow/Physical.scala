@@ -89,7 +89,7 @@ trait Physical {
 
         val info = new RigidBodyConstructionInfo(mass, state, shape, inertia)
         info.friction = 0f
-        info.restitution = .05f
+        info.restitution = .25f
         info.linearDamping = 0f
         info.angularDamping = 0f
 
