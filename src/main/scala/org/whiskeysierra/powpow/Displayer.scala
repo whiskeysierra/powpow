@@ -54,8 +54,8 @@ class Displayer(val pipeline: Pipeline, private val input: InputState) extends A
                 canvas.addKeyListener(input)
                 frame.getContentPane.add(canvas)
                 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE)
-                // TODO make configurable
                 frame.setMinimumSize(new Dimension(600, 600))
+                frame.setResizable(false)
                 frame.setVisible(true)
                 canvas.requestFocusInWindow
                 animator.start
