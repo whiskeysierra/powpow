@@ -35,6 +35,10 @@ case class BomberKill(bomber: Bomber)
 
 case class BombWallHit(bomb: Bomb)
 
+case class SeekerCollision(seeker: Seeker)
+
+case class BomberCollision(bomber: Bomber)
+
 case class BombCollision(bomb: Bomb)
 
 case object PoisonPill

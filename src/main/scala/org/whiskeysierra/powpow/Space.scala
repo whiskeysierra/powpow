@@ -58,10 +58,12 @@ class Space extends Actor {
                             }
                             case bomber:Bomber => right match {
                                 case bullet:Bullet => sender ! BomberHit(bomber, bullet)
+                                case _:Ship => sender ! BomberCollision(bomber)
                                 case _ =>
                             }
                             case seeker:Seeker => right match {
                                 case bullet:Bullet => sender ! SeekerHit(seeker, bullet)
+                                case _:Ship => sender ! SeekerCollision(seeker)
                                 case _:Wall => sender ! SeekerWallHit(seeker)
                                 case _ =>
                             }
@@ -75,6 +77,8 @@ class Space extends Actor {
                                 case _ =>
                             }
                             case ship:Ship => right match {
+                                case bomber:Bomber => sender ! BomberCollision(bomber)
+                                case seeker:Seeker => sender ! SeekerCollision(seeker)
                                 case bomb:Bomb => sender ! BombCollision(bomb)
                                 case _ =>
                             }
