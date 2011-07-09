@@ -3,11 +3,7 @@ package org.whiskeysierra.powpow.prototype;
 import de.bht.jvr.collada14.loader.ColladaLoader;
 import de.bht.jvr.core.*;
 import de.bht.jvr.core.pipeline.Pipeline;
-import de.bht.jvr.core.pipeline.PipelineCommandPtr;
-import de.bht.jvr.core.uniforms.UniformFloat;
-import de.bht.jvr.core.uniforms.UniformVector3;
 import de.bht.jvr.core.uniforms.UniformVector4;
-import de.bht.jvr.math.Vector3;
 import de.bht.jvr.math.Vector4;
 import de.bht.jvr.renderer.AwtRenderWindow;
 import de.bht.jvr.renderer.RenderWindow;
@@ -16,20 +12,7 @@ import de.bht.jvr.util.Color;
 import de.bht.jvr.util.InputState;
 import de.bht.jvr.util.StopWatch;
 
-import javax.media.opengl.GL2GL3;
 import java.io.File;
-import java.util.Map;
-
-/**
- * This basic sample demonstrates how to setup a very simple jVR application. It
- * opens a single window that shows a centered box geometry which is lit by a
- * point light source and can be rotated interactively with some keys. This
- * example uses the default phong shader that is applied to geometry loaded from
- * Collada files.
- *
- * @author Marc Roßbach
- * @author Henrik Tramberend
- */
 
 public class BlurExample {
 

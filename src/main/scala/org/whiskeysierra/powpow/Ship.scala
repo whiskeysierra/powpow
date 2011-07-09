@@ -23,7 +23,7 @@ class Ship(private val node: SceneNode) extends Actor with Physical with Collida
                 val program = new ShaderProgram(vs, fs)
                 val material = new ShaderMaterial("AMBIENT", program)
 
-                material.setUniform("AMBIENT", "color", new UniformVector4(new Vector4(1, 1, 0, .75f)))
+                material.setUniform("AMBIENT", "color", new UniformVector4(new Vector4(1, 1, 0, 1)))
 
                 Finder.find(node, classOf[ShapeNode], null).setMaterial(material)
 

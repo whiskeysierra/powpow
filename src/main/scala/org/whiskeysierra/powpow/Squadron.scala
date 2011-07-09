@@ -25,7 +25,7 @@ class Squadron(private val parent: GroupNode, private val sphere: SceneNode) ext
                 val program = new ShaderProgram(vs, fs)
                 val material = new ShaderMaterial("AMBIENT", program)
 
-                material.setUniform("AMBIENT", "color", new UniformVector4(new Vector4(0, 1, 0, .5f)))
+                material.setUniform("AMBIENT", "color", new UniformVector4(new Vector4(0, 1, 0, 1)))
 
                 Finder.find(sphere, classOf[ShapeNode], null).setMaterial(material)
 
@@ -36,7 +36,7 @@ class Squadron(private val parent: GroupNode, private val sphere: SceneNode) ext
                         bomber.health = bomber.max
                         bomber.position = randomPosition
                         bomber.direction = randomDirection
-                        sender ! AddNode(parent, bomber.node)
+                        parent.addChildNode(bomber.node)
                         sender ! AddBody(bomber.body, Collisions.BOMBER, Collisions.WITH_BOMBER)
                         bombers.add(bomber)
                     }
@@ -47,7 +47,7 @@ class Squadron(private val parent: GroupNode, private val sphere: SceneNode) ext
             case BomberHit(bomber, _) =>
                 bomber.hit()
                 if (bomber.dead) {
-                    sender ! RemoveNode(parent, bomber.node)
+                    parent.removeChildNode(bomber.node)
                     sender ! RemoveBody(bomber.body)
                     bombers.remove(bomber)
                 }

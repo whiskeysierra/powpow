@@ -4,36 +4,30 @@ import com.bulletphysics.dynamics.RigidBody
 import de.bht.jvr.core.{GroupNode, SceneNode}
 import de.bht.jvr.math.Vector3
 
-sealed abstract class Message
+case object Start
 
-case object Start extends Message
+case object Update
 
-case object Update extends Message
+case class Resize(width: Int, height: Int)
 
-case class Resize(width: Int, height: Int) extends Message
+case class Move(movement: Vector3)
 
-case class AddNode(parent: GroupNode, child: SceneNode) extends Message
+case object Stop
 
-case class RemoveNode(parent: GroupNode, orphan: SceneNode) extends Message
+case class Position(position: Vector3)
 
-case class Move(movement: Vector3) extends Message
+case class Aim(direction: Vector3)
 
-case object Stop extends Message
+case class AddBody(body: RigidBody, bit: Short, mask: Short)
 
-case class Position(position: Vector3) extends Message
+case class RemoveBody(body: RigidBody)
 
-case class Aim(direction: Vector3) extends Message
+case class Miss(bullet: Bullet)
 
-case class AddBody(body: RigidBody, bit: Short, mask: Short) extends Message
+case class SeekerHit(seeker: Seeker, bullet: Bullet)
 
-case class RemoveBody(body: RigidBody) extends Message
+case class BomberHit(bomber: Bomber, bullet: Bullet)
 
-case class Miss(bullet: Bullet) extends Message
+case object PoisonPill
 
-case class SeekerHit(seeker: Seeker, bullet: Bullet) extends Message
-
-case class BomberHit(bomber: Bomber, bullet: Bullet) extends Message
-
-case object PoisonPill extends Message
-
-case object Quit extends Message
+case object Quit

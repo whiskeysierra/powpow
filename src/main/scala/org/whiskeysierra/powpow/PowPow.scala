@@ -5,9 +5,10 @@ import de.bht.jvr.util.Color
 import de.bht.jvr.util.awt.InputState
 import javax.media.opengl.GL2ES2
 import de.bht.jvr.core._
-import pipeline.{PipelineCommandPtr, Pipeline}
+import pipeline.{PipelineState, PipelineCommand, PipelineCommandPtr, Pipeline}
 import uniforms.UniformFloat
 import java.io.File
+import java.lang.reflect.Field
 
 object PowPow extends ResourceLoader {
 
@@ -38,13 +39,17 @@ object PowPow extends ResourceLoader {
         val material = new ShaderMaterial("GlowPass", program)
 
         val pipeline: Pipeline = new Pipeline(root)
+        val addCommand = classOf[Pipeline].getDeclaredMethod("addCommand", classOf[PipelineCommand]);
+        addCommand.setAccessible(true)
 
         pipeline.createFrameBufferObject("GlowMap", true, 1, 1.0f, 0)
         pipeline.switchFrameBufferObject("GlowMap")
 
         pipeline.clearBuffers(true, true, new Color(0, 0, 0))
         pipeline.switchCamera(cameraNode)
+        addCommand.invoke(pipeline, new EnableWireframe)
         pipeline.drawGeometry("AMBIENT", null)
+        addCommand.invoke(pipeline, new DisableWireframe)
 
         pipeline.switchFrameBufferObject(null)
 

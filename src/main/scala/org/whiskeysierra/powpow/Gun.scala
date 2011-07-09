@@ -73,7 +73,7 @@ class Gun(private val parent: GroupNode) extends Actor with ResourceLoader {
 
                 update()
 
-                sender ! AddNode(parent, shape)
+                parent.addChildNode(shape)
             case Position(position) => this.position = position
             case Aim(direction) =>
                 val dead = deads.iterator

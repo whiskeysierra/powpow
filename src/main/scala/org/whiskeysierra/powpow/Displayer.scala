@@ -4,12 +4,10 @@ import com.jogamp.opengl.util.FPSAnimator
 import de.bht.jvr.core.Context
 import de.bht.jvr.core.pipeline.Pipeline
 import de.bht.jvr.util.awt.InputState
-import javax.media.opengl.{GL, GL2GL3, GLAutoDrawable, GLEventListener}
 import javax.media.opengl.awt.GLCanvas
 import javax.swing.JFrame
 import java.awt.Dimension
-import de.bht.jvr.util.StopWatch
-import de.bht.jvr.renderer.{Viewer, AwtRenderWindow, RenderWindow}
+import javax.media.opengl._
 
 class Displayer(val pipeline: Pipeline, private val input: InputState) extends Actor with GLEventListener {
 
@@ -28,10 +26,8 @@ class Displayer(val pipeline: Pipeline, private val input: InputState) extends A
             gl.setSwapInterval(1);
             context = new Context(gl)
 
-            // FIXME make wireframe work with blur
-            // gl.glPolygonMode(GL.GL_FRONT, GL2GL3.GL_LINE)
-            // gl.glEnable(GL.GL_LINE_SMOOTH)
-            // gl.glHint(GL.GL_LINE_SMOOTH_HINT, GL.GL_NICEST)
+            gl.glEnable(GL.GL_LINE_SMOOTH)
+            gl.glHint(GL.GL_LINE_SMOOTH_HINT, GL.GL_NICEST)
         }
     }
 
@@ -51,7 +47,7 @@ class Displayer(val pipeline: Pipeline, private val input: InputState) extends A
 
     }
 
-    override def act(message:Any) {
+    override def act(message: Any) {
         message match {
             case Start =>
                 canvas.addGLEventListener(this)
@@ -63,8 +59,6 @@ class Displayer(val pipeline: Pipeline, private val input: InputState) extends A
                 frame.setVisible(true)
                 canvas.requestFocusInWindow
                 animator.start
-            case AddNode(parent, child) => parent.addChildNodes(child)
-            case RemoveNode(parent, orphan) => parent.removeChildNode(orphan)
             case PoisonPill =>
                 animator.stop
                 frame.setVisible(false)

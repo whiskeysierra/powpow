@@ -60,7 +60,7 @@ class Grid(private val parent: GroupNode) extends Actor with ResourceLoader {
         shape.setGeometry(cloud)
         shape.setMaterial(material)
 
-        sender ! AddNode(parent, shape)
+        parent.addChildNode(shape)
     }
 
 }
