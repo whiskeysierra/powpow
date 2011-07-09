@@ -41,6 +41,7 @@ class Space extends Actor {
                         val left = leftBody.getUserPointer
                         val right = rightBody.getUserPointer
 
+                        // TODO simplify order matching
                         left match {
                             case bullet:Bullet => right match {
                                 case wall:Wall => sender ! BulletWallHit(bullet)
@@ -48,11 +49,11 @@ class Space extends Actor {
                                 case seeker:Seeker => sender ! SeekerHit(seeker, bullet)
                                 case _ =>
                             }
-                            // TODO simplify order matching
                             case wall:Wall => right match {
                                 case bullet:Bullet => sender ! BulletWallHit(bullet)
                                 case seeker:Seeker => sender ! SeekerWallHit(seeker)
-                                case particle:Particle => sender ! ParticleWallHit(particle, wall)
+                                case particle:Particle => sender ! ParticleWallHit(particle)
+                                case bomb:Bomb => sender ! BombWallHit(bomb)
                                 case _ =>
                             }
                             case bomber:Bomber => right match {
@@ -65,7 +66,17 @@ class Space extends Actor {
                                 case _ =>
                             }
                             case particle:Particle => right match {
-                                case wall:Wall => sender ! ParticleWallHit(particle, wall)
+                                case wall:Wall => sender ! ParticleWallHit(particle)
+                                case _ =>
+                            }
+                            case bomb:Bomb => right match {
+                                case wall:Wall => sender ! BombWallHit(bomb)
+                                case ship:Ship => sender ! BombCollision(bomb)
+                                case _ =>
+                            }
+                            case ship:Ship => right match {
+                                case bomb:Bomb => sender ! BombCollision(bomb)
+                                case _ =>
                             }
                             case _ =>
                         }

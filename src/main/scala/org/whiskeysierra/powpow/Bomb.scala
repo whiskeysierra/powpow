@@ -1,7 +1,12 @@
 package org.whiskeysierra.powpow
 
-class Bomb extends Enemy {
+import com.bulletphysics.collision.shapes.SphereShape
 
+class Bomb extends Physical with Enemy {
+
+    val shape = new SphereShape(.5f)
     val max = Float.MaxValue
-    
+
+    override val boost = 4f
+
 }

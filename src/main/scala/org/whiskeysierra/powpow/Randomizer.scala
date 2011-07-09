@@ -7,7 +7,7 @@ trait Randomizer {
 
     private val random = new Random
 
-    def randomDirection = new Vector3(random.nextInt(3) - 1, random.nextInt(3) - 1, 0)
+    def randomDirection = new Vector3(random.nextFloat() * 2 - 1, random.nextFloat() * 2 - 1, 0).normalize()
 
     def randomPosition = new Vector3((2 * random.nextFloat - 1) * Space.MAX_SIZE, (2 * random.nextFloat - 1) * Space.MAX_SIZE, 0)
 

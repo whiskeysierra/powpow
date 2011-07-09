@@ -29,7 +29,13 @@ case class SeekerWallHit(seeker: Seeker)
 
 case class BomberHit(bomber: Bomber, bullet: Bullet)
 
-case class ParticleWallHit(particle: Particle, wall: Wall)
+case class ParticleWallHit(particle: Particle)
+
+case class BomberKill(bomber: Bomber)
+
+case class BombWallHit(bomb: Bomb)
+
+case class BombCollision(bomb: Bomb)
 
 case object PoisonPill
 

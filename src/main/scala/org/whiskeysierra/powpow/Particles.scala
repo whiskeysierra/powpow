@@ -7,11 +7,9 @@ import com.google.common.collect.{Iterables, Lists}
 import javax.media.opengl.{GL2GL3, GL3, GL2ES2, GL}
 import de.bht.jvr.core._
 import attributes.{AttributeVector4, AttributeFloat, AttributeVector3}
-import uniforms.UniformVector4
 import de.bht.jvr.math.{Vector3, Vector4}
-import javax.vecmath.Vector3f
 
-class Explosions(private val parent: GroupNode) extends Actor with ResourceLoader with Randomizer {
+class Particles(private val parent: GroupNode) extends Actor with ResourceLoader with Randomizer {
 
     private val max = 100
     val loop = 1f
@@ -72,7 +70,8 @@ class Explosions(private val parent: GroupNode) extends Actor with ResourceLoade
             case BomberHit(bomber, bullet) => emit(bullet.position, Colors.GREEN)
             case SeekerHit(seeker, bullet) => emit(bullet.position, Colors.BLUE)
             case SeekerWallHit(seeker) => emit(seeker.position, Colors.BLUE)
-            case ParticleWallHit(particle, _) =>
+            case BombWallHit(bomb) => emit(bomb.position, Colors.GREEN)
+            case ParticleWallHit(particle) =>
                 sender ! RemoveBody(particle.body)
                 particle.energy = 0
             case PoisonPill => exit()

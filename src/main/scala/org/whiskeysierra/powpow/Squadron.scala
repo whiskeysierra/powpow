@@ -11,7 +11,7 @@ class Squadron(private val parent: GroupNode, private val sphere: SceneNode) ext
     private val bombers = new HashSet[Bomber]
     private val max = 10
 
-    val loop = 1f
+    val loop = 3f
 
     override def act(message:Any) {
         message match {
@@ -32,7 +32,7 @@ class Squadron(private val parent: GroupNode, private val sphere: SceneNode) ext
                 if (tick()) {
                     if (bombers.size < max) {
                         val bomber = new Bomber(new GroupNode(sphere))
-                        bomber.health = bomber.max
+                        bomber.revive()
                         bomber.position = randomPosition
                         bomber.direction = randomDirection
                         parent.addChildNode(bomber.node)
@@ -49,6 +49,7 @@ class Squadron(private val parent: GroupNode, private val sphere: SceneNode) ext
                     parent.removeChildNode(bomber.node)
                     sender ! RemoveBody(bomber.body)
                     bombers.remove(bomber)
+                    sender ! BomberKill(bomber)
                 }
             case PoisonPill => exit()
             case _ =>

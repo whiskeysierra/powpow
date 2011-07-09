@@ -15,14 +15,15 @@ object PowPow extends ResourceLoader {
 
         val box: SceneNode = loadModel("box")
 
-        val cameraNode: CameraNode = new CameraNode("camera", 1, 60)
-        val bullets: GroupNode = new GroupNode("Bullets")
-        val grid: GroupNode = new GroupNode("Grid")
-        val swarm: GroupNode = new GroupNode("Swarm")
-        val squadron: GroupNode = new GroupNode("Squadron")
-        val explosions: GroupNode = new GroupNode("Explosions")
+        val cameraNode = new CameraNode("camera", 1, 60)
+        val bullets = new GroupNode("Bullets")
+        val grid = new GroupNode("Grid")
+        val swarm = new GroupNode("Swarm")
+        val squadron = new GroupNode("Squadron")
+        val explosions = new GroupNode("Particles")
+        val bombs = new GroupNode("Bombs")
 
-        root.addChildNodes(box, bullets, grid, swarm, squadron, explosions, cameraNode)
+        root.addChildNodes(box, bullets, grid, swarm, squadron, explosions, bombs, cameraNode)
 
         Printer.print(root)
 
@@ -62,7 +63,8 @@ object PowPow extends ResourceLoader {
             "gun" -> new Gun(bullets),
             "swarm" -> new Swarm(swarm),
             "squadron" -> new Squadron(squadron, loadModel("sphere")),
-            "explosions" -> new Explosions(explosions),
+            "particles" -> new Particles(explosions),
+            "bombs" -> new Bombs(bombs),
             "keyboard" -> new Keyboard(input),
             "controller1" -> GameController(0),
             "controller2" -> GameController(1)

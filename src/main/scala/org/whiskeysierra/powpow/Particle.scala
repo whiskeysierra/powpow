@@ -1,14 +1,13 @@
 package org.whiskeysierra.powpow
 
-import com.bulletphysics.collision.shapes.BoxShape
-import javax.vecmath.Vector3f
+import com.bulletphysics.collision.shapes.SphereShape
 
 /**
  * A small object which is the result of a Bullet hitting an enemy or the wall.
  */
 class Particle extends Physical {
 
-    val shape = new BoxShape(new Vector3f(.2f, .2f, .2f))
+    val shape = new SphereShape(.5f)
     var energy = 25f
     override val boost = 2f
 
