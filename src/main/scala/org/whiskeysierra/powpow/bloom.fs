@@ -3,7 +3,7 @@ uniform sampler2D jvr_Texture0;
 varying vec2 texCoord;
 
 const float lod = 2.5;
-const float boost = 2.0;
+const float boost = 2.5;
 
 /**
   * A bloom shader based on the jVR example shader data/pipeline_shader/bloom.fs.
