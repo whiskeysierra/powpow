@@ -48,7 +48,7 @@ class Bombs(private val parent: GroupNode) extends Actor with ResourceLoader {
 
                 program.setParameter(GL2GL3.GL_GEOMETRY_INPUT_TYPE_ARB, GL.GL_POINTS)
                 program.setParameter(GL2GL3.GL_GEOMETRY_OUTPUT_TYPE_ARB, GL.GL_LINE_STRIP)
-                program.setParameter(GL2GL3.GL_GEOMETRY_VERTICES_OUT_ARB, 2)
+                program.setParameter(GL2GL3.GL_GEOMETRY_VERTICES_OUT_ARB, 8)
 
                 val material = new ShaderMaterial("AMBIENT", program)
 
