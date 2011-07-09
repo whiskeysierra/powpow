@@ -17,8 +17,9 @@ object GameController {
             println("Found: " + controller)
 
             controller.getName match {
-                case WingManRumblePad.name => new JInputGameController(controller, WingManRumblePad)
-                case CordlessRumblePad2.name => new JInputGameController(controller, CordlessRumblePad2)
+                case "Logitech Inc. WingMan RumblePad" => new JInputGameController(controller, new Template("x", "y", "rz", "slider"))
+                case "WingMan RumblePad" => new JInputGameController(controller, new Template("X axis", "Y axis", "Rudder", "Extra"))
+                case "Logitech Cordless RumblePad 2" => new JInputGameController(controller, new Template("x", "y", "z", "rz"))
             }
         } else {
             println("Using Fake Controller #" + index)
@@ -28,36 +29,7 @@ object GameController {
 
 }
 
-private trait Template {
-
-    val name: String
-
-    val leftX = "x"
-    val leftY = "y"
-    val rightX: String
-    val rightY: String
-
-    override def toString = name
-
-}
-
-private object WingManRumblePad extends Template {
-
-    val name = "Logitech Inc. WingMan RumblePad"
-
-    val rightX = "rz"
-    val rightY = "slider"
-
-}
-
-private object CordlessRumblePad2 extends Template {
-
-    val name = "Logitech Cordless RumblePad 2"
-
-    val rightX = "z"
-    val rightY = "rz"
-
-}
+case class Template(leftX:String, leftY:String, rightX:String, rightY:String)
 
 trait GameController extends Actor
 
@@ -88,7 +60,7 @@ private class JInputGameController(val controller: Controller, val template: Tem
                 case template.leftY => movementY = -value
                 case template.rightX => aimX = value
                 case template.rightY => aimY = -value
-                case _ =>
+                case a:AnyRef => println(a)
             }
         }
     }
