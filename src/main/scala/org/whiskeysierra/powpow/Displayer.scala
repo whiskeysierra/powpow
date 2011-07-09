@@ -40,7 +40,7 @@ class Displayer(val pipeline: Pipeline, private val input: InputState) extends A
     }
 
     override def reshape(drawable: GLAutoDrawable, x: Int, y: Int, width: Int, height: Int) {
-        sender ! Resize(width, height)
+
     }
 
     override def dispose(drawable: GLAutoDrawable) {

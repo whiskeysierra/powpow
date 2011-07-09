@@ -10,7 +10,6 @@ class Camera(private val node: CameraNode) extends Actor {
                 // TODO camera and ship should share translation
                 node.setTransform(Transform.translate(position.x, position.y, 25))
             }
-            case Resize(width, height) => node.setAspectRatio(width.toFloat / height.toFloat)
             case PoisonPill => exit()
             case _ =>
         }

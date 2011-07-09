@@ -7,8 +7,6 @@ case object Start
 
 case object Update
 
-case class Resize(width: Int, height: Int)
-
 case class Move(movement: Vector3)
 
 case object Stop
