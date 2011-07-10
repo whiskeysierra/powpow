@@ -32,7 +32,9 @@ object PowPow extends ResourceLoader {
         val material = new ShaderMaterial("GlowPass", program)
 
         val pipeline: Pipeline = new Pipeline(root)
-        val addCommand = classOf[Pipeline].getDeclaredMethod("addCommand", classOf[PipelineCommand]);
+        val commandClass = classOf[PipelineCommand]
+        val name = "addCommand"
+        val addCommand = classOf[Pipeline].getDeclaredMethod(name, commandClass)
         addCommand.setAccessible(true)
 
         pipeline.createFrameBufferObject("GlowMap", true, 1, 1.0f, 0)
