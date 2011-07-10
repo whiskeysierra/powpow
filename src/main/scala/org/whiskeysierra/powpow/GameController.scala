@@ -20,6 +20,7 @@ object GameController {
                 case "Logitech Inc. WingMan RumblePad" => new JInputGameController(controller, new Template("x", "y", "rz", "slider"))
                 case "WingMan RumblePad" => new JInputGameController(controller, new Template("X axis", "Y axis", "Rudder", "Extra"))
                 case "Logitech Cordless RumblePad 2" => new JInputGameController(controller, new Template("x", "y", "z", "rz"))
+                case "Logitech Cordless RumblePad 2 USB" => new JInputGameController(controller, new Template("X Axis", "Y Axis", "Z Axis", "Z Rotation"))
             }
         } else {
             println("Using Fake Controller #" + index)
@@ -81,7 +82,7 @@ private class JInputGameController(val controller: Controller, val template: Tem
                 case template.leftY => movementY = -value
                 case template.rightX => aimX = value
                 case template.rightY => aimY = -value
-                case _ =>
+                case a:AnyRef => println(a)
             }
         }
     }
