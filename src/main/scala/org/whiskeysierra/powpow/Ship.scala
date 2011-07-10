@@ -26,7 +26,6 @@ class Ship(private val node: SceneNode) extends Actor with Physical with Collida
                 material.setUniform("AMBIENT", "color", new UniformVector4(Colors.YELLOW))
 
                 Finder.find(node, classOf[ShapeNode], null).setMaterial(material)
-
             case Move(movement) =>
                 velocity = movement.length
                 direction = movement.normalize
@@ -51,7 +50,7 @@ class Ship(private val node: SceneNode) extends Actor with Physical with Collida
     private def update = {
         node.setTransform(
             Transform.translate(position.x, position.y, 0) mul
-                Transform.rotateZ(angle)
+                Transform.rotateZ(angle - math.Pi.toFloat / 4f)
         )
     }
 
