@@ -6,7 +6,6 @@ abstract class Actor {
 
     final def sender = s
 
-    def start() = Unit
     def exit() = Unit
 
     def act(message:Any)

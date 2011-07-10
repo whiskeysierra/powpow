@@ -70,7 +70,6 @@ object PowPow extends ResourceLoader {
             "controller2" -> GameController(1)
         ))
 
-        hub.start()
         hub ! Start
     }
 

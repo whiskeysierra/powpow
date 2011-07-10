@@ -14,13 +14,6 @@ final class MessageHub(private val actors: Map[String, Actor]) extends Actor {
         }
     }
 
-    override def start() = {
-        each {a =>
-            a.start()
-        }
-        super.start()
-    }
-
     override def act(message:Any) {
         message match {
             case Quit =>
