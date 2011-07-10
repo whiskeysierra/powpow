@@ -25,8 +25,6 @@ object PowPow extends ResourceLoader {
 
         root.addChildNodes(box, bullets, grid, swarm, squadron, explosions, bombs, cameraNode)
 
-        Printer.print(root)
-
         val vs = new Shader(load("quad.vs"), GL2ES2.GL_VERTEX_SHADER)
         val fs = new Shader(load("bloom.fs"), GL2ES2.GL_FRAGMENT_SHADER)
         val program = new ShaderProgram(vs, fs)
