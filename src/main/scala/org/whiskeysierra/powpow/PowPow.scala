@@ -74,6 +74,6 @@ object PowPow extends ResourceLoader {
         hub ! Start
     }
 
-    private def loadModel(model: String): SceneNode = ColladaLoader.load(open("models/" + model + ".dae"))
+    private def loadModel(model: String): SceneNode = ColladaLoader.load(load("models/" + model + ".dae"))
 
 }
