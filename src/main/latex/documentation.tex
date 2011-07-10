@@ -1,39 +1,73 @@
 \documentclass[a4paper]{article}
 \usepackage[utf8]{inputenc}
 \usepackage{fullpage}
+\usepackage{csquotes}
+\usepackage[ngerman]{babel}
 \usepackage{biblatex}
-\bibliography{documentation.bib}
+\usepackage{float}
 \usepackage{graphicx}
-\usepackage{scala}
+\usepackage{listings}
+\bibliography{documentation}
+\usepackage{listings}
 \usepackage{minted}
 \usemintedstyle{default}
-\title{PowPow Documentation}
+\title{PowPow Dokumention}
 \author{Willi Schönborn}
 \date{\today}
 \begin{document}
 
 \maketitle
-\newpage
 
+\newpage
 \tableofcontents
+
 \newpage
+\section{Einleitung}
 
-\section{Introduction}
+\subsection{Aufgabenstellung}
+Idee + Gerüst + Prototyp + Dokumentation
 
-\begin{figure}[htbp]
+\subsection{Idee}
+\begin{figure}[H]
 \centering
 \includegraphics[width=0.7\textwidth]{PewPew-iPhone-App-Review.jpg}
-\caption{Visual appearance}
+\caption{PewPew}
 \end{figure}
 
+\newpage
+\section{Implementierung}
+
+\subsection{Scala}
+
+\subsection{Architektur}
 \inputminted[firstline=20, lastline=36]{scala}{../scala/org/whiskeysierra/powpow/Ship.scala}
+\subsection{Bulletphysics}
+\subsection{Jinput}
+\subsection{Shaders}
+
+\newpage
+\section{Fazit}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.7\textwidth]{screenshot1.png}
+\caption{In-Game Screenshot}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.7\textwidth]{screenshot2.png}
+\caption{In-Game Screenshot}
+\end{figure}
 
 \newpage
 \nocite{pewpewgame}
 \nocite{jinput}
-\addcontentsline{toc}{section}{References}
+\renewcommand{\refname}{Quellen}
+\addcontentsline{toc}{section}{Quellen}
 \printbibliography
-\addcontentsline{toc}{section}{List of Figures}
+
+\addcontentsline{toc}{section}{Abbildungsverzeichnis}
 \listoffigures
 
 \end{document}
