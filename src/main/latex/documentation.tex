@@ -28,7 +28,7 @@
 
 \newpage
 \section{Einleitung}
-Als Teil der Lehrveranstaltung \textit{Computer Graphics and Effects} im Sommersemester 2011 an der \textit{Beuth Hochschule für Technik Berlin} soll im Rahmen eines Semester-Projektes ein Spiele-Prototyp auf Basis der jVR-Rendering-Engine entstehen. Ziel dieses Dokumentes ist es, die Idee sowie das Produkt dieses Projektes zu beschreiben und erläutern.
+Als Teil der Lehrveranstaltung \textit{Computer Graphics and Effects} im Sommersemester 2011 an der \textit{Beuth Hochschule für Technik Berlin} sollte im Rahmen eines Semester-Projektes ein Spiele-Prototyp auf Basis der jVR-Rendering-Engine entstehen. Ziel dieses Dokumentes ist es, die Idee sowie das Produkt dieses Projektes zu beschreiben und erläutern.
 
 \subsection{Idee}
 Als Idee für den Prototypen dient das Space-Arcade-Spiel \textit{PewPew} das für die Android-Plattform entwickelt wurde. Markante Eigenschaften des Spiels sind die sehr simpel anmutende Spielgrafik, die einzig und allein auf  einfachste Wireframe-Modelle setzt, sowie eine Verfolgungskamera, die sich ausschließlich in einer Ebene bewegt. Die Steuerung von PewPew erfolgt mithilfe der beiden Daumen auf zwei virtuellen Joysticks in den unteren Ecken des Bildschirms.
@@ -39,7 +39,7 @@ Als Idee für den Prototypen dient das Space-Arcade-Spiel \textit{PewPew} das f�
 \caption{PewPew In-Game Screenshot}
 \end{figure}
 
-Der zu Prototyp sollte einzelne dieser Eigenschaften übernehmen, ohne dabei zu viele Elemente der eigentlichen Spielidee zu übernehmen um den Aufwand in einem überschaubaren Rahmen zu halten.
+Der zu Prototyp sollte einzelne dieser Eigenschaften beinhalten, ohne dabei zu viele Elemente der eigentlichen Spielidee zu übernehmen um den Aufwand in einem überschaubaren Rahmen zu halten. Das Look-and-Feel des Prototypen sollte in etwa dem des Originalspiels entsprechen.
 
 \newpage
 \section{Funktionsweise}
@@ -117,7 +117,7 @@ Die komplette Physik im Prototypen wird mithilfe von JBullet, dem inoffiziellen 
 \end{listing}
 
 \subsection{Geometry Shader und Partikelsysteme}
-Im Prototypen kommen fünf verschiedene Geometry Shader-Programme zum Einsatz wobei vier jeweils für ein bestimmtes Partikelsystem zuständig sind. Geometry Shader werden effektiv benutzt um jegliche Geometry, die im Prototypen vorkommt, zu rendern mit Ausnahme des Schiffes und der \textit{Bomber}, die mithilfe zweier Collada-Modelle realisiert wurden. Alle Partikelsysteme werden durch einen einzigen Knoten im Szenengraph repräsentiert der die gesamte Verwaltung aller Partikel übernimmt. Dazu zählen der gesamte Lebenszyklus einzelner Instanzen, das Wiederverwenden/Recyclen, die Konfiguration und Integration des zugehörigen Geometry Shaders sowie die Interaktion mit dem restlichen System mithilfe des Message-Systems.
+Im Prototypen kommen fünf verschiedene Geometry Shader-Programme zum Einsatz wobei vier jeweils für ein bestimmtes Partikelsystem zuständig sind. Die Geometry Shader werden effektiv benutzt um jegliche Geometry, die im Prototypen vorkommt, zu rendern mit Ausnahme des Schiffes und der \textit{Bomber}, die mithilfe zweier Collada-Modelle realisiert wurden. Alle Partikelsysteme werden durch einen einzigen Knoten im Szenengraph repräsentiert der die gesamte Verwaltung aller Partikel übernimmt. Dazu zählen der gesamte Lebenszyklus einzelner Instanzen, das Wiederverwenden/Recyclen, die Konfiguration und Integration des zugehörigen Geometry Shaders sowie die Interaktion mit dem restlichen System mithilfe des Message-Systems.
 
 Abbildung \ref{scenegraph} zeigt einen Ausschnitt des Szenengraphen mit allen Knoten, die ihre Geometry mithilfe eines Shaders generieren, ein Partikelsystem verwalten oder beides.
 
@@ -158,7 +158,7 @@ Der Glow-Effekt ist als \textit{Bloom}-Shader mit Multipass-Rendering implementi
 \label{multipass}
 \end{listing}
 
-Das Rendern des \textit{FrameBufferObject}s auf ein Quad mithilfe eines Fragment-Shaders funktioniert natürlich im Wireframe-Modus nur bedingt da einzig die Kanten sowie eine Diagonale gerendert werden. Um diesen Umstand zu umgehen muss in der Pipeline festgelegt werden, dass vor dem Rendern der eigentlichen Geometry der Wireframe-Modus aktiviert und vor dem zweiten Durchgang wieder deaktiviert wird. Die \textit{Pipeline}-Klasse des jVR-Frameworks bietet leider keine öffentliche API an die es erlauben würde selbstgeschriebene \textit{PipelineCommand}s zu registrieren. Als Workaround wurde in diesem Prototypen via Reflection auf die private Methode \texttt{Pipeline.addCommand(PipelineCommand)} zugegriffen wie in Abbildung \ref{multipass} zu sehen ist.
+Das Rendern des \textit{FrameBufferObject}s auf ein Quad mithilfe eines Fragment-Shaders funktioniert natürlich im Wireframe-Modus nur bedingt da einzig die Kanten sowie eine Diagonale gerendert werden. Um diesen Umstand zu umgehen muss in der Pipeline festgelegt werden, dass vor dem Rendern der eigentlichen Geometry der Wireframe-Modus aktiviert und vor dem zweiten Durchgang wieder deaktiviert wird. Die \textit{Pipeline}-Klasse des jVR-Frameworks bietet leider keine öffentliche API an die es erlauben würde selbstgeschriebene \textit{PipelineCommand}s zu registrieren. Als Workaround wurde in diesem Prototypen via Reflection auf die private Methode \texttt{Pipeline.addCommand(PipelineCommand)} zugegriffen wie in Listing \ref{multipass} zu sehen ist.
 
 \newpage
 \nocite{pewpewgame}
